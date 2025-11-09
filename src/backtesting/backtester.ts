@@ -197,14 +197,17 @@ export class Backtester {
     try {
       logger.info('Fetching popular tokens...');
 
-      // Buscar tokens populares (exemplo com alguns tokens conhecidos)
-      const knownTokens = [
-        'So11111111111111111111111111111111111111112', // SOL (wrapped)
-        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
-        // Adicionar mais conforme necessário
+      // Memecoins populares Solana (atualizado 2024)
+      const popularMemecoins = [
+        'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263', // BONK
+        'ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82',  // BOME
+        '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', // POPCAT
+        'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm', // WIF (dogwifhat)
+        'MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5',  // MEW (cat)
       ];
 
-      return knownTokens.map(address => ({ address }));
+      logger.info(`Using ${popularMemecoins.length} popular memecoins for backtest`);
+      return popularMemecoins.map(address => ({ address }));
     } catch (error) {
       logError(error, 'fetchPopularTokens');
       return [];
