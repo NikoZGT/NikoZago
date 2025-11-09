@@ -1,6 +1,5 @@
 import { Backtester, BacktestConfig } from './backtester';
 import { loadConfig } from '../config/bot.config';
-import { logger } from '../utils/logger';
 
 /**
  * Script para executar backtesting
