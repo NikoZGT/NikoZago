@@ -8,6 +8,7 @@
     "start:advanced": "node dist/bot-advanced.js",
     "dev": "ts-node src/bot.ts",
     "dev:advanced": "ts-node src/bot-advanced.ts",
+    "backtest": "ts-node src/backtesting/run-backtest.ts",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint src --ext .ts"
