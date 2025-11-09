@@ -2,6 +2,22 @@
 
 Bot de trading automatizado baseado em IA para operações de curtíssimo prazo em memecoins, com capital inicial de US$10 e foco em preservação de capital e aprendizado de padrões de mercado.
 
+## 🆕 NOVO: Bot Avançado com IA e Tempo Real
+
+**Agora disponível em 2 versões**:
+- **Bot Básico**: Estratégias fundamentais e análise clássica
+- **Bot Avançado**: IA adaptativa, tempo real, order book e momentum
+
+👉 **[Ver Features Avançadas](ADVANCED-FEATURES.md)**
+
+### Features do Bot Avançado:
+- 🧠 **IA/ML** que aprende e otimiza estratégias automaticamente
+- ⚡ **Tempo Real** via WebSocket com stream de transações
+- 📊 **Order Book** com detecção de paredes e pressão de compra
+- 🎯 **Momentum** multi-indicadores (5 sinais combinados)
+- 🚀 **Spike Detection** detecta influxo súbito de compradores
+- 📈 **Win Rate esperado**: 60-70% (vs 45-55% do básico)
+
 ## 📋 Índice
 
 - [Características](#características)
