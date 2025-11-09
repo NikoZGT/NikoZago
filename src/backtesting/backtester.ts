@@ -323,7 +323,7 @@ export class Backtester {
    */
   private evaluateEntrySignal(token: any, candle: any, index: number): any {
     // Implementar lógica de entrada similar ao bot real
-    // Por simplicidade, usar critérios básicos
+    // Usar critérios mais realistas e flexíveis
 
     const volumeIncrease = index > 0 ?
       ((candle.volume - token.history[index - 1].volume) / token.history[index - 1].volume) * 100 : 0;
@@ -331,13 +331,28 @@ export class Backtester {
     const priceIncrease = index > 0 ?
       ((candle.close - token.history[index - 1].close) / token.history[index - 1].close) * 100 : 0;
 
-    const shouldEnter = volumeIncrease > 200 && priceIncrease > 5;
+    // Critérios mais realistas para entrada:
+    // 1. Volume alto + preço subindo moderadamente
+    // 2. Volume muito alto sozinho (indica interesse forte)
+    // 3. Preço subindo forte + volume moderado
+    // 4. Sinais moderados mas ambos presentes
+    const shouldEnter =
+      (volumeIncrease > 100 && priceIncrease > 2) ||  // Volume dobrou + preço subindo
+      (volumeIncrease > 150) ||                        // Volume muito alto
+      (volumeIncrease > 50 && priceIncrease > 5) ||   // Volume +50% + preço forte
+      (volumeIncrease > 30 && priceIncrease > 3);     // Ambos moderados
+
+    // Score baseado na força dos sinais
+    let score = 30;
+    if (shouldEnter) {
+      score = Math.min(95, 50 + (volumeIncrease / 5) + (priceIncrease * 3));
+    }
 
     return {
       shouldEnter,
       volumeIncrease,
       priceIncrease,
-      score: shouldEnter ? 75 : 30,
+      score,
     };
   }
 
