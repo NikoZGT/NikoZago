@@ -14,6 +14,7 @@
     "optimize": "ts-node src/backtesting/optimize-strategy.ts",
     "walk-forward": "ts-node src/backtesting/walk-forward-test.ts",
     "walk-forward:multi": "ts-node src/backtesting/walk-forward-multi.ts",
+    "paper": "ts-node src/paper-trading/run-paper-trading.ts",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint src --ext .ts"
