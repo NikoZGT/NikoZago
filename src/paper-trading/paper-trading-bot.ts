@@ -569,6 +569,35 @@ export class PaperTradingBot {
       ? (winningTrades / this.tradeHistory.length) * 100
       : 0;
 
+    // Calcula preço atual e PnL de cada posição aberta
+    const openPositionsData = Array.from(this.openPositions.values()).map(pos => {
+      // Busca preço atual do cache
+      const history = this.tokenCache.get(pos.tokenAddress) || [];
+      const currentPrice = history.length > 0 ? history[history.length - 1].close : pos.entryPrice;
+
+      // Calcula PnL
+      const pnlPercent = ((currentPrice - pos.entryPrice) / pos.entryPrice) * 100;
+      const currentValueUSD = pos.investedUSD * (1 + pnlPercent / 100);
+      const pnlUSD = currentValueUSD - pos.investedUSD;
+
+      // Calcula queda do pico
+      const dropFromHighPercent = ((pos.highestPrice - currentPrice) / pos.highestPrice) * 100;
+
+      return {
+        symbol: pos.tokenSymbol,
+        entryPrice: pos.entryPrice,
+        currentPrice: currentPrice,
+        highestPrice: pos.highestPrice,
+        investedUSD: pos.investedUSD,
+        currentValueUSD: currentValueUSD,
+        pnlUSD: pnlUSD,
+        pnlPercent: pnlPercent,
+        dropFromHighPercent: dropFromHighPercent,
+        entryTime: pos.entryTime,
+        score: pos.score.score,
+      };
+    });
+
     return {
       capital: this.capital,
       initialCapital: this.initialCapital,
@@ -578,13 +607,7 @@ export class PaperTradingBot {
       winRate,
       winningTrades,
       losingTrades: this.tradeHistory.length - winningTrades,
-      openPositions: Array.from(this.openPositions.values()).map(pos => ({
-        symbol: pos.tokenSymbol,
-        entryPrice: pos.entryPrice,
-        investedUSD: pos.investedUSD,
-        entryTime: pos.entryTime,
-        score: pos.score.score,
-      })),
+      openPositions: openPositionsData,
       recentTrades: this.tradeHistory.slice(-10).reverse(),
       scores: scores || [],
       tokenData: tokenData || [],
