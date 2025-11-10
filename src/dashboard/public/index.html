@@ -42,7 +42,7 @@
         🔴 Desligado
       </div>
       <div id="timeframe-badge" class="px-4 py-2 rounded-full text-sm font-semibold bg-blue-900 text-blue-200">
-        ⏱️ M5
+        📊 Candles M5
       </div>
     </div>
     <div class="flex gap-3">
@@ -210,7 +210,7 @@
     // Define timeframe
     function setTimeframe(timeframe) {
       currentTimeframe = timeframe;
-      timeframeBadge.textContent = `⏱️ ${timeframe}`;
+      timeframeBadge.textContent = `📊 Candles ${timeframe}`;
 
       // Atualiza estilos dos botões
       if (timeframe === 'M1') {
@@ -221,7 +221,10 @@
         btnM5.className = 'px-4 py-3 bg-blue-600 rounded-lg font-semibold transition border border-blue-600';
       }
 
-      addLog(`⏱️ Timeframe alterado para ${timeframe}`);
+      const desc = timeframe === 'M1'
+        ? 'Candles de 1 minuto (mais rápido, detecta movimentos pequenos)'
+        : 'Candles de 5 minutos (menos ruído, movimentos maiores)';
+      addLog(`📊 Timeframe alterado para ${timeframe} - ${desc}`);
     }
 
     // Atualiza status

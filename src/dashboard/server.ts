@@ -15,7 +15,7 @@ export class DashboardServer {
   private clients: Set<WebSocket> = new Set();
   private isRunning: boolean = false;
   private timeframe: 'M1' | 'M5' = 'M5';
-  private scanIntervalMs: number = 300000; // 5 minutos padrão
+  private scanIntervalMs: number = 15000; // Fixo: 15 segundos
 
   constructor(port: number = 3000) {
     this.app = express();
@@ -90,17 +90,19 @@ export class DashboardServer {
       return;
     }
 
-    // Configura timeframe
+    // Configura timeframe dos candles
     this.timeframe = timeframe;
-    this.scanIntervalMs = timeframe === 'M1' ? 60000 : 300000;
+    this.scanIntervalMs = 15000; // FIXO: Analisa a cada 15 segundos
 
-    console.log(`🚀 Iniciando bot em ${timeframe}...`);
-    console.log(`⏱️  Scan a cada ${timeframe === 'M1' ? '1 minuto' : '5 minutos'}`);
+    console.log(`🚀 Iniciando bot com candles ${timeframe}...`);
+    console.log(`⏱️  Análise a cada 15 segundos`);
+    console.log(`📊 Timeframe dos candles: ${timeframe === 'M1' ? '1 minuto' : '5 minutos'}`);
 
     this.isRunning = true;
     this.broadcast({ type: 'status', data: { isRunning: true } });
 
-    this.bot = new PaperTradingBot(10);
+    // Cria bot com timeframe configurado
+    this.bot = new PaperTradingBot(10, timeframe);
 
     // Inicia bot em modo não-bloqueante
     this.runBotLoop();
@@ -117,7 +119,7 @@ export class DashboardServer {
           data,
         });
 
-        // Aguarda conforme timeframe configurado (M1 = 1min, M5 = 5min)
+        // Aguarda 15 segundos antes do próximo scan (fixo)
         await this.sleep(this.scanIntervalMs);
       } catch (error: any) {
         console.error('Erro no loop do bot:', error);

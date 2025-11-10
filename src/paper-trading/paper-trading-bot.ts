@@ -43,6 +43,7 @@ export class PaperTradingBot {
   private tradeHistory: PaperTrade[] = [];
   private tokenCache: Map<string, any> = new Map();
   private scanCount: number = 0;
+  private timeframe: 'M1' | 'M5' = 'M5';
 
   // Tokens populares para monitorar
   private readonly TOKENS = [
@@ -53,11 +54,12 @@ export class PaperTradingBot {
     { address: 'ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82', symbol: 'BOME' },
   ];
 
-  constructor(initialCapital: number = 10) {
+  constructor(initialCapital: number = 10, timeframe: 'M1' | 'M5' = 'M5') {
     this.botConfig = loadConfig();
     this.scanner = new MultiTokenScanner();
     this.initialCapital = initialCapital;
     this.capital = initialCapital;
+    this.timeframe = timeframe;
   }
 
   /**
@@ -127,7 +129,11 @@ export class PaperTradingBot {
   private async fetchRealMarketData(): Promise<any[]> {
     const tokenData: any[] = [];
 
-    console.log('   📊 Gerando dados de mercado realistas...');
+    console.log(`   📊 Gerando candles ${this.timeframe} realistas...`);
+
+    // Configuração baseada no timeframe
+    const candlePeriodMs = this.timeframe === 'M1' ? 60 * 1000 : 5 * 60 * 1000; // M1 = 1min, M5 = 5min
+    const pumpChance = this.timeframe === 'M1' ? 0.08 : 0.15; // M1: 8%, M5: 15% (M1 detecta pumps menores)
 
     for (const token of this.TOKENS) {
       // Busca histórico (últimos candles)
@@ -139,7 +145,7 @@ export class PaperTradingBot {
         const baseVolume = 50000 + Math.random() * 200000;
 
         history.push({
-          timestamp: Date.now() - 5 * 60 * 1000, // 5min atrás
+          timestamp: Date.now() - candlePeriodMs,
           open: basePrice,
           high: basePrice * 1.01,
           low: basePrice * 0.99,
@@ -150,20 +156,35 @@ export class PaperTradingBot {
 
       // Gera novo candle baseado no anterior (simula movimento real)
       const lastCandle = history[history.length - 1];
-      const isPump = Math.random() < 0.15; // 15% chance de pump
+      const isPump = Math.random() < pumpChance;
 
       let priceChange;
       let volumeMultiplier;
 
-      if (isPump) {
-        // PUMP: preço sobe 5-12%, volume 2-4x
-        priceChange = 0.05 + Math.random() * 0.07;
-        volumeMultiplier = 2 + Math.random() * 2;
-        console.log(`   🔥 ${token.symbol}: PUMP DETECTADO! +${(priceChange * 100).toFixed(1)}%`);
+      if (this.timeframe === 'M1') {
+        // M1: Movimentos menores, mais granulares
+        if (isPump) {
+          // PUMP em M1: 2-5%, volume 1.5-3x (menor que M5)
+          priceChange = 0.02 + Math.random() * 0.03;
+          volumeMultiplier = 1.5 + Math.random() * 1.5;
+          console.log(`   🔥 ${token.symbol}: PUMP M1! +${(priceChange * 100).toFixed(1)}%`);
+        } else {
+          // Normal M1: -1% a +1%, menos volátil
+          priceChange = -0.01 + Math.random() * 0.02;
+          volumeMultiplier = 0.9 + Math.random() * 0.2;
+        }
       } else {
-        // Normal: -3% a +3%, volume similar
-        priceChange = -0.03 + Math.random() * 0.06;
-        volumeMultiplier = 0.8 + Math.random() * 0.4;
+        // M5: Movimentos maiores, mais consolidados
+        if (isPump) {
+          // PUMP em M5: 5-12%, volume 2-4x
+          priceChange = 0.05 + Math.random() * 0.07;
+          volumeMultiplier = 2 + Math.random() * 2;
+          console.log(`   🔥 ${token.symbol}: PUMP M5! +${(priceChange * 100).toFixed(1)}%`);
+        } else {
+          // Normal M5: -3% a +3%, mais volátil
+          priceChange = -0.03 + Math.random() * 0.06;
+          volumeMultiplier = 0.8 + Math.random() * 0.4;
+        }
       }
 
       const newPrice = lastCandle.close * (1 + priceChange);
