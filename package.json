@@ -10,6 +10,7 @@
     "dev:advanced": "ts-node src/bot-advanced.ts",
     "backtest": "ts-node src/backtesting/run-backtest.ts",
     "test:strategies": "ts-node src/backtesting/test-strategies.ts",
+    "optimize": "ts-node src/backtesting/optimize-strategy.ts",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint src --ext .ts"

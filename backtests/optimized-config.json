@@ -1,0 +1,18 @@
+{
+  "positionSizePercent": 15,
+  "stopLossPercent": 8,
+  "takeProfitPercent": 50,
+  "trailingStopPercent": 15,
+  "entryThresholds": {
+    "volumeSpike": 180,
+    "priceSpike": 8
+  },
+  "results": {
+    "pnl": 691.0226336560054,
+    "winRate": 60.215053763440864,
+    "profitFactor": 7.1139441587936,
+    "maxDrawdown": 1.8013074415570978,
+    "sharpeRatio": 10.833327715137514,
+    "trades": 93
+  }
+}
