@@ -1,0 +1,2186 @@
+{
+  "periods": [
+    {
+      "period": "Período 1",
+      "trainMetrics": {
+        "config": {
+          "startDate": "2025-11-03T00:00:00.000Z",
+          "endDate": "2025-11-05T23:59:59.000Z",
+          "initialCapital": 10,
+          "network": "solana"
+        },
+        "startCapital": 10,
+        "endCapital": 16.08732934750365,
+        "totalPnl": 6.087329347503652,
+        "totalPnlPercent": 60.87329347503652,
+        "totalTrades": 12,
+        "winningTrades": 12,
+        "losingTrades": 0,
+        "winRate": 100,
+        "avgWin": 0.5072774456253043,
+        "avgLoss": 0,
+        "profitFactor": 999,
+        "maxDrawdown": 0,
+        "maxDrawdownPercent": 0,
+        "sharpeRatio": 39.36350650498728,
+        "trades": [
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-05T09:00:00.000Z",
+            "exitTime": "2025-11-05T09:20:00.000Z",
+            "entryPrice": 0.3847355075865325,
+            "exitPrice": 0.5241840977564011,
+            "amount": 7.418798615046176,
+            "investedUSD": 2.854275250842055,
+            "returnUSD": 3.8888162584644177,
+            "pnl": 1.0345410076223627,
+            "pnlPercent": 36.245313317878406,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.3847355075865325,
+              "timestamp": "2025-11-05T09:00:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-05T08:15:00.000Z",
+            "exitTime": "2025-11-05T08:35:00.000Z",
+            "entryPrice": 0.2535737158263168,
+            "exitPrice": 0.33836598116359945,
+            "amount": 10.550594639127036,
+            "investedUSD": 2.6753534868206605,
+            "returnUSD": 3.569962306927632,
+            "pnl": 0.8946088201069713,
+            "pnlPercent": 33.43890160735759,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.2535737158263168,
+              "timestamp": "2025-11-05T08:15:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-05T11:05:00.000Z",
+            "exitTime": "2025-11-05T11:25:00.000Z",
+            "entryPrice": 0.16510577017500416,
+            "exitPrice": 0.20725144560946118,
+            "amount": 18.54074178704851,
+            "investedUSD": 3.0611834523665276,
+            "returnUSD": 3.842595538037549,
+            "pnl": 0.7814120856710212,
+            "pnlPercent": 25.52647032855644,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.16510577017500416,
+              "timestamp": "2025-11-05T11:05:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-04T11:25:00.000Z",
+            "exitTime": "2025-11-04T11:45:00.000Z",
+            "entryPrice": 0.0625836108430563,
+            "exitPrice": 0.07848815093601476,
+            "amount": 34.485886217470124,
+            "investedUSD": 2.158251282612069,
+            "returnUSD": 2.706733442599026,
+            "pnl": 0.548482159986957,
+            "pnlPercent": 25.41326695393619,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.0625836108430563,
+              "timestamp": "2025-11-04T11:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-04T18:45:00.000Z",
+            "exitTime": "2025-11-04T19:05:00.000Z",
+            "entryPrice": 0.19337278816641,
+            "exitPrice": 0.2423301589354093,
+            "amount": 12.046339814033681,
+            "investedUSD": 2.3294343170397256,
+            "returnUSD": 2.9191914417247307,
+            "pnl": 0.5897571246850051,
+            "pnlPercent": 25.31761124883211,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.19337278816641,
+              "timestamp": "2025-11-04T18:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-05T07:15:00.000Z",
+            "exitTime": "2025-11-05T07:30:00.000Z",
+            "entryPrice": 0.1790743011642181,
+            "exitPrice": 0.20759173701864425,
+            "amount": 14.478761278215858,
+            "investedUSD": 2.592774057620046,
+            "returnUSD": 3.0056712036231157,
+            "pnl": 0.41289714600306987,
+            "pnlPercent": 15.924918131203288,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.1790743011642181,
+              "timestamp": "2025-11-05T07:15:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-04T21:25:00.000Z",
+            "exitTime": "2025-11-04T21:35:00.000Z",
+            "entryPrice": 0.16896145193938428,
+            "exitPrice": 0.19508906233853807,
+            "amount": 14.484876366088155,
+            "investedUSD": 2.447385741976727,
+            "returnUSD": 2.825840948349789,
+            "pnl": 0.37845520637306185,
+            "pnlPercent": 15.463651678684196,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 14.830622934966414,
+                "priceSpike": 100,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.16896145193938428,
+              "timestamp": "2025-11-04T21:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-05T04:45:00.000Z",
+            "exitTime": "2025-11-05T05:00:00.000Z",
+            "entryPrice": 0.04584533689794744,
+            "exitPrice": 0.0521774767787331,
+            "amount": 55.03453467618211,
+            "investedUSD": 2.5230767832513394,
+            "returnUSD": 2.8715631550948735,
+            "pnl": 0.3484863718435341,
+            "pnlPercent": 13.811960625092842,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.04584533689794744,
+              "timestamp": "2025-11-05T04:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-04T13:25:00.000Z",
+            "exitTime": "2025-11-04T13:35:00.000Z",
+            "entryPrice": 0.0798946202583509,
+            "exitPrice": 0.09072478340650826,
+            "amount": 28.386738772594715,
+            "investedUSD": 2.2679477146094604,
+            "returnUSD": 2.5753807267607858,
+            "pnl": 0.3074330121513251,
+            "pnlPercent": 13.555559952768354,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 81,
+              "signals": {
+                "volumeSpike": 45.82126752759521,
+                "priceSpike": 100,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.0798946202583509,
+              "timestamp": "2025-11-04T13:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-03T22:20:00.000Z",
+            "exitTime": "2025-11-03T22:30:00.000Z",
+            "entryPrice": 0.009751031013482103,
+            "exitPrice": 0.011022480870055633,
+            "amount": 210.31140031228895,
+            "investedUSD": 2.050752986933979,
+            "returnUSD": 2.3181533866968174,
+            "pnl": 0.267400399762838,
+            "pnlPercent": 13.039132526761332,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.009751031013482103,
+              "timestamp": "2025-11-03T22:20:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-04T10:45:00.000Z",
+            "exitTime": "2025-11-04T10:55:00.000Z",
+            "entryPrice": 0.04160600413501851,
+            "exitPrice": 0.046946387152019105,
+            "amount": 50.57522611539323,
+            "investedUSD": 2.1042330668865468,
+            "returnUSD": 2.3743241455141577,
+            "pnl": 0.27009107862761084,
+            "pnlPercent": 12.835606610214592,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 71,
+              "signals": {
+                "volumeSpike": 41.808371748195924,
+                "priceSpike": 63.90609762884581,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.04160600413501851,
+              "timestamp": "2025-11-04T10:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-03T06:55:00.000Z",
+            "exitTime": "2025-11-03T07:20:00.000Z",
+            "entryPrice": 0.0016285117864176832,
+            "exitPrice": 0.0018351413799624025,
+            "amount": 1228.1151519323648,
+            "investedUSD": 2,
+            "returnUSD": 2.2537649346698956,
+            "pnl": 0.25376493466989575,
+            "pnlPercent": 12.688246733494788,
+            "holdTimeMinutes": 25,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.0016285117864176832,
+              "timestamp": "2025-11-03T06:55:00.000Z"
+            }
+          }
+        ],
+        "dailyPnl": [
+          {
+            "date": "2025-11-03",
+            "pnl": 0.5211653344327338,
+            "capital": 10.521165334432734
+          },
+          {
+            "date": "2025-11-04",
+            "pnl": 2.09421858182396,
+            "capital": 12.615383916256693
+          },
+          {
+            "date": "2025-11-05",
+            "pnl": 3.471945431246959,
+            "capital": 16.08732934750365
+          }
+        ]
+      },
+      "testMetrics": {
+        "config": {
+          "startDate": "2025-11-06T00:00:00.000Z",
+          "endDate": "2025-11-07T23:59:59.000Z",
+          "initialCapital": 10,
+          "network": "solana"
+        },
+        "startCapital": 10,
+        "endCapital": 12.126457507141765,
+        "totalPnl": 2.1264575071417653,
+        "totalPnlPercent": 21.264575071417653,
+        "totalTrades": 5,
+        "winningTrades": 5,
+        "losingTrades": 0,
+        "winRate": 100,
+        "avgWin": 0.42529150142835304,
+        "avgLoss": 0,
+        "profitFactor": 999,
+        "maxDrawdown": 0,
+        "maxDrawdownPercent": 0,
+        "sharpeRatio": 32.065957435155596,
+        "trades": [
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-07T16:05:00.000Z",
+            "exitTime": "2025-11-07T16:25:00.000Z",
+            "entryPrice": 0.10407653451403961,
+            "exitPrice": 0.14269112866170017,
+            "amount": 21.693232201906856,
+            "investedUSD": 2.2577564299828343,
+            "returnUSD": 3.095431787210428,
+            "pnl": 0.8376753572275939,
+            "pnlPercent": 37.102113678133236,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.10407653451403961,
+              "timestamp": "2025-11-07T16:05:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-07T15:10:00.000Z",
+            "exitTime": "2025-11-07T15:30:00.000Z",
+            "entryPrice": 0.07371016253176942,
+            "exitPrice": 0.09144428677935937,
+            "amount": 29.223977099185866,
+            "investedUSD": 2.1541041018056974,
+            "returnUSD": 2.672365742691383,
+            "pnl": 0.5182616408856856,
+            "pnlPercent": 24.059266237469583,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.07371016253176942,
+              "timestamp": "2025-11-07T15:10:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-06T13:50:00.000Z",
+            "exitTime": "2025-11-06T14:00:00.000Z",
+            "entryPrice": 0.07278656029746824,
+            "exitPrice": 0.0826701357613755,
+            "amount": 28.14071831650167,
+            "investedUSD": 2.048266090558118,
+            "returnUSD": 2.326397003647819,
+            "pnl": 0.2781309130897013,
+            "pnlPercent": 13.57884673147693,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 80,
+              "signals": {
+                "volumeSpike": 43.97238073904261,
+                "priceSpike": 100,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.07278656029746824,
+              "timestamp": "2025-11-06T13:50:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-06T11:55:00.000Z",
+            "exitTime": "2025-11-06T12:05:00.000Z",
+            "entryPrice": 0.050104358016985956,
+            "exitPrice": 0.056150211720496425,
+            "amount": 39.91668747301336,
+            "investedUSD": 2,
+            "returnUSD": 2.2413304527905877,
+            "pnl": 0.24133045279058776,
+            "pnlPercent": 12.06652263952939,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.050104358016985956,
+              "timestamp": "2025-11-06T11:55:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-07T09:05:00.000Z",
+            "exitTime": "2025-11-07T09:40:00.000Z",
+            "entryPrice": 0.008057790287047211,
+            "exitPrice": 0.009019332829375209,
+            "amount": 261.1004007585102,
+            "investedUSD": 2.103892273176058,
+            "returnUSD": 2.354951416324255,
+            "pnl": 0.251059143148197,
+            "pnlPercent": 11.933079765970882,
+            "holdTimeMinutes": 35,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 91,
+              "signals": {
+                "volumeSpike": 73.87500486329343,
+                "priceSpike": 100,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.008057790287047211,
+              "timestamp": "2025-11-07T09:05:00.000Z"
+            }
+          }
+        ],
+        "dailyPnl": [
+          {
+            "date": "2025-11-06",
+            "pnl": 0.519461365880289,
+            "capital": 10.51946136588029
+          },
+          {
+            "date": "2025-11-07",
+            "pnl": 1.6069961412614764,
+            "capital": 12.126457507141765
+          }
+        ]
+      },
+      "bestConfig": null,
+      "overfit": false,
+      "degradation": 0
+    },
+    {
+      "period": "Período 2",
+      "trainMetrics": {
+        "config": {
+          "startDate": "2025-11-04T00:00:00.000Z",
+          "endDate": "2025-11-06T23:59:59.000Z",
+          "initialCapital": 10,
+          "network": "solana"
+        },
+        "startCapital": 10,
+        "endCapital": 16.685170379881548,
+        "totalPnl": 6.685170379881548,
+        "totalPnlPercent": 66.85170379881548,
+        "totalTrades": 12,
+        "winningTrades": 12,
+        "losingTrades": 0,
+        "winRate": 100,
+        "avgWin": 0.5570975316567957,
+        "avgLoss": 0,
+        "profitFactor": 999,
+        "maxDrawdown": 0,
+        "maxDrawdownPercent": 0,
+        "sharpeRatio": 44.56277779043647,
+        "trades": [
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-05T11:20:00.000Z",
+            "exitTime": "2025-11-05T11:40:00.000Z",
+            "entryPrice": 0.1222619373197958,
+            "exitPrice": 0.1666904658616682,
+            "amount": 23.689070264756225,
+            "investedUSD": 2.896271623873864,
+            "returnUSD": 3.9487421582620064,
+            "pnl": 1.0524705343881424,
+            "pnlPercent": 36.33880626777769,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 99.15942093598638,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.1222619373197958,
+              "timestamp": "2025-11-05T11:20:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-04T10:10:00.000Z",
+            "exitTime": "2025-11-04T10:30:00.000Z",
+            "entryPrice": 0.002310527848464641,
+            "exitPrice": 0.0030525306240185316,
+            "amount": 1027.1503041067822,
+            "investedUSD": 2.3732593821976455,
+            "returnUSD": 3.1354077587559006,
+            "pnl": 0.7621483765582551,
+            "pnlPercent": 32.11399404023438,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 99.63462528658506,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.002310527848464641,
+              "timestamp": "2025-11-04T10:10:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-04T03:55:00.000Z",
+            "exitTime": "2025-11-04T04:15:00.000Z",
+            "entryPrice": 0.012901573478973532,
+            "exitPrice": 0.0168815890870323,
+            "amount": 159.71279881554435,
+            "investedUSD": 2.060546409451262,
+            "returnUSD": 2.6962058415438785,
+            "pnl": 0.6356594320926164,
+            "pnlPercent": 30.849071351996237,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.012901573478973532,
+              "timestamp": "2025-11-04T03:55:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-05T09:45:00.000Z",
+            "exitTime": "2025-11-05T10:05:00.000Z",
+            "entryPrice": 0.43294888604141457,
+            "exitPrice": 0.54861491521968,
+            "amount": 6.350329634636312,
+            "investedUSD": 2.7493681413115745,
+            "returnUSD": 3.4838855541230216,
+            "pnl": 0.7345174128114471,
+            "pnlPercent": 26.715862520362542,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.43294888604141457,
+              "timestamp": "2025-11-05T09:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-04T21:00:00.000Z",
+            "exitTime": "2025-11-04T21:20:00.000Z",
+            "entryPrice": 0.003400091792165039,
+            "exitPrice": 0.004278504365212319,
+            "amount": 742.82966810759,
+            "investedUSD": 2.5256890575092967,
+            "returnUSD": 3.1781999776075422,
+            "pnl": 0.6525109200982455,
+            "pnlPercent": 25.83496642859584,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.003400091792165039,
+              "timestamp": "2025-11-04T21:00:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-06T00:30:00.000Z",
+            "exitTime": "2025-11-06T00:50:00.000Z",
+            "entryPrice": 1.6658497508786898,
+            "exitPrice": 2.0456275551511447,
+            "amount": 1.864973554255274,
+            "investedUSD": 3.106765730751493,
+            "returnUSD": 3.815041292212757,
+            "pnl": 0.7082755614612639,
+            "pnlPercent": 22.79784260688172,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 1.6658497508786898,
+              "timestamp": "2025-11-06T00:30:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-05T05:35:00.000Z",
+            "exitTime": "2025-11-05T05:45:00.000Z",
+            "entryPrice": 0.0552773790165137,
+            "exitPrice": 0.06497279311987343,
+            "amount": 48.05204748827597,
+            "investedUSD": 2.656191241528946,
+            "returnUSD": 3.1220757404420882,
+            "pnl": 0.4658844989131423,
+            "pnlPercent": 17.539569125488562,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 73,
+              "signals": {
+                "volumeSpike": 32.79730085313292,
+                "priceSpike": 87.06307431597955,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.0552773790165137,
+              "timestamp": "2025-11-05T05:35:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-04T08:25:00.000Z",
+            "exitTime": "2025-11-04T08:35:00.000Z",
+            "entryPrice": 0.01248374872506613,
+            "exitPrice": 0.014620188551238766,
+            "amount": 183.81633010000994,
+            "investedUSD": 2.294716876532334,
+            "returnUSD": 2.687429404858891,
+            "pnl": 0.39271252832655706,
+            "pnlPercent": 17.113768253624624,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 73,
+              "signals": {
+                "volumeSpike": 32.988528903147056,
+                "priceSpike": 86.68726212626802,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.01248374872506613,
+              "timestamp": "2025-11-04T08:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-04T06:00:00.000Z",
+            "exitTime": "2025-11-04T06:10:00.000Z",
+            "entryPrice": 0.008251106104777483,
+            "exitPrice": 0.009519777371562718,
+            "amount": 265.13757890025136,
+            "investedUSD": 2.1876782958697856,
+            "returnUSD": 2.5240507239655376,
+            "pnl": 0.33637242809575213,
+            "pnlPercent": 15.375772056193297,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 75,
+              "signals": {
+                "volumeSpike": 37.622833583534074,
+                "priceSpike": 86.97072396202314,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.008251106104777483,
+              "timestamp": "2025-11-04T06:00:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-04T01:10:00.000Z",
+            "exitTime": "2025-11-04T01:20:00.000Z",
+            "entryPrice": 0.00655972233717843,
+            "exitPrice": 0.00755264142346192,
+            "amount": 304.8909537930642,
+            "investedUSD": 2,
+            "returnUSD": 2.302732047256311,
+            "pnl": 0.3027320472563111,
+            "pnlPercent": 15.136602362815557,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 74,
+              "signals": {
+                "volumeSpike": 29.051574030693722,
+                "priceSpike": 96.61459976254929,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.00655972233717843,
+              "timestamp": "2025-11-04T01:10:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-06T06:25:00.000Z",
+            "exitTime": "2025-11-06T06:35:00.000Z",
+            "entryPrice": 0.04408561793399059,
+            "exitPrice": 0.05009864598626157,
+            "amount": 73.68436681340404,
+            "investedUSD": 3.248420843043746,
+            "returnUSD": 3.691487007706569,
+            "pnl": 0.44306616466282356,
+            "pnlPercent": 13.639432391022153,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 72,
+              "signals": {
+                "volumeSpike": 29.609867668529905,
+                "priceSpike": 88.33275949136323,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.04408561793399059,
+              "timestamp": "2025-11-06T06:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-04T06:05:00.000Z",
+            "exitTime": "2025-11-04T06:20:00.000Z",
+            "entryPrice": 0.012390423124080204,
+            "exitPrice": 0.013798005433097092,
+            "amount": 141.24962635815953,
+            "investedUSD": 1.7501426366958284,
+            "returnUSD": 1.9489631119128192,
+            "pnl": 0.19882047521699084,
+            "pnlPercent": 11.360244076582967,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.012390423124080204,
+              "timestamp": "2025-11-04T06:05:00.000Z"
+            }
+          }
+        ],
+        "dailyPnl": [
+          {
+            "date": "2025-11-04",
+            "pnl": 3.2809562076447283,
+            "capital": 13.280956207644728
+          },
+          {
+            "date": "2025-11-05",
+            "pnl": 2.2528724461127316,
+            "capital": 15.53382865375746
+          },
+          {
+            "date": "2025-11-06",
+            "pnl": 1.1513417261240875,
+            "capital": 16.685170379881548
+          }
+        ]
+      },
+      "testMetrics": {
+        "config": {
+          "startDate": "2025-11-07T00:00:00.000Z",
+          "endDate": "2025-11-08T23:59:59.000Z",
+          "initialCapital": 10,
+          "network": "solana"
+        },
+        "startCapital": 10,
+        "endCapital": 10.69953893267831,
+        "totalPnl": 0.6995389326783106,
+        "totalPnlPercent": 6.995389326783105,
+        "totalTrades": 2,
+        "winningTrades": 2,
+        "losingTrades": 0,
+        "winRate": 100,
+        "avgWin": 0.3497694663391553,
+        "avgLoss": 0,
+        "profitFactor": 999,
+        "maxDrawdown": 0,
+        "maxDrawdownPercent": 0,
+        "sharpeRatio": 64.180162402824,
+        "trades": [
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-08T10:20:00.000Z",
+            "exitTime": "2025-11-08T10:35:00.000Z",
+            "entryPrice": 0.019153671491992298,
+            "exitPrice": 0.02326544109795074,
+            "amount": 107.1238017710642,
+            "investedUSD": 2.0518141080962664,
+            "returnUSD": 2.4922825002932454,
+            "pnl": 0.44046839219697875,
+            "pnlPercent": 21.467265989590953,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.019153671491992298,
+              "timestamp": "2025-11-08T10:20:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-07T20:15:00.000Z",
+            "exitTime": "2025-11-07T20:35:00.000Z",
+            "entryPrice": 0.015716977582580133,
+            "exitPrice": 0.01775288052110614,
+            "amount": 127.25092909826976,
+            "investedUSD": 2,
+            "returnUSD": 2.259070540481332,
+            "pnl": 0.2590705404813319,
+            "pnlPercent": 12.953527024066593,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 74,
+              "signals": {
+                "volumeSpike": 24.52395301770678,
+                "priceSpike": 100,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.015716977582580133,
+              "timestamp": "2025-11-07T20:15:00.000Z"
+            }
+          }
+        ],
+        "dailyPnl": [
+          {
+            "date": "2025-11-07",
+            "pnl": 0.2590705404813319,
+            "capital": 10.259070540481332
+          },
+          {
+            "date": "2025-11-08",
+            "pnl": 0.44046839219697875,
+            "capital": 10.69953893267831
+          }
+        ]
+      },
+      "bestConfig": null,
+      "overfit": false,
+      "degradation": 0
+    },
+    {
+      "period": "Período 3",
+      "trainMetrics": {
+        "config": {
+          "startDate": "2025-11-05T00:00:00.000Z",
+          "endDate": "2025-11-07T23:59:59.000Z",
+          "initialCapital": 10,
+          "network": "solana"
+        },
+        "startCapital": 10,
+        "endCapital": 15.131499772443334,
+        "totalPnl": 5.131499772443335,
+        "totalPnlPercent": 51.314997724433354,
+        "totalTrades": 11,
+        "winningTrades": 11,
+        "losingTrades": 0,
+        "winRate": 100,
+        "avgWin": 0.46649997931303044,
+        "avgLoss": 0,
+        "profitFactor": 999,
+        "maxDrawdown": 0,
+        "maxDrawdownPercent": 0,
+        "sharpeRatio": 41.93017820456961,
+        "trades": [
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-05T05:20:00.000Z",
+            "exitTime": "2025-11-05T05:40:00.000Z",
+            "entryPrice": 0.005549787951604236,
+            "exitPrice": 0.007148929616771598,
+            "amount": 360.37412914521803,
+            "investedUSD": 2,
+            "returnUSD": 2.5762892849645223,
+            "pnl": 0.576289284964522,
+            "pnlPercent": 28.814464248226102,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.005549787951604236,
+              "timestamp": "2025-11-05T05:20:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-06T06:15:00.000Z",
+            "exitTime": "2025-11-06T06:35:00.000Z",
+            "entryPrice": 0.051056371743491404,
+            "exitPrice": 0.0652185551794572,
+            "amount": 48.53902123926874,
+            "investedUSD": 2.4782263124573296,
+            "returnUSD": 3.1656448350500934,
+            "pnl": 0.6874185225927636,
+            "pnlPercent": 27.738327171223574,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.051056371743491404,
+              "timestamp": "2025-11-06T06:15:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-06T23:25:00.000Z",
+            "exitTime": "2025-11-06T23:45:00.000Z",
+            "entryPrice": 0.1940550143430458,
+            "exitPrice": 0.24574027029432172,
+            "amount": 13.75044595517048,
+            "investedUSD": 2.668342987053884,
+            "returnUSD": 3.379038305691057,
+            "pnl": 0.7106953186371727,
+            "pnlPercent": 26.634331571514018,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.1940550143430458,
+              "timestamp": "2025-11-06T23:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-06T04:00:00.000Z",
+            "exitTime": "2025-11-06T04:20:00.000Z",
+            "entryPrice": 0.15456442179065438,
+            "exitPrice": 0.1929652383325934,
+            "amount": 15.274631883366071,
+            "investedUSD": 2.360914645117571,
+            "returnUSD": 2.947472981816364,
+            "pnl": 0.5865583366987931,
+            "pnlPercent": 24.844538023083977,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.15456442179065438,
+              "timestamp": "2025-11-06T04:00:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-05T07:30:00.000Z",
+            "exitTime": "2025-11-05T07:45:00.000Z",
+            "entryPrice": 0.005850380151594002,
+            "exitPrice": 0.007220870454372444,
+            "amount": 361.55904440099994,
+            "investedUSD": 2.1152578569929044,
+            "returnUSD": 2.610771021226315,
+            "pnl": 0.4955131642334107,
+            "pnlPercent": 23.425662388879754,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.005850380151594002,
+              "timestamp": "2025-11-05T07:30:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-07T15:25:00.000Z",
+            "exitTime": "2025-11-07T15:35:00.000Z",
+            "entryPrice": 0.8680989537387512,
+            "exitPrice": 1.056209028958659,
+            "amount": 3.34131598891427,
+            "investedUSD": 2.9005929140870386,
+            "returnUSD": 3.5291281160951824,
+            "pnl": 0.6285352020081437,
+            "pnlPercent": 21.66919732016153,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 71,
+              "signals": {
+                "volumeSpike": 20.712670912642047,
+                "priceSpike": 95.84389374778146,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.8680989537387512,
+              "timestamp": "2025-11-07T15:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-07T02:25:00.000Z",
+            "exitTime": "2025-11-07T02:35:00.000Z",
+            "entryPrice": 0.19561266514903797,
+            "exitPrice": 0.22697174485782348,
+            "amount": 14.367587337149173,
+            "investedUSD": 2.810482050781319,
+            "returnUSD": 3.2610363673099174,
+            "pnl": 0.45055431652859834,
+            "pnlPercent": 16.031211314918142,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 72,
+              "signals": {
+                "volumeSpike": 57.85746559114974,
+                "priceSpike": 94.79214143507131,
+                "momentum": 59.49567065835267,
+                "liquidity": 100
+              },
+              "currentPrice": 0.19561266514903797,
+              "timestamp": "2025-11-07T02:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-05T11:00:00.000Z",
+            "exitTime": "2025-11-05T11:10:00.000Z",
+            "entryPrice": 0.030233052822070304,
+            "exitPrice": 0.03381123877001554,
+            "amount": 74.75967862435193,
+            "investedUSD": 2.2602133128110324,
+            "returnUSD": 2.5277173443375904,
+            "pnl": 0.2675040315265578,
+            "pnlPercent": 11.835344478785608,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.030233052822070304,
+              "timestamp": "2025-11-05T11:00:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-05T07:45:00.000Z",
+            "exitTime": "2025-11-05T07:50:00.000Z",
+            "entryPrice": 0.02119849975877828,
+            "exitPrice": 0.02339328931802009,
+            "amount": 104.4583586120344,
+            "investedUSD": 2.2143604898395863,
+            "returnUSD": 2.4436246046968164,
+            "pnl": 0.22926411485723008,
+            "pnlPercent": 10.353513617551881,
+            "holdTimeMinutes": 5,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.02119849975877828,
+              "timestamp": "2025-11-05T07:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-05T15:45:00.000Z",
+            "exitTime": "2025-11-05T15:55:00.000Z",
+            "entryPrice": 0.023574587908618237,
+            "exitPrice": 0.02597923449039629,
+            "amount": 98.14441414988688,
+            "investedUSD": 2.313714119116344,
+            "returnUSD": 2.549716749122479,
+            "pnl": 0.23600263000613506,
+            "pnlPercent": 10.200163799677611,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.023574587908618237,
+              "timestamp": "2025-11-05T15:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-06T07:20:00.000Z",
+            "exitTime": "2025-11-06T07:25:00.000Z",
+            "entryPrice": 0.09668810117317496,
+            "exitPrice": 0.10641582692052301,
+            "amount": 27.053070494072152,
+            "investedUSD": 2.6157100169758825,
+            "returnUSD": 2.87887486736589,
+            "pnl": 0.26316485039000753,
+            "pnlPercent": 10.060933692269986,
+            "holdTimeMinutes": 5,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.09668810117317496,
+              "timestamp": "2025-11-06T07:20:00.000Z"
+            }
+          }
+        ],
+        "dailyPnl": [
+          {
+            "date": "2025-11-05",
+            "pnl": 1.8045732255878557,
+            "capital": 11.804573225587855
+          },
+          {
+            "date": "2025-11-06",
+            "pnl": 2.247837028318737,
+            "capital": 14.052410253906592
+          },
+          {
+            "date": "2025-11-07",
+            "pnl": 1.0790895185367422,
+            "capital": 15.131499772443332
+          }
+        ]
+      },
+      "testMetrics": {
+        "config": {
+          "startDate": "2025-11-08T00:00:00.000Z",
+          "endDate": "2025-11-09T23:59:59.000Z",
+          "initialCapital": 10,
+          "network": "solana"
+        },
+        "startCapital": 10,
+        "endCapital": 13.089670720708822,
+        "totalPnl": 3.0896707207088228,
+        "totalPnlPercent": 30.896707207088227,
+        "totalTrades": 8,
+        "winningTrades": 8,
+        "losingTrades": 0,
+        "winRate": 100,
+        "avgWin": 0.38620884008860284,
+        "avgLoss": 0,
+        "profitFactor": 999,
+        "maxDrawdown": 0,
+        "maxDrawdownPercent": 0,
+        "sharpeRatio": 76.43467368245682,
+        "trades": [
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-09T10:10:00.000Z",
+            "exitTime": "2025-11-09T10:25:00.000Z",
+            "entryPrice": 0.1715957275824569,
+            "exitPrice": 0.21014170720859726,
+            "amount": 14.182915415143011,
+            "investedUSD": 2.4337276899019087,
+            "returnUSD": 2.9804220585332835,
+            "pnl": 0.5466943686313747,
+            "pnlPercent": 22.463251369482887,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.1715957275824569,
+              "timestamp": "2025-11-09T10:10:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-08T07:40:00.000Z",
+            "exitTime": "2025-11-08T07:55:00.000Z",
+            "entryPrice": 0.009016006676429147,
+            "exitPrice": 0.011007359822921378,
+            "amount": 183.07329525125377,
+            "investedUSD": 1.6505900522611885,
+            "returnUSD": 2.015153634798474,
+            "pnl": 0.36456358253728544,
+            "pnlPercent": 22.086864151268802,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.009016006676429147,
+              "timestamp": "2025-11-08T07:40:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-08T23:25:00.000Z",
+            "exitTime": "2025-11-08T23:40:00.000Z",
+            "entryPrice": 0.3488104183098463,
+            "exitPrice": 0.42098889568034004,
+            "amount": 6.699941437912985,
+            "investedUSD": 2.3370093756099015,
+            "returnUSD": 2.820600947069937,
+            "pnl": 0.48359157146003545,
+            "pnlPercent": 20.692752733772412,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 78,
+              "signals": {
+                "volumeSpike": 36.457510965959386,
+                "priceSpike": 100,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.3488104183098463,
+              "timestamp": "2025-11-08T23:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-08T22:00:00.000Z",
+            "exitTime": "2025-11-08T22:20:00.000Z",
+            "entryPrice": 0.21062938414538376,
+            "exitPrice": 0.2502966917997407,
+            "amount": 10.692619637061199,
+            "investedUSD": 2.252179889055037,
+            "returnUSD": 2.676327321829362,
+            "pnl": 0.42414743277432476,
+            "pnlPercent": 18.832751097528327,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.21062938414538376,
+              "timestamp": "2025-11-08T22:00:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-08T08:40:00.000Z",
+            "exitTime": "2025-11-08T08:50:00.000Z",
+            "entryPrice": 0.01706499993642473,
+            "exitPrice": 0.019770368934631046,
+            "amount": 127.92062119116612,
+            "investedUSD": 2.182965392494662,
+            "returnUSD": 2.529037875296537,
+            "pnl": 0.3460724828018747,
+            "pnlPercent": 15.853319708673347,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.01706499993642473,
+              "timestamp": "2025-11-08T08:40:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-08T05:45:00.000Z",
+            "exitTime": "2025-11-08T05:55:00.000Z",
+            "entryPrice": 0.01705828132398088,
+            "exitPrice": 0.019755091772937897,
+            "amount": 117.24510588228836,
+            "investedUSD": 2,
+            "returnUSD": 2.316187826632427,
+            "pnl": 0.3161878266324272,
+            "pnlPercent": 15.80939133162136,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 98.14788638659002,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.01705828132398088,
+              "timestamp": "2025-11-08T05:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-09T17:05:00.000Z",
+            "exitTime": "2025-11-09T17:20:00.000Z",
+            "entryPrice": 0.20816002870991457,
+            "exitPrice": 0.23880106251540537,
+            "amount": 12.216882267883058,
+            "investedUSD": 2.5430665636281837,
+            "returnUSD": 2.9174044661960896,
+            "pnl": 0.37433790256790583,
+            "pnlPercent": 14.719941189185365,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.20816002870991457,
+              "timestamp": "2025-11-09T17:05:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-08T07:20:00.000Z",
+            "exitTime": "2025-11-08T07:55:00.000Z",
+            "entryPrice": 0.015193012374425746,
+            "exitPrice": 0.016916668844071944,
+            "amount": 135.8017432276639,
+            "investedUSD": 2.0632375653264856,
+            "returnUSD": 2.2973131186300804,
+            "pnl": 0.23407555330359456,
+            "pnlPercent": 11.34506065793517,
+            "holdTimeMinutes": 35,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 74,
+              "signals": {
+                "volumeSpike": 72.30968452500862,
+                "priceSpike": 36.540333246396465,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.015193012374425746,
+              "timestamp": "2025-11-08T07:20:00.000Z"
+            }
+          }
+        ],
+        "dailyPnl": [
+          {
+            "date": "2025-11-08",
+            "pnl": 2.168638449509542,
+            "capital": 12.16863844950954
+          },
+          {
+            "date": "2025-11-09",
+            "pnl": 0.9210322711992804,
+            "capital": 13.08967072070882
+          }
+        ]
+      },
+      "bestConfig": null,
+      "overfit": false,
+      "degradation": 0
+    },
+    {
+      "period": "Período 4",
+      "trainMetrics": {
+        "config": {
+          "startDate": "2025-11-06T00:00:00.000Z",
+          "endDate": "2025-11-08T23:59:59.000Z",
+          "initialCapital": 10,
+          "network": "solana"
+        },
+        "startCapital": 10,
+        "endCapital": 12.750786977865769,
+        "totalPnl": 2.7507869778657685,
+        "totalPnlPercent": 27.507869778657685,
+        "totalTrades": 5,
+        "winningTrades": 5,
+        "losingTrades": 0,
+        "winRate": 100,
+        "avgWin": 0.5501573955731537,
+        "avgLoss": 0,
+        "profitFactor": 999,
+        "maxDrawdown": 0,
+        "maxDrawdownPercent": 0,
+        "sharpeRatio": 32.95977682945,
+        "trades": [
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-08T11:45:00.000Z",
+            "exitTime": "2025-11-08T12:05:00.000Z",
+            "entryPrice": 0.14529939913098866,
+            "exitPrice": 0.20712381978526104,
+            "amount": 16.174604309956134,
+            "investedUSD": 2.350160287418126,
+            "returnUSD": 3.350145828193261,
+            "pnl": 0.999985540775135,
+            "pnlPercent": 42.54967400005359,
+            "holdTimeMinutes": 20,
+            "exitReason": "Take Profit",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.14529939913098866,
+              "timestamp": "2025-11-08T11:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-08T03:45:00.000Z",
+            "exitTime": "2025-11-08T04:05:00.000Z",
+            "entryPrice": 0.21335553205587438,
+            "exitPrice": 0.2893911079628051,
+            "amount": 10.282346288099,
+            "investedUSD": 2.193795463080107,
+            "returnUSD": 2.9756195847702056,
+            "pnl": 0.7818241216900987,
+            "pnlPercent": 35.637967843748356,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.21335553205587438,
+              "timestamp": "2025-11-08T03:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-08T01:30:00.000Z",
+            "exitTime": "2025-11-08T01:40:00.000Z",
+            "entryPrice": 1.1753324226620574,
+            "exitPrice": 1.4067345755938758,
+            "amount": 1.7958189104236506,
+            "investedUSD": 2.1106841906505656,
+            "returnUSD": 2.5262405527982708,
+            "pnl": 0.41555636214770514,
+            "pnlPercent": 19.688230195139724,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 72,
+              "signals": {
+                "volumeSpike": 28.898420753969955,
+                "priceSpike": 91.98898439234023,
+                "momentum": 95.14320763257476,
+                "liquidity": 100
+              },
+              "currentPrice": 1.1753324226620574,
+              "timestamp": "2025-11-08T01:30:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-06T05:25:00.000Z",
+            "exitTime": "2025-11-06T05:40:00.000Z",
+            "entryPrice": 0.0019889145711912398,
+            "exitPrice": 0.002324372740535724,
+            "amount": 1005.5736073179456,
+            "investedUSD": 2,
+            "returnUSD": 2.337327881452007,
+            "pnl": 0.3373278814520071,
+            "pnlPercent": 16.866394072600354,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.0019889145711912398,
+              "timestamp": "2025-11-06T05:25:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-06T13:05:00.000Z",
+            "exitTime": "2025-11-06T13:15:00.000Z",
+            "entryPrice": 0.01720928112049095,
+            "exitPrice": 0.0190080082497152,
+            "amount": 120.13666124778952,
+            "investedUSD": 2.067465576290401,
+            "returnUSD": 2.2835586480912236,
+            "pnl": 0.21609307180082257,
+            "pnlPercent": 10.452075927114233,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.01720928112049095,
+              "timestamp": "2025-11-06T13:05:00.000Z"
+            }
+          }
+        ],
+        "dailyPnl": [
+          {
+            "date": "2025-11-06",
+            "pnl": 0.5534209532528297,
+            "capital": 10.553420953252829
+          },
+          {
+            "date": "2025-11-08",
+            "pnl": 2.197366024612939,
+            "capital": 12.750786977865767
+          }
+        ]
+      },
+      "testMetrics": {
+        "config": {
+          "startDate": "2025-11-09T00:00:00.000Z",
+          "endDate": "2025-11-10T23:59:59.000Z",
+          "initialCapital": 10,
+          "network": "solana"
+        },
+        "startCapital": 10,
+        "endCapital": 15.824122606768807,
+        "totalPnl": 5.824122606768806,
+        "totalPnlPercent": 58.24122606768805,
+        "totalTrades": 11,
+        "winningTrades": 11,
+        "losingTrades": 0,
+        "winRate": 100,
+        "avgWin": 0.5294656915244369,
+        "avgLoss": 0,
+        "profitFactor": 999,
+        "maxDrawdown": 0,
+        "maxDrawdownPercent": 0,
+        "sharpeRatio": 29.585855510766834,
+        "trades": [
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-10T13:50:00.000Z",
+            "exitTime": "2025-11-10T14:10:00.000Z",
+            "entryPrice": 0.4949817797779695,
+            "exitPrice": 0.7203204549168284,
+            "amount": 5.7279594909921165,
+            "investedUSD": 2.83523558334739,
+            "returnUSD": 4.125966386296606,
+            "pnl": 1.2907308029492162,
+            "pnlPercent": 45.52464036957835,
+            "holdTimeMinutes": 20,
+            "exitReason": "Take Profit",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 99.61836373789721,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.4949817797779695,
+              "timestamp": "2025-11-10T13:50:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-09T00:45:00.000Z",
+            "exitTime": "2025-11-09T01:05:00.000Z",
+            "entryPrice": 0.0036414709577702337,
+            "exitPrice": 0.004960405636046305,
+            "amount": 549.2286010773655,
+            "investedUSD": 2,
+            "returnUSD": 2.724396648261992,
+            "pnl": 0.7243966482619919,
+            "pnlPercent": 36.2198324130996,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 98.37509787076988,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.0036414709577702337,
+              "timestamp": "2025-11-09T00:45:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "POPCAT",
+            "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+            "entryTime": "2025-11-09T07:55:00.000Z",
+            "exitTime": "2025-11-09T08:15:00.000Z",
+            "entryPrice": 0.005449488609908519,
+            "exitPrice": 0.007321523492915607,
+            "amount": 393.59277231123616,
+            "investedUSD": 2.1448793296523987,
+            "returnUSD": 2.881698729118499,
+            "pnl": 0.7368193994661002,
+            "pnlPercent": 34.35248730685049,
+            "holdTimeMinutes": 20,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+              "symbol": "POPCAT",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.005449488609908519,
+              "timestamp": "2025-11-09T07:55:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "MEW",
+            "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+            "entryTime": "2025-11-10T10:35:00.000Z",
+            "exitTime": "2025-11-10T10:50:00.000Z",
+            "entryPrice": 0.3426518273497332,
+            "exitPrice": 0.4247600913905756,
+            "amount": 7.8959760049686825,
+            "investedUSD": 2.705570606812165,
+            "returnUSD": 3.3538954894882895,
+            "pnl": 0.6483248826761243,
+            "pnlPercent": 23.96259336362366,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+              "symbol": "MEW",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.3426518273497332,
+              "timestamp": "2025-11-10T10:35:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-09T19:55:00.000Z",
+            "exitTime": "2025-11-09T20:05:00.000Z",
+            "entryPrice": 0.00874124706194536,
+            "exitPrice": 0.010451566973022493,
+            "amount": 268.30958358259795,
+            "investedUSD": 2.345360359183167,
+            "returnUSD": 2.8042555823172988,
+            "pnl": 0.4588952231341318,
+            "pnlPercent": 19.566085925232997,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 75,
+              "signals": {
+                "volumeSpike": 60.43763012860891,
+                "priceSpike": 67.12131769185318,
+                "momentum": 89.4856632797142,
+                "liquidity": 100
+              },
+              "currentPrice": 0.00874124706194536,
+              "timestamp": "2025-11-09T19:55:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BOME",
+            "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+            "entryTime": "2025-11-10T01:40:00.000Z",
+            "exitTime": "2025-11-10T01:50:00.000Z",
+            "entryPrice": 0.016399420620961377,
+            "exitPrice": 0.018922363454726494,
+            "amount": 148.61131134687136,
+            "investedUSD": 2.4371394038099936,
+            "returnUSD": 2.8120772467890194,
+            "pnl": 0.3749378429790256,
+            "pnlPercent": 15.38434126471728,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+              "symbol": "BOME",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.016399420620961377,
+              "timestamp": "2025-11-10T01:40:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-10T02:05:00.000Z",
+            "exitTime": "2025-11-10T02:20:00.000Z",
+            "entryPrice": 0.007324571110608544,
+            "exitPrice": 0.008335754572738652,
+            "amount": 342.9725692426358,
+            "investedUSD": 2.512126972405799,
+            "returnUSD": 2.8589351623882258,
+            "pnl": 0.34680818998242674,
+            "pnlPercent": 13.805360707954087,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.007324571110608544,
+              "timestamp": "2025-11-10T02:05:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-10T04:05:00.000Z",
+            "exitTime": "2025-11-10T04:20:00.000Z",
+            "entryPrice": 0.01133883538951398,
+            "exitPrice": 0.012885092045348052,
+            "amount": 227.6678796121879,
+            "investedUSD": 2.5814886104022845,
+            "returnUSD": 2.93352158457226,
+            "pnl": 0.3520329741699758,
+            "pnlPercent": 13.636820737904282,
+            "holdTimeMinutes": 15,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.01133883538951398,
+              "timestamp": "2025-11-10T04:05:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-09T09:20:00.000Z",
+            "exitTime": "2025-11-09T09:30:00.000Z",
+            "entryPrice": 0.09317020148877403,
+            "exitPrice": 0.10396516319622039,
+            "amount": 24.60275037423643,
+            "investedUSD": 2.2922432095456187,
+            "returnUSD": 2.5578289577333626,
+            "pnl": 0.2655857481877438,
+            "pnlPercent": 11.58628138069126,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 89,
+              "signals": {
+                "volumeSpike": 72.47260376010935,
+                "priceSpike": 95.18186193992224,
+                "momentum": 100,
+                "liquidity": 100
+              },
+              "currentPrice": 0.09317020148877403,
+              "timestamp": "2025-11-09T09:20:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "WIF",
+            "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+            "entryTime": "2025-11-10T15:35:00.000Z",
+            "exitTime": "2025-11-10T15:45:00.000Z",
+            "entryPrice": 0.01126547203102206,
+            "exitPrice": 0.012566372917861921,
+            "amount": 274.5896253098758,
+            "investedUSD": 3.093381743937233,
+            "returnUSD": 3.4505956310198758,
+            "pnl": 0.35721388708264257,
+            "pnlPercent": 11.547682007975627,
+            "holdTimeMinutes": 10,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+              "symbol": "WIF",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.01126547203102206,
+              "timestamp": "2025-11-10T15:35:00.000Z"
+            }
+          },
+          {
+            "tokenSymbol": "BONK",
+            "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+            "entryTime": "2025-11-10T06:15:00.000Z",
+            "exitTime": "2025-11-10T06:20:00.000Z",
+            "entryPrice": 0.8664990691907839,
+            "exitPrice": 0.9541904783613099,
+            "amount": 3.0604709220436463,
+            "investedUSD": 2.6518952052362796,
+            "returnUSD": 2.920272213115706,
+            "pnl": 0.2683770078794263,
+            "pnlPercent": 10.12019658052492,
+            "holdTimeMinutes": 5,
+            "exitReason": "Score Fraco",
+            "signals": {
+              "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+              "symbol": "BONK",
+              "score": 70,
+              "signals": {
+                "volumeSpike": 100,
+                "priceSpike": 100,
+                "momentum": 0,
+                "liquidity": 100
+              },
+              "currentPrice": 0.8664990691907839,
+              "timestamp": "2025-11-10T06:15:00.000Z"
+            }
+          }
+        ],
+        "dailyPnl": [
+          {
+            "date": "2025-11-09",
+            "pnl": 2.1856970190499676,
+            "capital": 12.185697019049968
+          },
+          {
+            "date": "2025-11-10",
+            "pnl": 3.638425587718838,
+            "capital": 15.824122606768807
+          }
+        ]
+      },
+      "bestConfig": null,
+      "overfit": false,
+      "degradation": 0
+    }
+  ],
+  "summary": {
+    "avgDegradation": 0,
+    "overfitCount": 0,
+    "avgTestPnl": 29.34947441824426,
+    "avgTestWinRate": 100,
+    "avgTestTrades": 6.5
+  }
+}

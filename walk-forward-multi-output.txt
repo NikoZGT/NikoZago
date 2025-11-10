@@ -1,0 +1,547 @@
+
+> memecoin-trading-bot@1.0.0 walk-forward:multi
+> ts-node src/backtesting/walk-forward-multi.ts
+
+
+╔════════════════════════════════════════════════════════════════╗
+║   🧪 WALK-FORWARD TESTING - MULTI-TOKEN (Anti-Overfitting)   ║
+╚════════════════════════════════════════════════════════════════╝
+
+📋 Períodos de teste:
+
+Período 1:
+  Treino: 2025-11-03 → 2025-11-05
+  Teste:  2025-11-06 → 2025-11-07
+
+Período 2:
+  Treino: 2025-11-04 → 2025-11-06
+  Teste:  2025-11-07 → 2025-11-08
+
+Período 3:
+  Treino: 2025-11-05 → 2025-11-07
+  Teste:  2025-11-08 → 2025-11-09
+
+Período 4:
+  Treino: 2025-11-06 → 2025-11-08
+  Teste:  2025-11-09 → 2025-11-10
+
+
+======================================================================
+🔄 Período 1 - TREINO (Multi-Token)
+======================================================================
+
+2025-11-10 01:55:23 [[32minfo[39m]: 🔄 Starting MULTI-TOKEN backtesting...
+2025-11-10 01:55:23 [[32minfo[39m]: Period: 2025-11-03T00:00:00.000Z to 2025-11-05T23:59:59.000Z
+2025-11-10 01:55:23 [[32minfo[39m]: Initial Capital: $10
+2025-11-10 01:55:23 [[32minfo[39m]: Max Concurrent Positions: 3
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching popular tokens...
+2025-11-10 01:55:23 [[32minfo[39m]: Using 5 popular memecoins for backtest
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for 7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5...
+2025-11-10 01:55:23 [[32minfo[39m]: Found 5 tokens with historical data
+2025-11-10 01:55:23 [[32minfo[39m]: 📊 Simulando trading multi-token em 864 candles...
+2025-11-10 01:55:23 [[32minfo[39m]: Simulated 12 trades
+2025-11-10 01:55:23 [[32minfo[39m]: Results saved to: /home/user/NikoZago/backtests/backtest_multi_1762739723613.json
+
+============================================================
+📊 MULTI-TOKEN BACKTEST RESULTS
+============================================================
+Period: 11/3/2025 to 11/5/2025
+Duration: 3 days
+------------------------------------------------------------
+Start Capital:    $10.00
+End Capital:      $16.09
+Total PnL:        $6.09 (60.87%)
+------------------------------------------------------------
+Total Trades:     12
+Winning Trades:   12 (100.0%)
+Losing Trades:    0
+Avg Win:          $0.51
+Avg Loss:         $0.00
+Profit Factor:    999.00
+------------------------------------------------------------
+Max Drawdown:     $0.00 (0.00%)
+Sharpe Ratio:     39.36
+============================================================
+
+🏆 TOP 5 BEST TRADES:
+1. MEW: +36.25% ($1.03) - 20min
+2. BOME: +33.44% ($0.89) - 20min
+3. POPCAT: +25.53% ($0.78) - 20min
+4. WIF: +25.41% ($0.55) - 20min
+5. MEW: +25.32% ($0.59) - 20min
+
+============================================================
+
+
+🎯 Resultados no TREINO:
+  PnL: 60.87%
+  Win Rate: 100.00%
+  Profit Factor: 999.00
+  Max Drawdown: 0.00%
+  Trades: 12
+
+
+======================================================================
+🧪 Período 1 - TESTE (OUT-OF-SAMPLE)
+======================================================================
+
+2025-11-10 01:55:23 [[32minfo[39m]: 🔄 Starting MULTI-TOKEN backtesting...
+2025-11-10 01:55:23 [[32minfo[39m]: Period: 2025-11-06T00:00:00.000Z to 2025-11-07T23:59:59.000Z
+2025-11-10 01:55:23 [[32minfo[39m]: Initial Capital: $10
+2025-11-10 01:55:23 [[32minfo[39m]: Max Concurrent Positions: 3
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching popular tokens...
+2025-11-10 01:55:23 [[32minfo[39m]: Using 5 popular memecoins for backtest
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for 7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5...
+2025-11-10 01:55:23 [[32minfo[39m]: Found 5 tokens with historical data
+2025-11-10 01:55:23 [[32minfo[39m]: 📊 Simulando trading multi-token em 576 candles...
+2025-11-10 01:55:23 [[32minfo[39m]: Simulated 5 trades
+2025-11-10 01:55:23 [[32minfo[39m]: Results saved to: /home/user/NikoZago/backtests/backtest_multi_1762739723633.json
+
+============================================================
+📊 MULTI-TOKEN BACKTEST RESULTS
+============================================================
+Period: 11/6/2025 to 11/7/2025
+Duration: 2 days
+------------------------------------------------------------
+Start Capital:    $10.00
+End Capital:      $12.13
+Total PnL:        $2.13 (21.26%)
+------------------------------------------------------------
+Total Trades:     5
+Winning Trades:   5 (100.0%)
+Losing Trades:    0
+Avg Win:          $0.43
+Avg Loss:         $0.00
+Profit Factor:    999.00
+------------------------------------------------------------
+Max Drawdown:     $0.00 (0.00%)
+Sharpe Ratio:     32.07
+============================================================
+
+🏆 TOP 5 BEST TRADES:
+1. WIF: +37.10% ($0.84) - 20min
+2. WIF: +24.06% ($0.52) - 20min
+3. MEW: +13.58% ($0.28) - 10min
+4. MEW: +12.07% ($0.24) - 10min
+5. POPCAT: +11.93% ($0.25) - 35min
+
+============================================================
+
+
+📈 Resultados no TESTE:
+  PnL: 21.26%
+  Win Rate: 100.00%
+  Profit Factor: 999.00
+  Max Drawdown: 0.00%
+  Trades: 5
+
+⚠️  ANÁLISE DE OVERFITTING:
+  Degradação: 0.00%
+  Status: ✅ ESTRATÉGIA ROBUSTA
+
+======================================================================
+🔄 Período 2 - TREINO (Multi-Token)
+======================================================================
+
+2025-11-10 01:55:23 [[32minfo[39m]: 🔄 Starting MULTI-TOKEN backtesting...
+2025-11-10 01:55:23 [[32minfo[39m]: Period: 2025-11-04T00:00:00.000Z to 2025-11-06T23:59:59.000Z
+2025-11-10 01:55:23 [[32minfo[39m]: Initial Capital: $10
+2025-11-10 01:55:23 [[32minfo[39m]: Max Concurrent Positions: 3
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching popular tokens...
+2025-11-10 01:55:23 [[32minfo[39m]: Using 5 popular memecoins for backtest
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for 7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5...
+2025-11-10 01:55:23 [[32minfo[39m]: Found 5 tokens with historical data
+2025-11-10 01:55:23 [[32minfo[39m]: 📊 Simulando trading multi-token em 864 candles...
+2025-11-10 01:55:23 [[32minfo[39m]: Simulated 12 trades
+2025-11-10 01:55:23 [[32minfo[39m]: Results saved to: /home/user/NikoZago/backtests/backtest_multi_1762739723642.json
+
+============================================================
+📊 MULTI-TOKEN BACKTEST RESULTS
+============================================================
+Period: 11/4/2025 to 11/6/2025
+Duration: 3 days
+------------------------------------------------------------
+Start Capital:    $10.00
+End Capital:      $16.69
+Total PnL:        $6.69 (66.85%)
+------------------------------------------------------------
+Total Trades:     12
+Winning Trades:   12 (100.0%)
+Losing Trades:    0
+Avg Win:          $0.56
+Avg Loss:         $0.00
+Profit Factor:    999.00
+------------------------------------------------------------
+Max Drawdown:     $0.00 (0.00%)
+Sharpe Ratio:     44.56
+============================================================
+
+🏆 TOP 5 BEST TRADES:
+1. BONK: +36.34% ($1.05) - 20min
+2. POPCAT: +32.11% ($0.76) - 20min
+3. MEW: +30.85% ($0.64) - 20min
+4. WIF: +26.72% ($0.73) - 20min
+5. POPCAT: +25.83% ($0.65) - 20min
+
+============================================================
+
+
+🎯 Resultados no TREINO:
+  PnL: 66.85%
+  Win Rate: 100.00%
+  Profit Factor: 999.00
+  Max Drawdown: 0.00%
+  Trades: 12
+
+
+======================================================================
+🧪 Período 2 - TESTE (OUT-OF-SAMPLE)
+======================================================================
+
+2025-11-10 01:55:23 [[32minfo[39m]: 🔄 Starting MULTI-TOKEN backtesting...
+2025-11-10 01:55:23 [[32minfo[39m]: Period: 2025-11-07T00:00:00.000Z to 2025-11-08T23:59:59.000Z
+2025-11-10 01:55:23 [[32minfo[39m]: Initial Capital: $10
+2025-11-10 01:55:23 [[32minfo[39m]: Max Concurrent Positions: 3
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching popular tokens...
+2025-11-10 01:55:23 [[32minfo[39m]: Using 5 popular memecoins for backtest
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for 7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5...
+2025-11-10 01:55:23 [[32minfo[39m]: Found 5 tokens with historical data
+2025-11-10 01:55:23 [[32minfo[39m]: 📊 Simulando trading multi-token em 576 candles...
+2025-11-10 01:55:23 [[32minfo[39m]: Simulated 2 trades
+2025-11-10 01:55:23 [[32minfo[39m]: Results saved to: /home/user/NikoZago/backtests/backtest_multi_1762739723649.json
+
+============================================================
+📊 MULTI-TOKEN BACKTEST RESULTS
+============================================================
+Period: 11/7/2025 to 11/8/2025
+Duration: 2 days
+------------------------------------------------------------
+Start Capital:    $10.00
+End Capital:      $10.70
+Total PnL:        $0.70 (7.00%)
+------------------------------------------------------------
+Total Trades:     2
+Winning Trades:   2 (100.0%)
+Losing Trades:    0
+Avg Win:          $0.35
+Avg Loss:         $0.00
+Profit Factor:    999.00
+------------------------------------------------------------
+Max Drawdown:     $0.00 (0.00%)
+Sharpe Ratio:     64.18
+============================================================
+
+🏆 TOP 5 BEST TRADES:
+1. POPCAT: +21.47% ($0.44) - 15min
+2. WIF: +12.95% ($0.26) - 20min
+
+============================================================
+
+
+📈 Resultados no TESTE:
+  PnL: 7.00%
+  Win Rate: 100.00%
+  Profit Factor: 999.00
+  Max Drawdown: 0.00%
+  Trades: 2
+
+⚠️  ANÁLISE DE OVERFITTING:
+  Degradação: 0.00%
+  Status: ✅ ESTRATÉGIA ROBUSTA
+
+======================================================================
+🔄 Período 3 - TREINO (Multi-Token)
+======================================================================
+
+2025-11-10 01:55:23 [[32minfo[39m]: 🔄 Starting MULTI-TOKEN backtesting...
+2025-11-10 01:55:23 [[32minfo[39m]: Period: 2025-11-05T00:00:00.000Z to 2025-11-07T23:59:59.000Z
+2025-11-10 01:55:23 [[32minfo[39m]: Initial Capital: $10
+2025-11-10 01:55:23 [[32minfo[39m]: Max Concurrent Positions: 3
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching popular tokens...
+2025-11-10 01:55:23 [[32minfo[39m]: Using 5 popular memecoins for backtest
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for 7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5...
+2025-11-10 01:55:23 [[32minfo[39m]: Found 5 tokens with historical data
+2025-11-10 01:55:23 [[32minfo[39m]: 📊 Simulando trading multi-token em 864 candles...
+2025-11-10 01:55:23 [[32minfo[39m]: Simulated 11 trades
+2025-11-10 01:55:23 [[32minfo[39m]: Results saved to: /home/user/NikoZago/backtests/backtest_multi_1762739723658.json
+
+============================================================
+📊 MULTI-TOKEN BACKTEST RESULTS
+============================================================
+Period: 11/5/2025 to 11/7/2025
+Duration: 3 days
+------------------------------------------------------------
+Start Capital:    $10.00
+End Capital:      $15.13
+Total PnL:        $5.13 (51.31%)
+------------------------------------------------------------
+Total Trades:     11
+Winning Trades:   11 (100.0%)
+Losing Trades:    0
+Avg Win:          $0.47
+Avg Loss:         $0.00
+Profit Factor:    999.00
+------------------------------------------------------------
+Max Drawdown:     $0.00 (0.00%)
+Sharpe Ratio:     41.93
+============================================================
+
+🏆 TOP 5 BEST TRADES:
+1. BOME: +28.81% ($0.58) - 20min
+2. BOME: +27.74% ($0.69) - 20min
+3. BONK: +26.63% ($0.71) - 20min
+4. MEW: +24.84% ($0.59) - 20min
+5. WIF: +23.43% ($0.50) - 15min
+
+============================================================
+
+
+🎯 Resultados no TREINO:
+  PnL: 51.31%
+  Win Rate: 100.00%
+  Profit Factor: 999.00
+  Max Drawdown: 0.00%
+  Trades: 11
+
+
+======================================================================
+🧪 Período 3 - TESTE (OUT-OF-SAMPLE)
+======================================================================
+
+2025-11-10 01:55:23 [[32minfo[39m]: 🔄 Starting MULTI-TOKEN backtesting...
+2025-11-10 01:55:23 [[32minfo[39m]: Period: 2025-11-08T00:00:00.000Z to 2025-11-09T23:59:59.000Z
+2025-11-10 01:55:23 [[32minfo[39m]: Initial Capital: $10
+2025-11-10 01:55:23 [[32minfo[39m]: Max Concurrent Positions: 3
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching popular tokens...
+2025-11-10 01:55:23 [[32minfo[39m]: Using 5 popular memecoins for backtest
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for 7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5...
+2025-11-10 01:55:23 [[32minfo[39m]: Found 5 tokens with historical data
+2025-11-10 01:55:23 [[32minfo[39m]: 📊 Simulando trading multi-token em 576 candles...
+2025-11-10 01:55:23 [[32minfo[39m]: Simulated 8 trades
+2025-11-10 01:55:23 [[32minfo[39m]: Results saved to: /home/user/NikoZago/backtests/backtest_multi_1762739723665.json
+
+============================================================
+📊 MULTI-TOKEN BACKTEST RESULTS
+============================================================
+Period: 11/8/2025 to 11/9/2025
+Duration: 2 days
+------------------------------------------------------------
+Start Capital:    $10.00
+End Capital:      $13.09
+Total PnL:        $3.09 (30.90%)
+------------------------------------------------------------
+Total Trades:     8
+Winning Trades:   8 (100.0%)
+Losing Trades:    0
+Avg Win:          $0.39
+Avg Loss:         $0.00
+Profit Factor:    999.00
+------------------------------------------------------------
+Max Drawdown:     $0.00 (0.00%)
+Sharpe Ratio:     76.43
+============================================================
+
+🏆 TOP 5 BEST TRADES:
+1. WIF: +22.46% ($0.55) - 15min
+2. BOME: +22.09% ($0.36) - 15min
+3. POPCAT: +20.69% ($0.48) - 15min
+4. POPCAT: +18.83% ($0.42) - 20min
+5. BOME: +15.85% ($0.35) - 10min
+
+============================================================
+
+
+📈 Resultados no TESTE:
+  PnL: 30.90%
+  Win Rate: 100.00%
+  Profit Factor: 999.00
+  Max Drawdown: 0.00%
+  Trades: 8
+
+⚠️  ANÁLISE DE OVERFITTING:
+  Degradação: 0.00%
+  Status: ✅ ESTRATÉGIA ROBUSTA
+
+======================================================================
+🔄 Período 4 - TREINO (Multi-Token)
+======================================================================
+
+2025-11-10 01:55:23 [[32minfo[39m]: 🔄 Starting MULTI-TOKEN backtesting...
+2025-11-10 01:55:23 [[32minfo[39m]: Period: 2025-11-06T00:00:00.000Z to 2025-11-08T23:59:59.000Z
+2025-11-10 01:55:23 [[32minfo[39m]: Initial Capital: $10
+2025-11-10 01:55:23 [[32minfo[39m]: Max Concurrent Positions: 3
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching popular tokens...
+2025-11-10 01:55:23 [[32minfo[39m]: Using 5 popular memecoins for backtest
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for 7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5...
+2025-11-10 01:55:23 [[32minfo[39m]: Found 5 tokens with historical data
+2025-11-10 01:55:23 [[32minfo[39m]: 📊 Simulando trading multi-token em 864 candles...
+2025-11-10 01:55:23 [[32minfo[39m]: Simulated 5 trades
+2025-11-10 01:55:23 [[32minfo[39m]: Results saved to: /home/user/NikoZago/backtests/backtest_multi_1762739723673.json
+
+============================================================
+📊 MULTI-TOKEN BACKTEST RESULTS
+============================================================
+Period: 11/6/2025 to 11/8/2025
+Duration: 3 days
+------------------------------------------------------------
+Start Capital:    $10.00
+End Capital:      $12.75
+Total PnL:        $2.75 (27.51%)
+------------------------------------------------------------
+Total Trades:     5
+Winning Trades:   5 (100.0%)
+Losing Trades:    0
+Avg Win:          $0.55
+Avg Loss:         $0.00
+Profit Factor:    999.00
+------------------------------------------------------------
+Max Drawdown:     $0.00 (0.00%)
+Sharpe Ratio:     32.96
+============================================================
+
+🏆 TOP 5 BEST TRADES:
+1. BONK: +42.55% ($1.00) - 20min
+2. WIF: +35.64% ($0.78) - 20min
+3. POPCAT: +19.69% ($0.42) - 10min
+4. BONK: +16.87% ($0.34) - 15min
+5. MEW: +10.45% ($0.22) - 10min
+
+============================================================
+
+
+🎯 Resultados no TREINO:
+  PnL: 27.51%
+  Win Rate: 100.00%
+  Profit Factor: 999.00
+  Max Drawdown: 0.00%
+  Trades: 5
+
+
+======================================================================
+🧪 Período 4 - TESTE (OUT-OF-SAMPLE)
+======================================================================
+
+2025-11-10 01:55:23 [[32minfo[39m]: 🔄 Starting MULTI-TOKEN backtesting...
+2025-11-10 01:55:23 [[32minfo[39m]: Period: 2025-11-09T00:00:00.000Z to 2025-11-10T23:59:59.000Z
+2025-11-10 01:55:23 [[32minfo[39m]: Initial Capital: $10
+2025-11-10 01:55:23 [[32minfo[39m]: Max Concurrent Positions: 3
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching popular tokens...
+2025-11-10 01:55:23 [[32minfo[39m]: Using 5 popular memecoins for backtest
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for 7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm...
+2025-11-10 01:55:23 [[32minfo[39m]: Fetching history for MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5...
+2025-11-10 01:55:23 [[32minfo[39m]: Found 5 tokens with historical data
+2025-11-10 01:55:23 [[32minfo[39m]: 📊 Simulando trading multi-token em 576 candles...
+2025-11-10 01:55:23 [[32minfo[39m]: Simulated 11 trades
+2025-11-10 01:55:23 [[32minfo[39m]: Results saved to: /home/user/NikoZago/backtests/backtest_multi_1762739723680.json
+
+============================================================
+📊 MULTI-TOKEN BACKTEST RESULTS
+============================================================
+Period: 11/9/2025 to 11/10/2025
+Duration: 2 days
+------------------------------------------------------------
+Start Capital:    $10.00
+End Capital:      $15.82
+Total PnL:        $5.82 (58.24%)
+------------------------------------------------------------
+Total Trades:     11
+Winning Trades:   11 (100.0%)
+Losing Trades:    0
+Avg Win:          $0.53
+Avg Loss:         $0.00
+Profit Factor:    999.00
+------------------------------------------------------------
+Max Drawdown:     $0.00 (0.00%)
+Sharpe Ratio:     29.59
+============================================================
+
+🏆 TOP 5 BEST TRADES:
+1. MEW: +45.52% ($1.29) - 20min
+2. MEW: +36.22% ($0.72) - 20min
+3. POPCAT: +34.35% ($0.74) - 20min
+4. MEW: +23.96% ($0.65) - 15min
+5. BOME: +19.57% ($0.46) - 10min
+
+============================================================
+
+
+📈 Resultados no TESTE:
+  PnL: 58.24%
+  Win Rate: 100.00%
+  Profit Factor: 999.00
+  Max Drawdown: 0.00%
+  Trades: 11
+
+⚠️  ANÁLISE DE OVERFITTING:
+  Degradação: 0.00%
+  Status: ✅ ESTRATÉGIA ROBUSTA
+
+
+
+╔════════════════════════════════════════════════════════════════╗
+║           📊 RELATÓRIO WALK-FORWARD (MULTI-TOKEN)             ║
+╚════════════════════════════════════════════════════════════════╝
+
+┌─────────────┬──────────┬──────────┬────────────┬──────────────┐
+│   Período   │   Treino │   Teste  │ Degradação │    Status    │
+│             │   PnL %  │  PnL %   │     %      │              │
+├─────────────┼──────────┼──────────┼────────────┼──────────────┤
+│ Período 1   │    60.9 │    21.3 │       0.0 │ ✅ Robusto   │
+│ Período 2   │    66.9 │     7.0 │       0.0 │ ✅ Robusto   │
+│ Período 3   │    51.3 │    30.9 │       0.0 │ ✅ Robusto   │
+│ Período 4   │    27.5 │    58.2 │       0.0 │ ✅ Robusto   │
+└─────────────┴──────────┴──────────┴────────────┴──────────────┘
+
+📈 ESTATÍSTICAS GERAIS (MULTI-TOKEN):
+
+  Degradação Média: 0.00%
+  Períodos com Overfitting: 0/4
+  PnL Médio (Teste): 29.35%
+  Win Rate Médio (Teste): 100.00%
+  Trades Médio (Teste): 7
+
+
+╔════════════════════════════════════════════════════════════════╗
+║              🎯 RECOMENDAÇÃO FINAL (MULTI-TOKEN)               ║
+╚════════════════════════════════════════════════════════════════╝
+
+✅ ESTRATÉGIA MULTI-TOKEN VALIDADA - Altamente Confiável
+   - Performance consistente entre períodos
+   - Sem sinais de overfitting
+   - Scanner funciona bem em dados nunca vistos
+   - RECOMENDADO para produção
+
+
+💾 Resultados salvos em: /home/user/NikoZago/backtests/walk-forward-multi-results.json
+

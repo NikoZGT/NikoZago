@@ -9,9 +9,11 @@
     "dev": "ts-node src/bot.ts",
     "dev:advanced": "ts-node src/bot-advanced.ts",
     "backtest": "ts-node src/backtesting/run-backtest.ts",
+    "backtest:multi": "ts-node src/backtesting/run-backtest-multi.ts",
     "test:strategies": "ts-node src/backtesting/test-strategies.ts",
     "optimize": "ts-node src/backtesting/optimize-strategy.ts",
     "walk-forward": "ts-node src/backtesting/walk-forward-test.ts",
+    "walk-forward:multi": "ts-node src/backtesting/walk-forward-multi.ts",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint src --ext .ts"
