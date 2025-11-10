@@ -1,15 +1,37 @@
-# 🚀 Memecoin Pump Detector - TradingView Indicator
+# 🚀 Memecoin Pump Detector ML v2 - TradingView Indicator
 
-Indicador Pine Script v6 que detecta pumps de memecoins usando a mesma lógica do bot de trading automatizado.
+Indicador Pine Script v6 **inteligente e dinâmico** que analisa os últimos 50 candles em tempo real para detectar pumps e dumps de memecoins.
 
-## 📊 O que o Indicador Faz
+## 🆕 O que há de novo na v2?
 
-✅ **Detecta Pumps** (volume spike + price spike + momentum)
-✅ **Calcula Score 0-100** (baseado em volume, preço, momentum)
-✅ **Anti-Late Entry Filters** (bloqueia entradas tardias)
-✅ **Sinais Visuais** (setas BUY/SELL no gráfico)
-✅ **Painel em Tempo Real** (métricas ao vivo)
-✅ **Alertas Configuráveis** (notificações no app/email)
+✅ **Score SEMPRE 0-100** (nunca negativo!)
+✅ **Análise contínua dos últimos 50 candles** em tempo real
+✅ **Detecção de Tendência** (ALTA/BAIXA/LATERAL)
+✅ **Força da Tendência** (0-100%)
+✅ **Análise de Reversão** (detecta divergências preço/volume)
+✅ **Sinais BUY e SELL inteligentes** baseados na direção do mercado
+✅ **Linha de Tendência visual** no gráfico
+✅ **11 métricas em tempo real** no painel
+
+## 📊 Como Funciona
+
+O indicador **analisa dinamicamente** os últimos 50 candles para entender:
+
+1. **Volume** → Compara volume atual com média de 50 candles
+2. **Posição do Preço** → Onde está na faixa (topo/meio/fundo) dos últimos 50 candles
+3. **Tendência** → Analisa EMAs (9, 21, 50) para determinar direção
+4. **Força** → Mede separação das EMAs (quanto mais separadas, mais forte a tendência)
+5. **Reversão** → Detecta divergências (preço sobe + volume cai = cuidado!)
+
+### Score Calculation (0-100 pontos)
+
+```
+Volume Score (0-30 pts):    Volume atual vs média de 50 candles
+Price Score (0-35 pts):     Posição na faixa (topo/fundo) dos 50 candles
+Momentum Score (0-35 pts):  Força da tendência (separação das EMAs)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 0-100 pontos (sempre positivo!)
+```
 
 ## 🔧 Como Instalar (2 minutos)
 
@@ -33,268 +55,246 @@ Indicador Pine Script v6 que detecta pumps de memecoins usando a mesma lógica d
 ### Para Memecoins (Solana, BSC, etc)
 
 1. **Adicione o par no TradingView:**
-   - Pesquise: `BONKUSDT`, `WIFUSDT`, `SHIBUSDT`, etc
+   - Pesquise: `BONKUSDT`, `WIFUSDT`, `SHIBUSDT`, `PEPEUSDT`, etc
    - Timeframe recomendado: **M5** ou **M15**
 
 2. **Configure o indicador:**
    - Clique na engrenagem ⚙️ ao lado do nome
-   - Ajuste "Score Mínimo" conforme sua agressividade:
-     - `60-65` = Mais sinais (maior risco)
-     - `70-75` = Balanceado (recomendado)
-     - `80-85` = Poucos sinais (menor risco)
+   - **Score Mínimo**: 60-75 (quanto maior, mais seletivo)
+   - **Força Mínima de Tendência**: 40-70% (quanto maior, mais forte a tendência exigida)
+   - **Análise de Candles**: 50 (recomendado)
 
 3. **Interprete os sinais:**
-   - 🚀 **Seta Verde (BUY)** = Pump detectado, entrada segura
-   - ⏱️ **Warning Laranja** = Pump muito velho (> 6 candles)
-   - 📊 **Warning Vermelho** = Pump muito rápido (reversão iminente)
-   - ⛔ **Warning Roxo** = Buy Stop (preço já subiu demais)
 
-## 📊 Painel de Métricas
+   **Sinais de COMPRA (BUY):**
+   - 🚀 **Seta Verde** = Pump detectado + Tendência de ALTA confirmada + Força boa
+   - Aparece quando: Score alto + EMA 9 > EMA 21 > EMA 50 + Sem divergência
 
-O painel no canto superior direito mostra:
+   **Sinais de VENDA (SELL):**
+   - 📉 **Seta Vermelha** = Dump detectado + Tendência de BAIXA confirmada + Força boa
+   - Aparece quando: Score alto + EMA 9 < EMA 21 < EMA 50
 
-| Métrica | Descrição | Bom / Ruim |
-|---------|-----------|------------|
-| ⭐ **Score** | 0-100 | Verde: ≥80<br>Amarelo: 70-80<br>Vermelho: <70 |
-| 📊 **Volume** | Volume vs média | Verde: ≥1.5x<br>Amarelo: 1.2-1.5x<br>Vermelho: <1.2x |
-| 💹 **Price Δ** | Variação 5 candles | Verde: positivo<br>Vermelho: negativo |
-| 🎯 **Momentum** | EMA 9 vs EMA 21 | Verde: positivo<br>Vermelho: negativo |
-| ⚡ **RoC** | Rate of Change | Verde: <8%<br>Vermelho: >8% (muito rápido!) |
-| ⏱️ **Pump Age** | Idade do pump | Verde: ≤6 candles<br>Vermelho: >6 (velho!) |
-| ⛔ **Buy Stop** | Subida desde detecção | Verde: <1.5%<br>Vermelho: >1.5% (tarde!) |
-| 🎯 **Signal** | Sinal atual | BUY 🚀 / HOLD / SELL 📉 |
+   **Avisos (Warnings):**
+   - ⏱️ **TOO OLD** = Pump/dump muito velho (> 6 candles) - entrada tardia!
+   - 📊 **TOO FAST** = Movimento muito rápido (> 8%) - possível reversão!
+   - ⛔ **BUY STOP** = Preço já subiu demais (> 1.5%) - esperou demais!
+   - ⚠️ **REVERSAL?** = Preço subindo mas volume caindo - cuidado com reversão!
 
-## ⚙️ Configurações
+## 📊 Painel de Estatísticas (Canto Superior Direito)
 
-### Score Settings
+O painel mostra **11 métricas em tempo real**:
 
+| Métrica | Descrição | Cores |
+|---------|-----------|-------|
+| ⭐ **Score** | Score total (0-100) | Verde (80+), Amarelo (70-79), Vermelho (<70) |
+| 🎯 **Tendência** | Direção do mercado | 📈 ALTA (verde), 📉 BAIXA (vermelho), ↔️ LATERAL (cinza) |
+| 💪 **Força** | Força da tendência (%) | Verde (70+), Amarelo (40-69), Vermelho (<40) |
+| 📊 **Volume** | Volume vs média 50 candles | Verde (1.5x+), Amarelo (1.2-1.5x), Vermelho (<1.2x) |
+| 📍 **Posição** | Posição na faixa 50 candles | Verde (topo 70%+), Amarelo (meio), Vermelho (fundo <30%) |
+| ⚡ **RoC** | Rate of Change (velocidade) | Verde (normal), Vermelho (>8% - muito rápido!) |
+| ⏱️ **Pump Age** | Idade do pump (candles) | Verde (≤6), Vermelho (>6 - muito velho!) |
+| 📈 **Δ Pump** | Variação desde início pump | Verde (+lucro), Vermelho (-perda) |
+| 🔄 **Reversão?** | Risco de reversão | ✅ NÃO (verde), ⚠️ SIM (laranja - cuidado!) |
+| 🎯 **Signal** | Sinal atual | 🚀 BUY (verde), 📉 SELL (vermelho), ⏸️ HOLD (cinza) |
+
+## 🎨 Visualização
+
+### Background Colors (fundo do gráfico):
+- 🟢 **Verde claro** = Tendência de ALTA + Score alto
+- 🔴 **Vermelho claro** = Tendência de BAIXA + Score alto
+- 🟡 **Amarelo claro** = Score alto mas tendência lateral
+- ⚪ **Cinza** = Score baixo (mercado calmo)
+
+### Linha de Tendência:
+- **Verde** = Tendência de alta (EMAs alinhadas pra cima)
+- **Vermelha** = Tendência de baixa (EMAs alinhadas pra baixo)
+- **Cinza** = Lateral (sem tendência clara)
+
+## ⚙️ Configurações Recomendadas
+
+### 🔥 Agressivo (Mais sinais, mais risco)
 ```
-⭐ Score Mínimo: 70 (padrão)
-   - 50-60: Ultra agressivo (muitos sinais falsos)
-   - 65-75: Balanceado ✅
-   - 80-90: Conservador (poucos sinais)
-
-Volume Weight: 30 (0-50)
-Price Weight: 40 (0-50)
-Momentum Weight: 30 (0-50)
-```
-
-### Anti-Late Entry Filters
-
-```
-⏱️ Max Pump Age: 6 candles (padrão)
-   - M5: 6 candles = 30 min
-   - M15: 6 candles = 90 min
-   - Ajuste conforme timeframe
-
-📊 Max Rate of Change: 8% (padrão)
-   - Memecoins: 5-10%
-   - Altcoins: 3-5%
-   - Pumps >8% revertem rápido
-
-⛔ Buy Stop: 1.5% (padrão)
-   - Mais agressivo: 1.0%
-   - Mais conservador: 2.5%
-```
-
-### Visual Settings
-
-```
-✅ Show BUY Signals: ON
-❌ Show SELL Signals: OFF (habilite para shorts)
-🏷️ Show Labels: ON (warnings de late entry)
-📊 Show Stats Table: ON (painel de métricas)
+Score Mínimo: 60
+Força Mínima: 40%
+Max Pump Age: 8 candles
+Max RoC: 10%
+Buy Stop: 2%
 ```
 
-### Alerts
-
+### ⚖️ Balanceado (Recomendado)
 ```
-🔔 Enable Alerts: ON
-```
-
-## 🔔 Criar Alertas
-
-Para receber notificações quando aparecer sinal de BUY:
-
-1. Clique nos **3 pontinhos** ao lado do indicador
-2. Selecione "Add Alert"
-3. Configure:
-   - **Condition:** `Memecoin Pump Detector ML`
-   - **Trigger:** `Once Per Bar Close`
-   - **Expiration:** Escolha tempo (ou nunca)
-   - **Actions:** ✅ Notification, ✅ Email, ✅ Webhook
-4. Clique "Create"
-
-**Agora você recebe alerta no celular/email quando aparecer pump!** 🔥
-
-## 🎯 Exemplos de Uso
-
-### Exemplo 1: Pump Saudável ✅
-
-```
-📊 Gráfico mostra:
-- Score: 85/100 (verde)
-- Volume: 2.3x (verde)
-- Price Δ: +6.5% (verde)
-- Momentum: +2.1% (verde)
-- RoC: 5.2% (verde - não muito rápido)
-- Pump Age: 3 bars (verde - novo)
-- Buy Stop: 0.8% (verde - não subiu muito)
-- Signal: BUY 🚀
-
-🚀 Seta verde aparece no gráfico!
-
-✅ ENTRADA SEGURA!
+Score Mínimo: 70
+Força Mínima: 60%
+Max Pump Age: 6 candles
+Max RoC: 8%
+Buy Stop: 1.5%
 ```
 
-### Exemplo 2: Pump Muito Velho ⚠️
-
+### 🛡️ Conservador (Poucos sinais, menor risco)
 ```
-📊 Gráfico mostra:
-- Score: 78/100 (amarelo)
-- Volume: 1.8x (verde)
-- Pump Age: 9 bars (vermelho - muito velho!)
-- Signal: HOLD
-
-⏱️ Warning laranja: "TOO OLD - 9 bars"
-
-❌ NÃO ENTRE! Pump já passou, reversão iminente.
+Score Mínimo: 80
+Força Mínima: 70%
+Max Pump Age: 4 candles
+Max RoC: 5%
+Buy Stop: 1%
 ```
 
-### Exemplo 3: Pump Muito Rápido ⚠️
+## 🔔 Como Configurar Alertas
 
+1. Clique com botão direito no indicador → "Add Alert"
+2. **Condição**: Escolha uma das opções:
+   - `Buy Signal` = Alerta quando aparecer sinal BUY
+   - `Sell Signal` = Alerta quando aparecer sinal SELL
+   - `Score` = Alerta quando score cruzar valor específico
+3. **Opções**: Configure como preferir
+4. **Notificações**: Ative popup/email/app conforme desejado
+5. Clique em "Create"
+
+## 💡 Dicas de Uso
+
+### ✅ Boas Práticas:
+
+1. **Use timeframe M5 ou M15** para memecoins
+2. **Espere confirmação da tendência** (linha verde ou vermelha clara)
+3. **Evite sinais com avisos** (TOO OLD, TOO FAST, REVERSAL)
+4. **Combine com análise manual** (suporte/resistência, notícias)
+5. **Use stop loss sempre** (recomendado: -5%)
+6. **Take profit gradual** (50% em +10%, 50% em +20%)
+
+### ❌ Evite:
+
+1. ❌ Entrar em sinais BUY quando tendência está BAIXA (vermelho)
+2. ❌ Entrar em sinais SELL quando tendência está ALTA (verde)
+3. ❌ Ignorar avisos de REVERSÃO (⚠️)
+4. ❌ Entrar quando Pump Age > 6 candles (⏱️ TOO OLD)
+5. ❌ Entrar quando RoC > 8% (📊 TOO FAST)
+6. ❌ Usar timeframes muito curtos (< M1) ou muito longos (> H1)
+
+## 🧪 Exemplos de Sinais
+
+### ✅ Sinal BUY Perfeito:
 ```
-📊 Gráfico mostra:
-- Score: 92/100 (verde)
-- RoC: 12.5% (vermelho - explosivo!)
-- Signal: HOLD
+Score: 85/100
+Tendência: 📈 ALTA
+Força: 75%
+Volume: 2.5x
+Posição: 80% (perto do topo)
+RoC: 3.5%
+Pump Age: 2 bars
+Reversão?: ✅ NÃO
+Signal: 🚀 BUY
 
-📊 Warning vermelho: "TOO FAST - 12.5%"
-
-❌ NÃO ENTRE! Pump explosivo, vai reverter rápido.
+→ ENTRAR! Todas as condições ideais!
 ```
 
-## 🧠 Lógica do Score
-
-### Como o Score é Calculado (0-100)
-
+### ⚠️ Sinal BUY Arriscado:
 ```
-1. Volume Score (0-30 pontos)
-   - Volume 1.5x média = 30 pontos
-   - Volume 1.0x média = 0 pontos
-   - Escala linear
+Score: 72/100
+Tendência: 📈 ALTA
+Força: 65%
+Volume: 1.8x
+Posição: 85%
+RoC: 9.5%
+Pump Age: 7 bars
+Reversão?: ⚠️ SIM
 
-2. Price Score (0-40 pontos)
-   - +10% em 5 candles = 40 pontos
-   - +5% em 5 candles = 20 pontos
-   - Escala linear
-
-3. Momentum Score (0-30 pontos)
-   - EMA 9 vs EMA 21
-   - 3% acima = 30 pontos
-   - 0% = 0 pontos
-   - Escala linear
-
-TOTAL: Volume + Price + Momentum = Score (0-100)
+→ EVITAR! Pump velho + muito rápido + divergência!
 ```
 
-## 🎨 Cores e Significados
+### 🔴 Sinal SELL (Short):
+```
+Score: 80/100
+Tendência: 📉 BAIXA
+Força: 70%
+Volume: 2.2x
+Posição: 25% (perto do fundo)
+RoC: 4%
+Dump Age: 3 bars
+Reversão?: ✅ NÃO
+Signal: 📉 SELL
 
-**Background (fundo do gráfico):**
-- 🟢 **Verde claro** = Score ≥ 80 (pump muito forte)
-- 🟡 **Amarelo claro** = Score 70-80 (pump moderado)
-- 🔴 **Vermelho claro** = Score < 70 (sem pump)
+→ OPORTUNIDADE DE SHORT! (se operar vendido)
+```
 
-**Labels (etiquetas):**
-- 🚀 **Verde** = BUY Signal (entrada segura)
-- 📉 **Vermelho** = SELL Signal (short)
-- 🟠 **Laranja** = Too Old Warning
-- 🔴 **Vermelho escuro** = Too Fast Warning
-- 🟣 **Roxo** = Buy Stop Warning
+## 🔬 Detalhes Técnicos
 
-## 📱 Melhores Práticas
+### Análise dos 50 Candles:
 
-### ✅ Faça
+O indicador usa **janela móvel de 50 candles** para:
 
-1. **Use em memecoins voláteis** (BONK, WIF, SHIB, etc)
-2. **Timeframe M5 ou M15** para memecoins
-3. **Aguarde sinal BUY 🚀** sem warnings
-4. **Configure alertas** para não perder oportunidades
-5. **Combine com análise técnica** (suporte/resistência)
+1. **Volume Analysis:**
+   ```
+   avgVolume50 = SMA(volume, 50)
+   currentRatio = volume / avgVolume50
+   ```
 
-### ❌ Evite
+2. **Price Position:**
+   ```
+   highest50 = MAX(high dos últimos 50)
+   lowest50 = MIN(low dos últimos 50)
+   position = (close - lowest50) / (highest50 - lowest50) * 100
+   ```
 
-1. **Não entre em pumps velhos** (warning ⏱️)
-2. **Não entre em pumps rápidos** (warning 📊)
-3. **Não ignore Buy Stop** (warning ⛔)
-4. **Não use em Bitcoin/Ethereum** (lógica diferente)
-5. **Não entre sem confirmar volume** (vermelho no painel)
+3. **Trend Detection:**
+   ```
+   isBullish = EMA9 > EMA21 AND EMA21 > EMA50
+   isBearish = EMA9 < EMA21 AND EMA21 < EMA50
+   ```
 
-## 🔄 Diferença vs Bot Automatizado
+4. **Trend Strength:**
+   ```
+   sep9_21 = |EMA9 - EMA21| / EMA21 * 100
+   sep21_50 = |EMA21 - EMA50| / EMA50 * 100
+   strength = (sep9_21 + sep21_50) * 10
+   ```
 
-| Aspecto | TradingView Indicator | Bot Automatizado |
-|---------|----------------------|------------------|
-| **Função** | Análise visual | Executa trades |
-| **Uso** | Manual (você decide) | Automático |
-| **Plataforma** | TradingView | MT5/Python |
-| **Custo** | Grátis | Precisa broker |
-| **Risco** | Zero (só visualiza) | Real (dinheiro) |
-| **Vantagem** | Sem risco, aprenda | Trades 24/7 |
+### Score Garantido 0-100:
 
-**Recomendação:** Use o indicador para **aprender** antes de usar o bot com dinheiro real!
+```pinescript
+volumeScore = math.min(30, math.max(0, ...))
+priceScore = math.min(35, math.max(0, ...))
+momentumScore = math.min(35, math.max(0, ...))
+totalScore = volumeScore + priceScore + momentumScore
+```
+
+Cada componente usa `math.max(0, ...)` para nunca ser negativo!
 
 ## 🐛 Troubleshooting
 
-### "Indicador não aparece no gráfico"
-✅ Certifique-se que clicou em "Add to Chart"
-✅ Verifique se não há erros no Pine Editor
-✅ Recarregue a página
+### Problema: Score ficando negativo
+**Solução:** Isso foi corrigido na v2! Score agora é SEMPRE 0-100.
 
-### "Muitos sinais falsos"
-✅ Aumente "Score Mínimo" para 75-80
-✅ Reduza "Max Rate of Change" para 6%
-✅ Use timeframe maior (M15 ao invés de M5)
+### Problema: Muitos sinais BUY/SELL
+**Solução:** Aumente "Score Mínimo" e "Força Mínima de Tendência"
 
-### "Poucos sinais"
-✅ Reduza "Score Mínimo" para 65-70
-✅ Aumente "Max Pump Age" para 8-10 candles
-✅ Use timeframe menor (M5 ao invés de M15)
+### Problema: Poucos sinais ou nenhum sinal
+**Solução:** Reduza "Score Mínimo" (tente 60) e "Força Mínima" (tente 40%)
 
-### "Alertas não funcionam"
-✅ Verifique se "Enable Alerts" está ON
-✅ Certifique-se que criou o alerta (botão 3 pontinhos)
-✅ Verifique configurações de notificação do TradingView
+### Problema: Sinais atrasados
+**Solução:** Use timeframe menor (M1 ou M5) e reduza "Max Pump Age" para 4
 
-## 📚 Recursos Extras
+### Problema: Muitos sinais falsos
+**Solução:**
+- Aumente "Força Mínima de Tendência" para 70%
+- Ative "Show Labels" para ver os avisos
+- Evite sinais com warnings (TOO OLD, TOO FAST, REVERSAL)
 
-### Backtest Manual
+## 📚 Próximos Passos
 
-Para testar performance histórica:
-1. Abra gráfico histórico (scroll para trás)
-2. Observe onde apareceram setas 🚀
-3. Veja se o preço subiu depois
-4. Anote win rate e ajuste parâmetros
+Depois de testar o indicador:
 
-### Customizações Avançadas
+1. **Pratique com Paper Trading** antes de usar dinheiro real
+2. **Anote os resultados** (win rate, profit factor)
+3. **Ajuste as configurações** baseado nos seus resultados
+4. **Combine com outros indicadores** (RSI, MACD, Volume Profile)
+5. **Sempre use Stop Loss e Take Profit**
 
-**Alterar cores:**
-Linha 150-160 do código: `color.new(color.green, 0)`
+## ⚠️ Disclaimer
 
-**Adicionar EMAs ao gráfico:**
-Linha 269-270: Descomente (remova `//`)
-
-**Mudar posição do painel:**
-Linha 147: `position.top_right` → `position.top_left`
-
-## 🎓 Próximos Passos
-
-1. **Teste em demo** (TradingView Paper Trading)
-2. **Ajuste parâmetros** conforme resultados
-3. **Combine com outras análises** (RSI, MACD, etc)
-4. **Quando confiante** → use bot automatizado
+Este indicador é para **fins educacionais**. Não é garantia de lucros. Trading de criptomoedas é arriscado. Nunca invista mais do que você pode perder. Sempre faça sua própria análise (DYOR - Do Your Own Research).
 
 ---
 
-**Criado para facilitar análise de memecoins no TradingView! 📊🚀**
+**Desenvolvido com ❤️ para traders de memecoins**
 
-**Bons trades! 💰**
+🚀 **Boa sorte nos trades!**

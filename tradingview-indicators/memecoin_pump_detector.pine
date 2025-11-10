@@ -1,15 +1,16 @@
 //@version=6
-indicator("🚀 Memecoin Pump Detector ML", overlay=true, max_labels_count=500)
+indicator("🚀 Memecoin Pump Detector ML v2", overlay=true, max_labels_count=500)
 
 // ============================================================================
 // CONFIGURAÇÕES
 // ============================================================================
 
 // Score Settings
-minScoreInput = input.int(70, "⭐ Score Mínimo", minval=50, maxval=90, group="Score")
-volumeWeight = input.int(30, "Volume Weight", minval=0, maxval=50, group="Score")
-priceWeight = input.int(40, "Price Weight", minval=0, maxval=50, group="Score")
-momentumWeight = input.int(30, "Momentum Weight", minval=0, maxval=50, group="Score")
+minScoreInput = input.int(70, "⭐ Score Mínimo para Sinais", minval=50, maxval=90, group="Score")
+lookbackPeriod = input.int(50, "📊 Análise de Candles", minval=20, maxval=100, group="Score")
+
+// Trend Detection
+trendStrengthMin = input.float(60, "💪 Força Mínima de Tendência", minval=30, maxval=90, group="Tendência")
 
 // Anti-Late Entry Filters
 maxPumpAgeBars = input.int(6, "⏱️ Max Pump Age (candles)", minval=1, maxval=20, group="Anti-Late Entry")
@@ -18,204 +19,357 @@ buyStopPct = input.float(1.5, "⛔ Buy Stop (%)", minval=0.5, maxval=10.0, group
 
 // Visual Settings
 showBuySignals = input.bool(true, "✅ Show BUY Signals", group="Visual")
-showSellSignals = input.bool(false, "❌ Show SELL Signals (shorts)", group="Visual")
+showSellSignals = input.bool(true, "❌ Show SELL Signals", group="Visual")
 showLabels = input.bool(true, "🏷️ Show Labels", group="Visual")
 showTable = input.bool(true, "📊 Show Stats Table", group="Visual")
+showTrendLine = input.bool(true, "📈 Show Trend Line", group="Visual")
 
 // Alert Settings
 enableAlerts = input.bool(true, "🔔 Enable Alerts", group="Alerts")
 
 // ============================================================================
-// CÁLCULO DE INDICADORES
+// ANÁLISE DOS ÚLTIMOS 50 CANDLES
 // ============================================================================
 
-// Volume Spike (volume atual vs média 20 períodos)
-avgVolume = ta.sma(volume, 20)
-volumeSpike = avgVolume > 0 ? (volume / avgVolume) : 1.0
-volumeSpikePct = (volumeSpike - 1) * 100
+// Função para calcular média dos últimos N candles
+calcAverage(source, length) =>
+    sum = 0.0
+    for i = 0 to length - 1
+        sum := sum + source[i]
+    sum / length
 
-// Price Spike (variação % dos últimos 5 candles)
-priceChange5 = close >= close[5] ? ((close - close[5]) / close[5]) * 100 : 0
-priceSpike = priceChange5
+// Análise de Volume (últimos 50 candles)
+avgVolume50 = ta.sma(volume, lookbackPeriod)
+currentVolumeRatio = avgVolume50 > 0 ? volume / avgVolume50 : 1.0
 
-// Momentum (EMA 9 vs EMA 21)
+// Volume Spike Score (0-30 pontos)
+// Se volume > 1.5x média = 30 pontos
+// Se volume = 1.0x média = 0 pontos
+volumeScore = math.min(30, math.max(0, (currentVolumeRatio - 1.0) / 0.5 * 30))
+
+// Análise de Preço (últimos 50 candles)
+highest50 = ta.highest(high, lookbackPeriod)
+lowest50 = ta.lowest(low, lookbackPeriod)
+priceRange = highest50 - lowest50
+pricePosition = priceRange > 0 ? ((close - lowest50) / priceRange) * 100 : 50
+
+// Price Momentum Score (0-35 pontos)
+// Baseado em onde o preço está na faixa dos últimos 50 candles
+// Perto do topo = mais pontos, perto do fundo = menos pontos
+priceScore = math.min(35, math.max(0, pricePosition * 0.35))
+
+// ============================================================================
+// DETECÇÃO DE TENDÊNCIA DINÂMICA
+// ============================================================================
+
+// EMA rápida vs EMA lenta
 ema9 = ta.ema(close, 9)
 ema21 = ta.ema(close, 21)
-momentum = ((ema9 - ema21) / ema21) * 100
+ema50 = ta.ema(close, 50)
 
-// Rate of Change (variação % do último candle)
-rateOfChange = math.abs(((close - close[1]) / close[1]) * 100)
+// Direção da Tendência
+isBullishTrend = ema9 > ema21 and ema21 > ema50
+isBearishTrend = ema9 < ema21 and ema21 < ema50
+isSideways = not isBullishTrend and not isBearishTrend
+
+// Força da Tendência (0-100%)
+// Baseado na separação das EMAs
+emaSeparation9_21 = math.abs((ema9 - ema21) / ema21) * 100
+emaSeparation21_50 = math.abs((ema21 - ema50) / ema50) * 100
+trendStrength = math.min(100, (emaSeparation9_21 + emaSeparation21_50) * 10)
+
+// Momentum Score (0-35 pontos)
+// Maior separação entre EMAs = maior momentum
+momentumScore = math.min(35, math.max(0, trendStrength * 0.35))
 
 // ============================================================================
-// CÁLCULO DE SCORE (0-100)
+// SCORE TOTAL (0-100)
 // ============================================================================
 
-// Volume Score (0-30 pontos)
-volumeScore = math.min(volumeWeight, (volumeSpike - 1) / 1.5 * volumeWeight)
-
-// Price Score (0-40 pontos)
-priceScore = math.min(priceWeight, priceSpike / 10 * priceWeight)
-
-// Momentum Score (0-30 pontos)
-momentumScore = math.min(momentumWeight, math.abs(momentum) / 3 * momentumWeight)
-
-// SCORE TOTAL
+// SCORE = Volume (30) + Preço (35) + Momentum (35)
 totalScore = volumeScore + priceScore + momentumScore
+
+// Garantir que score nunca é negativo
+totalScoreFinal = math.max(0, math.min(100, totalScore))
+
+// ============================================================================
+// ANÁLISE DE PADRÕES DE REVERSÃO
+// ============================================================================
+
+// Detecta divergência de preço (sinal de reversão)
+// Preço fazendo topos mais altos, mas volume caindo = possível reversão
+priceUp = close > close[5]
+volumeDown = volume < ta.sma(volume, 5)
+possibleReversal = priceUp and volumeDown
+
+// Rate of Change (velocidade do movimento)
+rateOfChange = math.abs((close - close[1]) / close[1]) * 100
 
 // ============================================================================
 // ANTI-LATE ENTRY DETECTION
 // ============================================================================
 
-// Detecta início do pump (score cruza acima de minScore)
+// Detecta início do pump (score cruza acima de minScore E tendência bullish)
 var int pumpStartBar = na
 var float pumpStartPrice = na
 
-isPumpDetected = ta.crossover(totalScore, minScoreInput)
+isPumpDetected = ta.crossover(totalScoreFinal, minScoreInput) and isBullishTrend
 
 if isPumpDetected
     pumpStartBar := bar_index
     pumpStartPrice := close
 
-// Calcula idade do pump em candles
+// Detecta início do dump (score cruza acima de minScore E tendência bearish)
+var int dumpStartBar = na
+var float dumpStartPrice = na
+
+isDumpDetected = ta.crossover(totalScoreFinal, minScoreInput) and isBearishTrend
+
+if isDumpDetected
+    dumpStartBar := bar_index
+    dumpStartPrice := close
+
+// Calcula idade do pump/dump em candles
 pumpAge = not na(pumpStartBar) ? bar_index - pumpStartBar : 999
+dumpAge = not na(dumpStartBar) ? bar_index - dumpStartBar : 999
 
-// Calcula price change desde início do pump
-priceChangeSincePump = not na(pumpStartPrice) ? ((close - pumpStartPrice) / pumpStartPrice) * 100 : 0
+// Calcula price change desde início do movimento
+priceChangeSincePump = not na(pumpStartPrice) and pumpStartPrice > 0 ?
+     ((close - pumpStartPrice) / pumpStartPrice) * 100 : 0
+priceChangeSinceDump = not na(dumpStartPrice) and dumpStartPrice > 0 ?
+     ((close - dumpStartPrice) / dumpStartPrice) * 100 : 0
 
-// FILTROS
-isTooOld = pumpAge > maxPumpAgeBars
+// FILTROS ANTI-LATE ENTRY
+isTooOld = pumpAge > maxPumpAgeBars or dumpAge > maxPumpAgeBars
 isTooFast = rateOfChange > maxRateOfChange
 buyStopActive = priceChangeSincePump > buyStopPct
+sellStopActive = priceChangeSinceDump < -buyStopPct
 
 // ============================================================================
-// SINAIS DE TRADE
+// SINAIS DE TRADE INTELIGENTES
 // ============================================================================
 
-// BUY Signal: score alto + pumps saudáveis + não late entry
-buySignal = totalScore >= minScoreInput and priceSpike > 0 and not isTooOld and not isTooFast and not buyStopActive
+// BUY Signal:
+// 1. Score alto (>= minScore)
+// 2. Tendência BULLISH confirmada
+// 3. Força da tendência boa (>= trendStrengthMin)
+// 4. Não é late entry (não muito velho, rápido, ou já subiu demais)
+// 5. Sem divergência de reversão
+buySignal = totalScoreFinal >= minScoreInput and
+     isBullishTrend and
+     trendStrength >= trendStrengthMin and
+     not isTooOld and
+     not isTooFast and
+     not buyStopActive and
+     not possibleReversal
 
-// SELL Signal (para shorts): momentum negativo forte
-sellSignal = showSellSignals and totalScore >= minScoreInput and momentum < -2 and not isTooOld
+// SELL Signal:
+// 1. Score alto (>= minScore)
+// 2. Tendência BEARISH confirmada
+// 3. Força da tendência boa (>= trendStrengthMin)
+// 4. Não é late entry
+sellSignal = totalScoreFinal >= minScoreInput and
+     isBearishTrend and
+     trendStrength >= trendStrengthMin and
+     not isTooOld and
+     not isTooFast and
+     not sellStopActive
 
-// Reset pump tracking quando score cai abaixo do mínimo
-if totalScore < minScoreInput - 10
+// Reset tracking quando score cai muito
+if totalScoreFinal < minScoreInput - 20
     pumpStartBar := na
     pumpStartPrice := na
+    dumpStartBar := na
+    dumpStartPrice := na
 
 // ============================================================================
 // VISUALIZAÇÃO
 // ============================================================================
 
-// Background color baseado no score
-bgcolor(totalScore >= 80 ? color.new(color.green, 90) :
-        totalScore >= minScoreInput ? color.new(color.yellow, 95) :
-        color.new(color.red, 97))
+// Background color baseado na TENDÊNCIA
+bgcolor(isBullishTrend and totalScoreFinal >= minScoreInput ? color.new(color.green, 90) :
+     isBearishTrend and totalScoreFinal >= minScoreInput ? color.new(color.red, 90) :
+     totalScoreFinal >= minScoreInput ? color.new(color.yellow, 95) :
+     color.new(color.gray, 97))
+
+// Plot da linha de tendência
+trendLineColor = isBullishTrend ? color.new(color.green, 0) :
+     isBearishTrend ? color.new(color.red, 0) : color.new(color.gray, 50)
+plot(showTrendLine ? ema21 : na, "Trend", color=trendLineColor, linewidth=2)
 
 // Setas de BUY
 if buySignal and showBuySignals
-    label.new(bar_index, low, "🚀 BUY\n" + str.tostring(totalScore, "#") + "/100",
-              style=label.style_label_up, color=color.new(color.green, 0),
-              textcolor=color.white, size=size.normal)
+    label.new(bar_index, low,
+         "🚀 BUY\n" +
+         str.tostring(totalScoreFinal, "#") + "/100\n" +
+         "Trend: " + str.tostring(trendStrength, "#.0") + "%",
+         style=label.style_label_up,
+         color=color.new(color.green, 0),
+         textcolor=color.white,
+         size=size.normal)
+
     if enableAlerts
-        alert("🚀 BUY Signal: Score " + str.tostring(totalScore, "#") + "/100", alert.freq_once_per_bar_close)
+        alert("🚀 BUY Signal: Score " + str.tostring(totalScoreFinal, "#") +
+             " | Trend: " + str.tostring(trendStrength, "#") + "%",
+             alert.freq_once_per_bar_close)
 
 // Setas de SELL
 if sellSignal and showSellSignals
-    label.new(bar_index, high, "📉 SELL\n" + str.tostring(totalScore, "#") + "/100",
-              style=label.style_label_down, color=color.new(color.red, 0),
-              textcolor=color.white, size=size.normal)
+    label.new(bar_index, high,
+         "📉 SELL\n" +
+         str.tostring(totalScoreFinal, "#") + "/100\n" +
+         "Trend: " + str.tostring(trendStrength, "#.0") + "%",
+         style=label.style_label_down,
+         color=color.new(color.red, 0),
+         textcolor=color.white,
+         size=size.normal)
 
-// Warnings de Late Entry
+    if enableAlerts
+        alert("📉 SELL Signal: Score " + str.tostring(totalScoreFinal, "#") +
+             " | Trend: " + str.tostring(trendStrength, "#") + "%",
+             alert.freq_once_per_bar_close)
+
+// Warnings de Late Entry e Problemas
 if showLabels
-    if isTooOld and totalScore >= minScoreInput
-        label.new(bar_index, high, "⏱️ TOO OLD\n" + str.tostring(pumpAge) + " bars",
-                  style=label.style_label_down, color=color.new(color.orange, 20),
-                  textcolor=color.white, size=size.small)
+    // Pump muito velho
+    if isTooOld and totalScoreFinal >= minScoreInput and isBullishTrend
+        label.new(bar_index, high,
+             "⏱️ TOO OLD\n" + str.tostring(pumpAge) + " bars",
+             style=label.style_label_down,
+             color=color.new(color.orange, 20),
+             textcolor=color.white,
+             size=size.small)
 
-    if isTooFast
-        label.new(bar_index, high, "📊 TOO FAST\n" + str.tostring(rateOfChange, "#.#") + "%",
-                  style=label.style_label_down, color=color.new(color.red, 20),
-                  textcolor=color.white, size=size.small)
+    // Movimento muito rápido
+    if isTooFast and totalScoreFinal >= minScoreInput
+        label.new(bar_index, high,
+             "📊 TOO FAST\n" + str.tostring(rateOfChange, "#.#") + "%",
+             style=label.style_label_down,
+             color=color.new(color.red, 20),
+             textcolor=color.white,
+             size=size.small)
 
-    if buyStopActive and totalScore >= minScoreInput
-        label.new(bar_index, high, "⛔ BUY STOP\n+" + str.tostring(priceChangeSincePump, "#.#") + "%",
-                  style=label.style_label_down, color=color.new(color.purple, 20),
-                  textcolor=color.white, size=size.small)
+    // Buy Stop ativado
+    if buyStopActive and totalScoreFinal >= minScoreInput and isBullishTrend
+        label.new(bar_index, high,
+             "⛔ BUY STOP\n+" + str.tostring(priceChangeSincePump, "#.#") + "%",
+             style=label.style_label_down,
+             color=color.new(color.purple, 20),
+             textcolor=color.white,
+             size=size.small)
+
+    // Possível reversão
+    if possibleReversal and totalScoreFinal >= minScoreInput
+        label.new(bar_index, high,
+             "⚠️ REVERSAL?\nPreço↑ Vol↓",
+             style=label.style_label_down,
+             color=color.new(color.orange, 30),
+             textcolor=color.white,
+             size=size.small)
 
 // ============================================================================
-// PAINEL DE ESTATÍSTICAS
+// PAINEL DE ESTATÍSTICAS EM TEMPO REAL
 // ============================================================================
 
 if showTable
-    var table statsTable = table.new(position.top_right, 2, 9,
+    var table statsTable = table.new(position.top_right, 2, 11,
                                       bgcolor=color.new(color.black, 10),
                                       frame_color=color.gray,
                                       frame_width=1)
 
     // Headers
-    table.cell(statsTable, 0, 0, "Metric", bgcolor=color.new(color.blue, 70), text_color=color.white)
-    table.cell(statsTable, 1, 0, "Value", bgcolor=color.new(color.blue, 70), text_color=color.white)
+    table.cell(statsTable, 0, 0, "📊 Metric",
+         bgcolor=color.new(color.blue, 70), text_color=color.white, text_size=size.small)
+    table.cell(statsTable, 1, 0, "Value",
+         bgcolor=color.new(color.blue, 70), text_color=color.white, text_size=size.small)
 
-    // Score
-    scoreColor = totalScore >= 80 ? color.green :
-                 totalScore >= minScoreInput ? color.yellow : color.red
-    table.cell(statsTable, 0, 1, "⭐ Score", text_color=color.white)
-    table.cell(statsTable, 1, 1, str.tostring(totalScore, "#") + "/100",
-               bgcolor=color.new(scoreColor, 70), text_color=color.white)
+    // Score Total
+    scoreColor = totalScoreFinal >= 80 ? color.green :
+                 totalScoreFinal >= minScoreInput ? color.yellow : color.red
+    table.cell(statsTable, 0, 1, "⭐ Score", text_color=color.white, text_size=size.small)
+    table.cell(statsTable, 1, 1, str.tostring(totalScoreFinal, "#") + "/100",
+               bgcolor=color.new(scoreColor, 70), text_color=color.white, text_size=size.normal)
 
-    // Volume Spike
-    volColor = volumeSpike >= 1.5 ? color.green :
-               volumeSpike >= 1.2 ? color.yellow : color.red
-    table.cell(statsTable, 0, 2, "📊 Volume", text_color=color.white)
-    table.cell(statsTable, 1, 2, str.tostring(volumeSpike, "#.##") + "x",
-               bgcolor=color.new(volColor, 70), text_color=color.white)
+    // Tendência
+    trendText = isBullishTrend ? "📈 ALTA" : isBearishTrend ? "📉 BAIXA" : "↔️ LATERAL"
+    trendColor = isBullishTrend ? color.green : isBearishTrend ? color.red : color.gray
+    table.cell(statsTable, 0, 2, "🎯 Tendência", text_color=color.white, text_size=size.small)
+    table.cell(statsTable, 1, 2, trendText,
+               bgcolor=color.new(trendColor, 70), text_color=color.white, text_size=size.small)
 
-    // Price Spike
-    table.cell(statsTable, 0, 3, "💹 Price Δ", text_color=color.white)
-    priceColor = priceSpike > 0 ? color.green : color.red
-    table.cell(statsTable, 1, 3, str.tostring(priceSpike, "#.#") + "%",
-               bgcolor=color.new(priceColor, 70), text_color=color.white)
+    // Força da Tendência
+    strengthColor = trendStrength >= 70 ? color.green :
+                    trendStrength >= 40 ? color.yellow : color.red
+    table.cell(statsTable, 0, 3, "💪 Força", text_color=color.white, text_size=size.small)
+    table.cell(statsTable, 1, 3, str.tostring(trendStrength, "#.0") + "%",
+               bgcolor=color.new(strengthColor, 70), text_color=color.white, text_size=size.small)
 
-    // Momentum
-    table.cell(statsTable, 0, 4, "🎯 Momentum", text_color=color.white)
-    momColor = momentum > 0 ? color.green : color.red
-    table.cell(statsTable, 1, 4, str.tostring(momentum, "#.#") + "%",
-               bgcolor=color.new(momColor, 70), text_color=color.white)
+    // Volume Ratio
+    volColor = currentVolumeRatio >= 1.5 ? color.green :
+               currentVolumeRatio >= 1.2 ? color.yellow : color.red
+    table.cell(statsTable, 0, 4, "📊 Volume", text_color=color.white, text_size=size.small)
+    table.cell(statsTable, 1, 4, str.tostring(currentVolumeRatio, "#.##") + "x",
+               bgcolor=color.new(volColor, 70), text_color=color.white, text_size=size.small)
+
+    // Posição do Preço na Faixa (50 candles)
+    posColor = pricePosition >= 70 ? color.green :
+               pricePosition >= 30 ? color.yellow : color.red
+    table.cell(statsTable, 0, 5, "📍 Posição", text_color=color.white, text_size=size.small)
+    table.cell(statsTable, 1, 5, str.tostring(pricePosition, "#.0") + "%",
+               bgcolor=color.new(posColor, 70), text_color=color.white, text_size=size.small)
 
     // Rate of Change
-    table.cell(statsTable, 0, 5, "⚡ RoC", text_color=color.white)
     rocColor = rateOfChange < maxRateOfChange ? color.green : color.red
-    table.cell(statsTable, 1, 5, str.tostring(rateOfChange, "#.#") + "%",
-               bgcolor=color.new(rocColor, 70), text_color=color.white)
+    table.cell(statsTable, 0, 6, "⚡ RoC", text_color=color.white, text_size=size.small)
+    table.cell(statsTable, 1, 6, str.tostring(rateOfChange, "#.#") + "%",
+               bgcolor=color.new(rocColor, 70), text_color=color.white, text_size=size.small)
 
-    // Pump Age
-    table.cell(statsTable, 0, 6, "⏱️ Pump Age", text_color=color.white)
-    ageColor = pumpAge <= maxPumpAgeBars ? color.green : color.red
-    ageText = not na(pumpStartBar) ? str.tostring(pumpAge) + " bars" : "N/A"
-    table.cell(statsTable, 1, 6, ageText,
-               bgcolor=color.new(ageColor, 70), text_color=color.white)
+    // Pump Age (se aplicável)
+    if not na(pumpStartBar) and isBullishTrend
+        ageColor = pumpAge <= maxPumpAgeBars ? color.green : color.red
+        table.cell(statsTable, 0, 7, "⏱️ Pump Age", text_color=color.white, text_size=size.small)
+        table.cell(statsTable, 1, 7, str.tostring(pumpAge) + " bars",
+                   bgcolor=color.new(ageColor, 70), text_color=color.white, text_size=size.small)
+    else
+        table.cell(statsTable, 0, 7, "⏱️ Pump Age", text_color=color.white, text_size=size.small)
+        table.cell(statsTable, 1, 7, "N/A",
+                   bgcolor=color.new(color.gray, 70), text_color=color.white, text_size=size.small)
 
-    // Buy Stop
-    table.cell(statsTable, 0, 7, "⛔ Buy Stop", text_color=color.white)
-    stopColor = not buyStopActive ? color.green : color.red
-    table.cell(statsTable, 1, 7, str.tostring(priceChangeSincePump, "#.#") + "%",
-               bgcolor=color.new(stopColor, 70), text_color=color.white)
+    // Price Change Since Entry
+    if not na(pumpStartPrice) and isBullishTrend
+        changeColor = priceChangeSincePump > 0 ? color.green : color.red
+        table.cell(statsTable, 0, 8, "📈 Δ Pump", text_color=color.white, text_size=size.small)
+        table.cell(statsTable, 1, 8, str.tostring(priceChangeSincePump, "#.#") + "%",
+                   bgcolor=color.new(changeColor, 70), text_color=color.white, text_size=size.small)
+    else if not na(dumpStartPrice) and isBearishTrend
+        changeColor = priceChangeSinceDump < 0 ? color.green : color.red
+        table.cell(statsTable, 0, 8, "📉 Δ Dump", text_color=color.white, text_size=size.small)
+        table.cell(statsTable, 1, 8, str.tostring(priceChangeSinceDump, "#.#") + "%",
+                   bgcolor=color.new(changeColor, 70), text_color=color.white, text_size=size.small)
+    else
+        table.cell(statsTable, 0, 8, "💹 Δ Move", text_color=color.white, text_size=size.small)
+        table.cell(statsTable, 1, 8, "N/A",
+                   bgcolor=color.new(color.gray, 70), text_color=color.white, text_size=size.small)
 
-    // Signal
-    table.cell(statsTable, 0, 8, "🎯 Signal", text_color=color.white)
-    signalText = buySignal ? "BUY 🚀" : sellSignal ? "SELL 📉" : "HOLD"
+    // Reversal Warning
+    reversalColor = possibleReversal ? color.orange : color.green
+    reversalText = possibleReversal ? "⚠️ SIM" : "✅ NÃO"
+    table.cell(statsTable, 0, 9, "🔄 Reversão?", text_color=color.white, text_size=size.small)
+    table.cell(statsTable, 1, 9, reversalText,
+               bgcolor=color.new(reversalColor, 70), text_color=color.white, text_size=size.small)
+
+    // Signal Final
+    signalText = buySignal ? "🚀 BUY" : sellSignal ? "📉 SELL" : "⏸️ HOLD"
     signalColor = buySignal ? color.green : sellSignal ? color.red : color.gray
-    table.cell(statsTable, 1, 8, signalText,
-               bgcolor=color.new(signalColor, 50), text_color=color.white)
+    table.cell(statsTable, 0, 10, "🎯 Signal", text_color=color.white, text_size=size.small)
+    table.cell(statsTable, 1, 10, signalText,
+               bgcolor=color.new(signalColor, 50), text_color=color.white, text_size=size.normal)
 
 // ============================================================================
-// PLOTS (para criar alertas customizados)
+// PLOTS (para alertas customizados)
 // ============================================================================
 
-plot(totalScore, "Score", color=color.new(color.blue, 0), linewidth=2, display=display.none)
+plot(totalScoreFinal, "Score", color=color.new(color.blue, 0), linewidth=2, display=display.none)
+plot(trendStrength, "Trend Strength", color=color.new(color.purple, 0), linewidth=2, display=display.none)
 plot(buySignal ? 1 : 0, "Buy Signal", color=color.green, display=display.none)
 plot(sellSignal ? 1 : 0, "Sell Signal", color=color.red, display=display.none)
-
-// EMA lines (opcional - comentado por padrão)
-// plot(ema9, "EMA 9", color=color.new(color.green, 0), linewidth=1)
-// plot(ema21, "EMA 21", color=color.new(color.red, 0), linewidth=1)
