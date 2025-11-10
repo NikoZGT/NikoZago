@@ -41,10 +41,25 @@
       <div id="status-badge" class="px-4 py-2 rounded-full text-sm font-semibold bg-red-900 text-red-200">
         🔴 Desligado
       </div>
+      <div id="timeframe-badge" class="px-4 py-2 rounded-full text-sm font-semibold bg-blue-900 text-blue-200">
+        ⏱️ M5
+      </div>
     </div>
-    <button id="toggle-bot" class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition">
-      ▶️ Iniciar Bot
-    </button>
+    <div class="flex gap-3">
+      <!-- Seletor de Timeframe -->
+      <div class="flex gap-2">
+        <button id="btn-m1" class="px-4 py-3 bg-blue-600/30 hover:bg-blue-600 rounded-lg font-semibold transition border border-blue-600">
+          M1
+        </button>
+        <button id="btn-m5" class="px-4 py-3 bg-blue-600 rounded-lg font-semibold transition border border-blue-600">
+          M5
+        </button>
+      </div>
+      <!-- Botão Start/Stop -->
+      <button id="toggle-bot" class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition">
+        ▶️ Iniciar Bot
+      </button>
+    </div>
   </div>
 
   <!-- Métricas -->
@@ -117,10 +132,14 @@
     let ws = null;
     let performanceChart = null;
     let performanceData = [];
+    let currentTimeframe = 'M5'; // Timeframe padrão
 
     // Elementos
     const toggleBtn = document.getElementById('toggle-bot');
     const statusBadge = document.getElementById('status-badge');
+    const timeframeBadge = document.getElementById('timeframe-badge');
+    const btnM1 = document.getElementById('btn-m1');
+    const btnM5 = document.getElementById('btn-m5');
     const capitalEl = document.getElementById('capital');
     const pnlEl = document.getElementById('pnl');
     const winrateEl = document.getElementById('winrate');
@@ -166,10 +185,44 @@
         ws.send(JSON.stringify({ type: 'stop' }));
         addLog('🛑 Parando bot...');
       } else {
-        ws.send(JSON.stringify({ type: 'start' }));
-        addLog('🚀 Iniciando bot...');
+        ws.send(JSON.stringify({ type: 'start', timeframe: currentTimeframe }));
+        addLog(`🚀 Iniciando bot em ${currentTimeframe}...`);
       }
     });
+
+    // Seleção de timeframe
+    btnM1.addEventListener('click', () => {
+      if (isRunning) {
+        addLog('⚠️ Pare o bot antes de mudar o timeframe');
+        return;
+      }
+      setTimeframe('M1');
+    });
+
+    btnM5.addEventListener('click', () => {
+      if (isRunning) {
+        addLog('⚠️ Pare o bot antes de mudar o timeframe');
+        return;
+      }
+      setTimeframe('M5');
+    });
+
+    // Define timeframe
+    function setTimeframe(timeframe) {
+      currentTimeframe = timeframe;
+      timeframeBadge.textContent = `⏱️ ${timeframe}`;
+
+      // Atualiza estilos dos botões
+      if (timeframe === 'M1') {
+        btnM1.className = 'px-4 py-3 bg-blue-600 rounded-lg font-semibold transition border border-blue-600';
+        btnM5.className = 'px-4 py-3 bg-blue-600/30 hover:bg-blue-600 rounded-lg font-semibold transition border border-blue-600';
+      } else {
+        btnM1.className = 'px-4 py-3 bg-blue-600/30 hover:bg-blue-600 rounded-lg font-semibold transition border border-blue-600';
+        btnM5.className = 'px-4 py-3 bg-blue-600 rounded-lg font-semibold transition border border-blue-600';
+      }
+
+      addLog(`⏱️ Timeframe alterado para ${timeframe}`);
+    }
 
     // Atualiza status
     function updateStatus(running) {

@@ -14,6 +14,8 @@ export class DashboardServer {
   private bot: PaperTradingBot | null = null;
   private clients: Set<WebSocket> = new Set();
   private isRunning: boolean = false;
+  private timeframe: 'M1' | 'M5' = 'M5';
+  private scanIntervalMs: number = 300000; // 5 minutos padrão
 
   constructor(port: number = 3000) {
     this.app = express();
@@ -66,7 +68,7 @@ export class DashboardServer {
           const data = JSON.parse(message.toString());
 
           if (data.type === 'start') {
-            await this.startBot();
+            await this.startBot(data.timeframe || 'M5');
           } else if (data.type === 'stop') {
             await this.stopBot();
           }
@@ -82,13 +84,19 @@ export class DashboardServer {
     });
   }
 
-  private async startBot() {
+  private async startBot(timeframe: 'M1' | 'M5' = 'M5') {
     if (this.isRunning) {
       this.broadcast({ type: 'error', message: 'Bot já está rodando' });
       return;
     }
 
-    console.log('🚀 Iniciando bot...');
+    // Configura timeframe
+    this.timeframe = timeframe;
+    this.scanIntervalMs = timeframe === 'M1' ? 60000 : 300000;
+
+    console.log(`🚀 Iniciando bot em ${timeframe}...`);
+    console.log(`⏱️  Scan a cada ${timeframe === 'M1' ? '1 minuto' : '5 minutos'}`);
+
     this.isRunning = true;
     this.broadcast({ type: 'status', data: { isRunning: true } });
 
@@ -109,8 +117,8 @@ export class DashboardServer {
           data,
         });
 
-        // Aguarda 5 minutos
-        await this.sleep(300000);
+        // Aguarda conforme timeframe configurado (M1 = 1min, M5 = 5min)
+        await this.sleep(this.scanIntervalMs);
       } catch (error: any) {
         console.error('Erro no loop do bot:', error);
         this.broadcast({
