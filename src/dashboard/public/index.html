@@ -181,12 +181,24 @@
       ws.onmessage = (event) => {
         const message = JSON.parse(event.data);
 
+        console.log('🔍 [DEBUG Frontend] Mensagem recebida:', message.type);
+
         if (message.type === 'status') {
           const hasRunningBots = message.data.bots && message.data.bots.length > 0;
           updateStatus(hasRunningBots);
         } else if (message.type === 'update') {
+          console.log('   📊 Scan update:', {
+            scores: message.data.scores?.length || 0,
+            openPositions: message.data.openPositions?.length || 0,
+            recentTrades: message.data.recentTrades?.length || 0,
+            capital: message.data.capital
+          });
           updateDashboard(message.data, false); // Scan completo
         } else if (message.type === 'quick_update') {
+          console.log('   ⚡ Quick update:', {
+            openPositions: message.data.openPositions?.length || 0,
+            recentTrades: message.data.recentTrades?.length || 0
+          });
           updateDashboard(message.data, true); // Check rápido (sem log)
         } else if (message.type === 'error') {
           addLog(`❌ Erro: ${message.message}`);
@@ -311,6 +323,16 @@
 
     // Atualiza dashboard
     function updateDashboard(data, isQuickUpdate = false) {
+      console.log('🔍 [DEBUG updateDashboard] Processando dados:', {
+        isQuickUpdate,
+        hasScores: !!data.scores,
+        scoresLength: data.scores?.length || 0,
+        hasOpenPositions: !!data.openPositions,
+        openPositionsLength: data.openPositions?.length || 0,
+        hasRecentTrades: !!data.recentTrades,
+        recentTradesLength: data.recentTrades?.length || 0
+      });
+
       // Métricas
       capitalEl.textContent = `$${data.capital.toFixed(2)}`;
 

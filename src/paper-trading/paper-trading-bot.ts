@@ -613,6 +613,11 @@ export class PaperTradingBot {
       ? (winningTrades / this.tradeHistory.length) * 100
       : 0;
 
+    console.log(`\n🔍 [DEBUG getState] Bot ${this.botId}:`);
+    console.log(`   Scores recebidos: ${scores ? scores.length : 0}`);
+    console.log(`   Posições abertas: ${this.openPositions.size}`);
+    console.log(`   Trade history: ${this.tradeHistory.length}`);
+
     // Calcula preço atual e PnL de cada posição aberta
     const openPositionsData = Array.from(this.openPositions.values()).map(pos => {
       // Busca preço atual do cache

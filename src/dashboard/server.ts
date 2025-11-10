@@ -158,11 +158,19 @@ export class DashboardServer {
       try {
         const data = await botInstance.bot.scanOnce();
 
+        console.log(`\n🔍 [DEBUG Server] Scan ${botId} concluído:`);
+        console.log(`   Scores: ${data.scores?.length || 0}`);
+        console.log(`   Open Positions: ${data.openPositions?.length || 0}`);
+        console.log(`   Recent Trades: ${data.recentTrades?.length || 0}`);
+        console.log(`   Capital: ${data.capital}`);
+
         // Envia dados para todos os clientes
         this.broadcast({
           type: 'update',
           data: { ...data, botId },
         });
+
+        console.log(`   ✅ Broadcast enviado para ${this.clients.size} cliente(s)`);
 
         // Aguarda conforme intervalo configurado
         await this.sleep(botInstance.checkInterval);
@@ -189,11 +197,17 @@ export class DashboardServer {
         if (botInstance.bot.hasOpenPositions()) {
           const data = await botInstance.bot.checkPositionsQuick();
 
+          console.log(`\n⚡ [DEBUG Server] Quick check ${botId}:`);
+          console.log(`   Open Positions: ${data.openPositions?.length || 0}`);
+          console.log(`   Recent Trades: ${data.recentTrades?.length || 0}`);
+
           // Envia dados atualizados
           this.broadcast({
             type: 'quick_update',
             data: { ...data, botId },
           });
+
+          console.log(`   ✅ Quick update enviado para ${this.clients.size} cliente(s)`);
         }
 
         // Aguarda 2 segundos antes do próximo check
