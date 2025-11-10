@@ -11,6 +11,7 @@
     "backtest": "ts-node src/backtesting/run-backtest.ts",
     "test:strategies": "ts-node src/backtesting/test-strategies.ts",
     "optimize": "ts-node src/backtesting/optimize-strategy.ts",
+    "walk-forward": "ts-node src/backtesting/walk-forward-test.ts",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint src --ext .ts"
