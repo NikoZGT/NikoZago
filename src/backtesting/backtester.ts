@@ -127,34 +127,66 @@ export class Backtester {
     try {
       logger.info(`Fetching history for ${address}...`);
 
-      // Usar DexScreener para dados históricos
-      const response = await axios.get(
-        `https://api.dexscreener.com/latest/dex/tokens/${address}`,
-        { timeout: 10000 }
-      );
-
-      const pair = response.data?.pairs?.[0];
-      if (!pair) return null;
-
-      // Buscar dados OHLCV (Open, High, Low, Close, Volume)
-      // Nota: DexScreener free não tem histórico completo
-      // Para produção, usar APIs pagas (Birdeye, DexTools Pro)
+      // Para backtest, usar dados simulados baseados nos memecoins populares
+      // Em produção, substituir por chamadas reais à API (Birdeye, DexTools Pro)
+      const mockPair = {
+        baseToken: {
+          address,
+          symbol: this.getTokenSymbol(address),
+          name: this.getTokenName(address),
+        },
+        priceUsd: Math.random() * 0.001 + 0.00001, // Preço aleatório típico de memecoin
+        volume: {
+          h24: Math.random() * 5000000 + 500000, // Volume 24h entre $500k-$5.5M
+        },
+        liquidity: {
+          usd: Math.random() * 2000000 + 200000, // Liquidez entre $200k-$2.2M
+        },
+      };
 
       return {
         address,
-        symbol: pair.baseToken.symbol,
-        name: pair.baseToken.name,
-        pairAddress: pair.pairAddress,
-        priceUsd: parseFloat(pair.priceUsd || '0'),
-        volume24h: parseFloat(pair.volume?.h24 || '0'),
-        liquidity: parseFloat(pair.liquidity?.usd || '0'),
-        // Simular dados históricos (em produção, usar API real)
-        history: this.generateSimulatedHistory(pair),
+        symbol: mockPair.baseToken.symbol,
+        name: mockPair.baseToken.name,
+        pairAddress: address,
+        priceUsd: mockPair.priceUsd,
+        volume24h: mockPair.volume.h24,
+        liquidity: mockPair.liquidity.usd,
+        // Simular dados históricos
+        history: this.generateSimulatedHistory(mockPair),
       };
     } catch (error) {
       logError(error, `fetchTokenHistory: ${address}`);
       return null;
     }
+  }
+
+  /**
+   * Retorna símbolo do token para memecoins conhecidos
+   */
+  private getTokenSymbol(address: string): string {
+    const symbols: Record<string, string> = {
+      'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263': 'BONK',
+      'ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82': 'BOME',
+      '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr': 'POPCAT',
+      'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm': 'WIF',
+      'MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5': 'MEW',
+    };
+    return symbols[address] || 'MEME';
+  }
+
+  /**
+   * Retorna nome do token para memecoins conhecidos
+   */
+  private getTokenName(address: string): string {
+    const names: Record<string, string> = {
+      'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263': 'Bonk',
+      'ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82': 'Book of Meme',
+      '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr': 'Popcat',
+      'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm': 'dogwifhat',
+      'MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5': 'cat in a dogs world',
+    };
+    return names[address] || 'Memecoin';
   }
 
   /**
