@@ -438,4 +438,61 @@ export class PaperTradingBot {
   private sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
+  /**
+   * Faz um scan único e retorna os dados (para dashboard)
+   */
+  async scanOnce() {
+    this.scanCount++;
+    const timestamp = Date.now();
+
+    // Busca dados
+    const tokenData = await this.fetchRealMarketData();
+
+    // Calcula scores
+    const scores = await this.scanner.scanAllTokens(tokenData, timestamp);
+
+    // Verifica posições abertas
+    await this.checkOpenPositions(tokenData);
+
+    // Procura novas oportunidades
+    await this.findNewOpportunities(scores, tokenData);
+
+    // Retorna estado completo
+    return this.getState(scores, tokenData);
+  }
+
+  /**
+   * Retorna estado atual do bot (para dashboard)
+   */
+  getState(scores?: TokenScore[], tokenData?: any[]) {
+    const totalPnl = this.capital - this.initialCapital;
+    const totalPnlPercent = (totalPnl / this.initialCapital) * 100;
+    const winningTrades = this.tradeHistory.filter(t => t.pnl > 0).length;
+    const winRate = this.tradeHistory.length > 0
+      ? (winningTrades / this.tradeHistory.length) * 100
+      : 0;
+
+    return {
+      capital: this.capital,
+      initialCapital: this.initialCapital,
+      totalPnl,
+      totalPnlPercent,
+      totalTrades: this.tradeHistory.length,
+      winRate,
+      winningTrades,
+      losingTrades: this.tradeHistory.length - winningTrades,
+      openPositions: Array.from(this.openPositions.values()).map(pos => ({
+        symbol: pos.tokenSymbol,
+        entryPrice: pos.entryPrice,
+        investedUSD: pos.investedUSD,
+        entryTime: pos.entryTime,
+        score: pos.score.score,
+      })),
+      recentTrades: this.tradeHistory.slice(-10).reverse(),
+      scores: scores || [],
+      tokenData: tokenData || [],
+      scanCount: this.scanCount,
+    };
+  }
 }

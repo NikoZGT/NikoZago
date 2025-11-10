@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📊 Memecoin Trading Bot - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .status-on {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .token-row:hover {
+      background: #334155;
+    }
+    .score-hot { color: #22c55e; }
+    .score-watch { color: #eab308; }
+    .score-low { color: #64748b; }
+  </style>
+</head>
+<body class="p-6">
+  <!-- Header -->
+  <div class="card mb-6 flex justify-between items-center">
+    <div class="flex items-center gap-4">
+      <h1 class="text-3xl font-bold">📊 Memecoin Trading Bot</h1>
+      <div id="status-badge" class="px-4 py-2 rounded-full text-sm font-semibold bg-red-900 text-red-200">
+        🔴 Desligado
+      </div>
+    </div>
+    <button id="toggle-bot" class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition">
+      ▶️ Iniciar Bot
+    </button>
+  </div>
+
+  <!-- Métricas -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div class="card">
+      <div class="text-sm text-gray-400">Capital</div>
+      <div id="capital" class="text-2xl font-bold">$10.00</div>
+    </div>
+    <div class="card">
+      <div class="text-sm text-gray-400">PnL Total</div>
+      <div id="pnl" class="text-2xl font-bold text-green-400">+$0.00 (0%)</div>
+    </div>
+    <div class="card">
+      <div class="text-sm text-gray-400">Win Rate</div>
+      <div id="winrate" class="text-2xl font-bold">0%</div>
+    </div>
+    <div class="card">
+      <div class="text-sm text-gray-400">Trades</div>
+      <div id="trades" class="text-2xl font-bold">0</div>
+    </div>
+  </div>
+
+  <!-- Gráfico e Scanner -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Gráfico de Performance -->
+    <div class="card">
+      <h2 class="text-xl font-bold mb-4">📈 Performance</h2>
+      <canvas id="chart-performance"></canvas>
+    </div>
+
+    <!-- Scanner Ao Vivo -->
+    <div class="card">
+      <h2 class="text-xl font-bold mb-4">🔍 Scanner (Score)</h2>
+      <div id="scanner-list" class="space-y-2">
+        <div class="text-gray-400 text-center py-8">Aguardando dados...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Posições e Trades -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Posições Abertas -->
+    <div class="card">
+      <h2 class="text-xl font-bold mb-4">💼 Posições Abertas</h2>
+      <div id="positions-list" class="space-y-2">
+        <div class="text-gray-400 text-center py-4">Nenhuma posição aberta</div>
+      </div>
+    </div>
+
+    <!-- Histórico de Trades -->
+    <div class="card">
+      <h2 class="text-xl font-bold mb-4">📜 Últimos Trades</h2>
+      <div id="trades-list" class="space-y-2 max-h-96 overflow-y-auto">
+        <div class="text-gray-400 text-center py-4">Nenhum trade ainda</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log de Atividade -->
+  <div class="card mt-6">
+    <h2 class="text-xl font-bold mb-4">📋 Log de Atividade</h2>
+    <div id="activity-log" class="bg-black/30 rounded p-4 font-mono text-sm max-h-64 overflow-y-auto">
+      <div class="text-gray-500">Aguardando atividade...</div>
+    </div>
+  </div>
+
+  <script>
+    // Estado
+    let isRunning = false;
+    let ws = null;
+    let performanceChart = null;
+    let performanceData = [];
+
+    // Elementos
+    const toggleBtn = document.getElementById('toggle-bot');
+    const statusBadge = document.getElementById('status-badge');
+    const capitalEl = document.getElementById('capital');
+    const pnlEl = document.getElementById('pnl');
+    const winrateEl = document.getElementById('winrate');
+    const tradesEl = document.getElementById('trades');
+    const scannerList = document.getElementById('scanner-list');
+    const positionsList = document.getElementById('positions-list');
+    const tradesList = document.getElementById('trades-list');
+    const activityLog = document.getElementById('activity-log');
+
+    // Conecta WebSocket
+    function connectWebSocket() {
+      ws = new WebSocket(`ws://${window.location.host}`);
+
+      ws.onopen = () => {
+        addLog('✅ Conectado ao servidor');
+      };
+
+      ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+
+        if (message.type === 'status') {
+          updateStatus(message.data.isRunning);
+        } else if (message.type === 'update') {
+          updateDashboard(message.data);
+        } else if (message.type === 'error') {
+          addLog(`❌ Erro: ${message.message}`);
+        }
+      };
+
+      ws.onclose = () => {
+        addLog('🔌 Desconectado. Reconectando...');
+        setTimeout(connectWebSocket, 3000);
+      };
+
+      ws.onerror = (error) => {
+        addLog('❌ Erro na conexão WebSocket');
+      };
+    }
+
+    // Toggle bot
+    toggleBtn.addEventListener('click', () => {
+      if (isRunning) {
+        ws.send(JSON.stringify({ type: 'stop' }));
+        addLog('🛑 Parando bot...');
+      } else {
+        ws.send(JSON.stringify({ type: 'start' }));
+        addLog('🚀 Iniciando bot...');
+      }
+    });
+
+    // Atualiza status
+    function updateStatus(running) {
+      isRunning = running;
+
+      if (running) {
+        statusBadge.className = 'px-4 py-2 rounded-full text-sm font-semibold bg-green-900 text-green-200 status-on';
+        statusBadge.textContent = '🟢 Rodando';
+        toggleBtn.textContent = '⏸️ Parar Bot';
+        toggleBtn.className = 'px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-semibold transition';
+      } else {
+        statusBadge.className = 'px-4 py-2 rounded-full text-sm font-semibold bg-red-900 text-red-200';
+        statusBadge.textContent = '🔴 Desligado';
+        toggleBtn.textContent = '▶️ Iniciar Bot';
+        toggleBtn.className = 'px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition';
+      }
+    }
+
+    // Atualiza dashboard
+    function updateDashboard(data) {
+      // Métricas
+      capitalEl.textContent = `$${data.capital.toFixed(2)}`;
+
+      const pnlColor = data.totalPnl >= 0 ? 'text-green-400' : 'text-red-400';
+      const pnlSign = data.totalPnl >= 0 ? '+' : '';
+      pnlEl.className = `text-2xl font-bold ${pnlColor}`;
+      pnlEl.textContent = `${pnlSign}$${data.totalPnl.toFixed(2)} (${data.totalPnlPercent.toFixed(1)}%)`;
+
+      winrateEl.textContent = `${data.winRate.toFixed(1)}%`;
+      tradesEl.textContent = `${data.totalTrades}`;
+
+      // Performance chart
+      updatePerformanceChart(data);
+
+      // Scanner
+      updateScanner(data.scores);
+
+      // Posições
+      updatePositions(data.openPositions);
+
+      // Trades
+      updateTrades(data.recentTrades);
+
+      addLog(`📊 Scan #${data.scanCount} completo`);
+    }
+
+    // Atualiza gráfico
+    function updatePerformanceChart(data) {
+      performanceData.push({
+        x: new Date(),
+        y: data.capital
+      });
+
+      if (performanceData.length > 50) {
+        performanceData.shift();
+      }
+
+      if (!performanceChart) {
+        const ctx = document.getElementById('chart-performance').getContext('2d');
+        performanceChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            datasets: [{
+              label: 'Capital ($)',
+              data: performanceData,
+              borderColor: '#22c55e',
+              backgroundColor: 'rgba(34, 197, 94, 0.1)',
+              tension: 0.4,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              x: {
+                type: 'time',
+                time: { unit: 'minute' },
+                grid: { color: '#334155' },
+                ticks: { color: '#94a3b8' }
+              },
+              y: {
+                grid: { color: '#334155' },
+                ticks: { color: '#94a3b8' }
+              }
+            }
+          }
+        });
+      } else {
+        performanceChart.data.datasets[0].data = performanceData;
+        performanceChart.update();
+      }
+    }
+
+    // Atualiza scanner
+    function updateScanner(scores) {
+      if (!scores || scores.length === 0) {
+        scannerList.innerHTML = '<div class="text-gray-400 text-center py-4">Aguardando scores...</div>';
+        return;
+      }
+
+      scannerList.innerHTML = scores.map(s => {
+        const scoreClass = s.score >= 70 ? 'score-hot' : s.score >= 50 ? 'score-watch' : 'score-low';
+        const status = s.score >= 70 ? '🔥' : s.score >= 50 ? '⚠️' : '  ';
+
+        return `
+          <div class="token-row flex justify-between items-center p-3 rounded transition">
+            <div class="flex items-center gap-3">
+              <span>${status}</span>
+              <span class="font-bold">${s.symbol}</span>
+            </div>
+            <div class="flex items-center gap-6">
+              <span class="${scoreClass} font-bold">${s.score}/100</span>
+              <span class="text-sm text-gray-400">Vol: ${s.signals.volumeSpike.toFixed(0)}%</span>
+              <span class="text-sm text-gray-400">Price: ${s.signals.priceSpike > 0 ? '+' : ''}${s.signals.priceSpike.toFixed(1)}%</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Atualiza posições
+    function updatePositions(positions) {
+      if (!positions || positions.length === 0) {
+        positionsList.innerHTML = '<div class="text-gray-400 text-center py-4">Nenhuma posição aberta</div>';
+        return;
+      }
+
+      positionsList.innerHTML = positions.map(pos => {
+        const holdTime = Math.floor((Date.now() - new Date(pos.entryTime).getTime()) / 60000);
+        return `
+          <div class="flex justify-between items-center p-3 bg-blue-900/20 rounded">
+            <div>
+              <div class="font-bold">${pos.symbol}</div>
+              <div class="text-sm text-gray-400">Entry: $${pos.entryPrice.toFixed(6)}</div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm">$${pos.investedUSD.toFixed(2)}</div>
+              <div class="text-xs text-gray-400">${holdTime}min ago</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Atualiza trades
+    function updateTrades(trades) {
+      if (!trades || trades.length === 0) {
+        tradesList.innerHTML = '<div class="text-gray-400 text-center py-4">Nenhum trade ainda</div>';
+        return;
+      }
+
+      tradesList.innerHTML = trades.map(trade => {
+        const isProfit = trade.pnl > 0;
+        const color = isProfit ? 'text-green-400' : 'text-red-400';
+        const icon = isProfit ? '✅' : '❌';
+        const sign = isProfit ? '+' : '';
+
+        return `
+          <div class="flex justify-between items-center p-3 rounded border border-gray-700">
+            <div class="flex items-center gap-2">
+              <span>${icon}</span>
+              <span class="font-bold">${trade.tokenSymbol}</span>
+            </div>
+            <div class="text-right">
+              <div class="${color} font-semibold">${sign}${trade.pnlPercent.toFixed(2)}%</div>
+              <div class="text-sm text-gray-400">${sign}$${trade.pnl.toFixed(2)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Adiciona log
+    function addLog(message) {
+      const time = new Date().toLocaleTimeString();
+      const entry = `<div class="text-gray-300">[${time}] ${message}</div>`;
+
+      if (activityLog.children[0]?.classList.contains('text-gray-500')) {
+        activityLog.innerHTML = entry;
+      } else {
+        activityLog.innerHTML = entry + activityLog.innerHTML;
+      }
+
+      // Limita a 50 entradas
+      if (activityLog.children.length > 50) {
+        activityLog.lastChild.remove();
+      }
+    }
+
+    // Inicializa
+    connectWebSocket();
+  </script>
+</body>
+</html>
