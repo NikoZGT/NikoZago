@@ -295,12 +295,14 @@ export class Backtester {
         const lastCandle = token.history[token.history.length - 1];
         const returnUSD = position.amount * lastCandle.close;
         const pnl = returnUSD - position.investedUSD;
+        const exitTime = new Date(lastCandle.timestamp);
+        const holdTimeMinutes = Math.abs((exitTime.getTime() - position.entryTime.getTime()) / (1000 * 60));
 
         trades.push({
           tokenSymbol: position.tokenSymbol,
           tokenAddress: position.tokenAddress,
           entryTime: position.entryTime,
-          exitTime: new Date(lastCandle.timestamp),
+          exitTime,
           entryPrice: position.entryPrice,
           exitPrice: lastCandle.close,
           amount: position.amount,
@@ -308,7 +310,7 @@ export class Backtester {
           returnUSD,
           pnl,
           pnlPercent: (pnl / position.investedUSD) * 100,
-          holdTimeMinutes: (lastCandle.timestamp - position.entryTime.getTime()) / (1000 * 60),
+          holdTimeMinutes,
           exitReason: 'end_of_period',
           signals: position.signals,
         });
@@ -331,21 +333,18 @@ export class Backtester {
     const priceIncrease = index > 0 ?
       ((candle.close - token.history[index - 1].close) / token.history[index - 1].close) * 100 : 0;
 
-    // Critérios mais realistas para entrada:
-    // 1. Volume alto + preço subindo moderadamente
-    // 2. Volume muito alto sozinho (indica interesse forte)
-    // 3. Preço subindo forte + volume moderado
-    // 4. Sinais moderados mas ambos presentes
+    // Critérios mais seletivos para entrada (melhor win rate):
+    // Sempre requerer volume E preço positivos
+    // Focar em sinais fortes e combinados
     const shouldEnter =
-      (volumeIncrease > 100 && priceIncrease > 2) ||  // Volume dobrou + preço subindo
-      (volumeIncrease > 150) ||                        // Volume muito alto
-      (volumeIncrease > 50 && priceIncrease > 5) ||   // Volume +50% + preço forte
-      (volumeIncrease > 30 && priceIncrease > 3);     // Ambos moderados
+      (volumeIncrease > 150 && priceIncrease > 3) ||  // Volume muito alto + preço subindo
+      (volumeIncrease > 100 && priceIncrease > 5) ||  // Volume alto + preço forte
+      (volumeIncrease > 80 && priceIncrease > 8);     // Volume bom + preço muito forte
 
     // Score baseado na força dos sinais
     let score = 30;
     if (shouldEnter) {
-      score = Math.min(95, 50 + (volumeIncrease / 5) + (priceIncrease * 3));
+      score = Math.min(95, 50 + (volumeIncrease / 4) + (priceIncrease * 4));
     }
 
     return {

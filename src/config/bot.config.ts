@@ -28,7 +28,7 @@ export function loadConfig(): BotConfig {
     // Capital Management
     initialCapital: parseFloat(process.env.INITIAL_CAPITAL || '10'),
     currentCapital: parseFloat(process.env.INITIAL_CAPITAL || '10'),
-    positionSizePercent: parseFloat(process.env.POSITION_SIZE_PERCENT || '2.5'),
+    positionSizePercent: parseFloat(process.env.POSITION_SIZE_PERCENT || '15'),
     maxConcurrentPositions: parseInt(process.env.MAX_CONCURRENT_POSITIONS || '3'),
     weeklyGrowthTarget: parseFloat(process.env.WEEKLY_GROWTH_TARGET || '3.5'),
 
@@ -38,7 +38,7 @@ export function loadConfig(): BotConfig {
     walletPrivateKey,
 
     // Risk Management
-    stopLossPercent: parseFloat(process.env.STOP_LOSS_PERCENT || '8'),
+    stopLossPercent: parseFloat(process.env.STOP_LOSS_PERCENT || '12'),
     takeProfitPercent: parseFloat(process.env.TAKE_PROFIT_PERCENT || '40'),
     trailingStopPercent: parseFloat(process.env.TRAILING_STOP_PERCENT || '10'),
     maxConsecutiveLosses: parseInt(process.env.MAX_CONSECUTIVE_LOSSES || '2'),
@@ -64,8 +64,8 @@ export function validateConfig(config: BotConfig): string[] {
     errors.push('Initial capital must be greater than 0');
   }
 
-  if (config.positionSizePercent <= 0 || config.positionSizePercent > 10) {
-    errors.push('Position size percent must be between 0 and 10');
+  if (config.positionSizePercent <= 0 || config.positionSizePercent > 25) {
+    errors.push('Position size percent must be between 0 and 25');
   }
 
   if (!config.rpcUrl) {
