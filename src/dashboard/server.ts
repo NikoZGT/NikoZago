@@ -16,6 +16,7 @@ export class DashboardServer {
   private isRunning: boolean = false;
   private timeframe: 'M1' | 'M5' = 'M5';
   private scanIntervalMs: number = 15000; // Fixo: 15 segundos
+  private quickCheckIntervalMs: number = 2000; // 2 segundos para verificar posições
 
   constructor(port: number = 3000) {
     this.app = express();
@@ -95,7 +96,8 @@ export class DashboardServer {
     this.scanIntervalMs = 15000; // FIXO: Analisa a cada 15 segundos
 
     console.log(`🚀 Iniciando bot com candles ${timeframe}...`);
-    console.log(`⏱️  Análise a cada 15 segundos`);
+    console.log(`⏱️  Scan completo: a cada 15 segundos`);
+    console.log(`⚡ Check de posições: a cada 2 segundos (proteção rápida)`);
     console.log(`📊 Timeframe dos candles: ${timeframe === 'M1' ? '1 minuto' : '5 minutos'}`);
 
     this.isRunning = true;
@@ -104,11 +106,16 @@ export class DashboardServer {
     // Cria bot com timeframe configurado
     this.bot = new PaperTradingBot(10, timeframe);
 
-    // Inicia bot em modo não-bloqueante
-    this.runBotLoop();
+    // Inicia bot com dois loops: scan completo + check rápido
+    this.runMainScanLoop();
+    this.runQuickCheckLoop();
   }
 
-  private async runBotLoop() {
+  /**
+   * Loop principal: Scan completo a cada 15 segundos
+   * Busca novas oportunidades e atualiza candles
+   */
+  private async runMainScanLoop() {
     while (this.isRunning && this.bot) {
       try {
         const data = await this.bot.scanOnce();
@@ -119,14 +126,40 @@ export class DashboardServer {
           data,
         });
 
-        // Aguarda 15 segundos antes do próximo scan (fixo)
+        // Aguarda 15 segundos antes do próximo scan completo
         await this.sleep(this.scanIntervalMs);
       } catch (error: any) {
-        console.error('Erro no loop do bot:', error);
+        console.error('Erro no scan completo:', error);
         this.broadcast({
           type: 'error',
           message: error.message,
         });
+      }
+    }
+  }
+
+  /**
+   * Loop rápido: Verifica posições abertas a cada 2 segundos
+   * Proteção contra quedas súbitas (trailing stop, take profit, stop loss)
+   */
+  private async runQuickCheckLoop() {
+    while (this.isRunning && this.bot) {
+      try {
+        // Só verifica se tiver posições abertas
+        if (this.bot.hasOpenPositions()) {
+          const data = await this.bot.checkPositionsQuick();
+
+          // Envia dados atualizados
+          this.broadcast({
+            type: 'quick_update',
+            data,
+          });
+        }
+
+        // Aguarda 2 segundos antes do próximo check
+        await this.sleep(this.quickCheckIntervalMs);
+      } catch (error: any) {
+        console.error('Erro no check rápido:', error);
       }
     }
   }

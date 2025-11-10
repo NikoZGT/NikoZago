@@ -163,7 +163,9 @@
         if (message.type === 'status') {
           updateStatus(message.data.isRunning);
         } else if (message.type === 'update') {
-          updateDashboard(message.data);
+          updateDashboard(message.data, false); // Scan completo
+        } else if (message.type === 'quick_update') {
+          updateDashboard(message.data, true); // Check rápido (sem log)
         } else if (message.type === 'error') {
           addLog(`❌ Erro: ${message.message}`);
         }
@@ -245,7 +247,7 @@
     }
 
     // Atualiza dashboard
-    function updateDashboard(data) {
+    function updateDashboard(data, isQuickUpdate = false) {
       // Métricas
       capitalEl.textContent = `$${data.capital.toFixed(2)}`;
 
@@ -260,16 +262,21 @@
       // Performance chart
       updatePerformanceChart(data);
 
-      // Scanner
-      updateScanner(data.scores);
+      // Scanner (só atualiza em scan completo)
+      if (!isQuickUpdate && data.scores) {
+        updateScanner(data.scores);
+      }
 
-      // Posições
+      // Posições (sempre atualiza)
       updatePositions(data.openPositions);
 
-      // Trades
+      // Trades (sempre atualiza)
       updateTrades(data.recentTrades);
 
-      addLog(`📊 Scan #${data.scanCount} completo`);
+      // Log apenas para scan completo
+      if (!isQuickUpdate && data.scanCount) {
+        addLog(`📊 Scan #${data.scanCount} completo`);
+      }
     }
 
     // Atualiza gráfico

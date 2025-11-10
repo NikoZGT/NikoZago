@@ -484,6 +484,63 @@ export class PaperTradingBot {
   }
 
   /**
+   * Verifica APENAS posições abertas (modo rápido para proteção)
+   * Usado para monitoramento frequente sem fazer scan completo
+   */
+  async checkPositionsQuick() {
+    if (this.openPositions.size === 0) {
+      return this.getState();
+    }
+
+    // Busca preço apenas dos tokens com posição aberta
+    const tokenData: any[] = [];
+
+    for (const [address, position] of Array.from(this.openPositions.entries())) {
+      const token = this.TOKENS.find(t => t.address === address);
+      if (!token) continue;
+
+      // Pega histórico do cache
+      let history = this.tokenCache.get(address) || [];
+      if (history.length === 0) continue;
+
+      const lastCandle = history[history.length - 1];
+
+      // Simula movimento de preço pequeno (volatilidade entre scans)
+      const microChange = -0.005 + Math.random() * 0.01; // -0.5% a +0.5%
+      const currentPrice = lastCandle.close * (1 + microChange);
+
+      // Atualiza último candle com preço atual (intra-candle)
+      const updatedCandle = {
+        ...lastCandle,
+        close: currentPrice,
+        high: Math.max(lastCandle.high, currentPrice),
+        low: Math.min(lastCandle.low, currentPrice),
+      };
+
+      history[history.length - 1] = updatedCandle;
+      this.tokenCache.set(address, history);
+
+      tokenData.push({
+        address,
+        symbol: token.symbol,
+        history,
+      });
+    }
+
+    // Verifica se precisa fechar alguma posição
+    await this.checkOpenPositions(tokenData);
+
+    return this.getState();
+  }
+
+  /**
+   * Retorna se há posições abertas
+   */
+  hasOpenPositions(): boolean {
+    return this.openPositions.size > 0;
+  }
+
+  /**
    * Retorna estado atual do bot (para dashboard)
    */
   getState(scores?: TokenScore[], tokenData?: any[]) {
