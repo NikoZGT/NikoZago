@@ -6,6 +6,7 @@
   <title>📊 Memecoin Trading Bot - Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
   <style>
     body {
       background: #0f172a;
@@ -220,6 +221,13 @@
       if (isRunning) {
         ws.send(JSON.stringify({ type: 'stop', botId: 'bot-1' }));
         addLog('🛑 Parando bot...');
+
+        // Reseta gráfico ao parar
+        if (performanceChart) {
+          performanceChart.destroy();
+          performanceChart = null;
+        }
+        performanceData = [];
       } else {
         const checkInterval = parseInt(checkIntervalSelect.value);
         ws.send(JSON.stringify({
@@ -376,42 +384,61 @@
       }
 
       if (!performanceChart) {
-        const ctx = document.getElementById('chart-performance').getContext('2d');
-        performanceChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            datasets: [{
-              label: 'Capital ($)',
-              data: performanceData,
-              borderColor: '#22c55e',
-              backgroundColor: 'rgba(34, 197, 94, 0.1)',
-              tension: 0.4,
-              fill: true
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false }
+        try {
+          const ctx = document.getElementById('chart-performance').getContext('2d');
+
+          // Destrói qualquer chart existente no canvas
+          const existingChart = Chart.getChart('chart-performance');
+          if (existingChart) {
+            existingChart.destroy();
+          }
+
+          performanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              datasets: [{
+                label: 'Capital ($)',
+                data: performanceData,
+                borderColor: '#22c55e',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                tension: 0.4,
+                fill: true
+              }]
             },
-            scales: {
-              x: {
-                type: 'time',
-                time: { unit: 'minute' },
-                grid: { color: '#334155' },
-                ticks: { color: '#94a3b8' }
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false }
               },
-              y: {
-                grid: { color: '#334155' },
-                ticks: { color: '#94a3b8' }
+              scales: {
+                x: {
+                  type: 'time',
+                  time: { unit: 'minute' },
+                  grid: { color: '#334155' },
+                  ticks: { color: '#94a3b8' }
+                },
+                y: {
+                  grid: { color: '#334155' },
+                  ticks: { color: '#94a3b8' }
+                }
               }
             }
-          }
-        });
+          });
+        } catch (error) {
+          console.error('Erro ao criar gráfico:', error);
+        }
       } else {
-        performanceChart.data.datasets[0].data = performanceData;
-        performanceChart.update();
+        try {
+          performanceChart.data.datasets[0].data = performanceData;
+          performanceChart.update();
+        } catch (error) {
+          console.error('Erro ao atualizar gráfico:', error);
+          // Se falhar ao atualizar, recria o chart
+          performanceChart.destroy();
+          performanceChart = null;
+          updatePerformanceChart(data);
+        }
       }
     }
 
