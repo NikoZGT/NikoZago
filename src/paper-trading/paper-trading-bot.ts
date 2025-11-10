@@ -133,7 +133,7 @@ export class PaperTradingBot {
 
     // Configuração baseada no timeframe
     const candlePeriodMs = this.timeframe === 'M1' ? 60 * 1000 : 5 * 60 * 1000; // M1 = 1min, M5 = 5min
-    const pumpChance = this.timeframe === 'M1' ? 0.08 : 0.15; // M1: 8%, M5: 15% (M1 detecta pumps menores)
+    const pumpChance = this.timeframe === 'M1' ? 0.20 : 0.25; // M1: 20%, M5: 25% (aumentado para testes)
 
     for (const token of this.TOKENS) {
       // Busca histórico (últimos candles)
@@ -275,7 +275,13 @@ export class PaperTradingBot {
   private async findNewOpportunities(scores: TokenScore[], tokenData: any[]) {
     const availableSlots = this.botConfig.maxConcurrentPositions - this.openPositions.size;
 
-    if (availableSlots <= 0 || this.capital < this.initialCapital * 0.1) {
+    if (availableSlots <= 0) {
+      console.log('   ⚠️  Todas as posições ocupadas. Aguardando saída para novas entradas.');
+      return;
+    }
+
+    if (this.capital < this.initialCapital * 0.1) {
+      console.log('   ⚠️  Capital muito baixo. Aguardando recuperação.');
       return;
     }
 
@@ -284,6 +290,14 @@ export class PaperTradingBot {
     const opportunities = scores
       .filter(s => s.score >= minScore && !this.openPositions.has(s.address))
       .slice(0, availableSlots);
+
+    if (opportunities.length === 0) {
+      const maxScore = Math.max(...scores.map(s => s.score));
+      console.log(`   💤 Nenhuma oportunidade (score < 70). Maior score: ${maxScore.toFixed(0)}/100`);
+      return;
+    }
+
+    console.log(`   🎯 ${opportunities.length} oportunidade(s) detectada(s)!`);
 
     for (const opp of opportunities) {
       const token = tokenData.find(t => t.address === opp.address);
@@ -430,9 +444,13 @@ export class PaperTradingBot {
     if (scores.length === 0) {
       console.log('⚠️  Nenhum score calculado ainda.');
       console.log('   Motivo: Precisa de pelo menos 2 candles para comparar.');
-      console.log('   Aguarde o próximo scan (5min) para ver os scores!\n');
+      console.log('   Aguarde o próximo scan para ver os scores!\n');
       return;
     }
+
+    const maxScore = Math.max(...scores.map(s => s.score));
+    const avgScore = scores.reduce((sum, s) => sum + s.score, 0) / scores.length;
+    console.log(`\n📊 ANÁLISE: Máx=${maxScore.toFixed(0)} | Médio=${avgScore.toFixed(0)} | Threshold=70 para compra`);
 
     console.log('┌──────────┬─────────┬────────────┬─────────────┬──────────┐');
     console.log('│  Token   │  Score  │   Volume   │    Price    │  Status  │');
