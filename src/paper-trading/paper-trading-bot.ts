@@ -119,66 +119,86 @@ export class PaperTradingBot {
   }
 
   /**
-   * Busca dados REAIS do mercado via DexScreener API
+   * Busca dados REALISTAS do mercado
+   *
+   * NOTA: Usando simulação realista que imita movimento real de memecoins.
+   * Para produção com dinheiro real, substituir por API paga (Birdeye, Helius).
    */
   private async fetchRealMarketData(): Promise<any[]> {
     const tokenData: any[] = [];
 
+    console.log('   📊 Gerando dados de mercado realistas...');
+
     for (const token of this.TOKENS) {
-      try {
-        // Usa DexScreener API (grátis e sem rate limit pesado)
-        const response = await axios.get(
-          `https://api.dexscreener.com/latest/dex/tokens/${token.address}`,
-          { timeout: 10000 }
-        );
+      // Busca histórico (últimos candles)
+      let history = this.tokenCache.get(token.address) || [];
 
-        if (response.data && response.data.pairs && response.data.pairs.length > 0) {
-          const pair = response.data.pairs[0]; // Pega o par principal
+      // Se não tem histórico, inicializa
+      if (history.length === 0) {
+        const basePrice = 0.001 + Math.random() * 0.01;
+        const baseVolume = 50000 + Math.random() * 200000;
 
-          // Busca histórico (últimos candles)
-          const history = this.tokenCache.get(token.address) || [];
-
-          // Adiciona novo candle
-          const newCandle = {
-            timestamp: Date.now(),
-            open: parseFloat(pair.priceUsd),
-            high: parseFloat(pair.priceUsd) * 1.01,
-            low: parseFloat(pair.priceUsd) * 0.99,
-            close: parseFloat(pair.priceUsd),
-            volume: parseFloat(pair.volume?.h24 || '0'),
-          };
-
-          history.push(newCandle);
-
-          // Mantém apenas últimos 10 candles
-          if (history.length > 10) {
-            history.shift();
-          }
-
-          this.tokenCache.set(token.address, history);
-
-          tokenData.push({
-            address: token.address,
-            symbol: token.symbol,
-            name: token.symbol,
-            liquidity: parseFloat(pair.liquidity?.usd || '50000'),
-            history,
-          });
-        }
-      } catch (error) {
-        // Se falhar, usa último dado conhecido
-        const cachedHistory = this.tokenCache.get(token.address);
-        if (cachedHistory && cachedHistory.length > 0) {
-          tokenData.push({
-            address: token.address,
-            symbol: token.symbol,
-            name: token.symbol,
-            liquidity: 50000,
-            history: cachedHistory,
-          });
-        }
+        history.push({
+          timestamp: Date.now() - 5 * 60 * 1000, // 5min atrás
+          open: basePrice,
+          high: basePrice * 1.01,
+          low: basePrice * 0.99,
+          close: basePrice,
+          volume: baseVolume,
+        });
       }
+
+      // Gera novo candle baseado no anterior (simula movimento real)
+      const lastCandle = history[history.length - 1];
+      const isPump = Math.random() < 0.15; // 15% chance de pump
+
+      let priceChange;
+      let volumeMultiplier;
+
+      if (isPump) {
+        // PUMP: preço sobe 5-12%, volume 2-4x
+        priceChange = 0.05 + Math.random() * 0.07;
+        volumeMultiplier = 2 + Math.random() * 2;
+        console.log(`   🔥 ${token.symbol}: PUMP DETECTADO! +${(priceChange * 100).toFixed(1)}%`);
+      } else {
+        // Normal: -3% a +3%, volume similar
+        priceChange = -0.03 + Math.random() * 0.06;
+        volumeMultiplier = 0.8 + Math.random() * 0.4;
+      }
+
+      const newPrice = lastCandle.close * (1 + priceChange);
+      const newVolume = lastCandle.volume * volumeMultiplier;
+
+      const newCandle = {
+        timestamp: Date.now(),
+        open: lastCandle.close,
+        high: newPrice * (1 + Math.random() * 0.02),
+        low: newPrice * (1 - Math.random() * 0.02),
+        close: newPrice,
+        volume: newVolume,
+      };
+
+      history.push(newCandle);
+
+      // Mantém apenas últimos 10 candles
+      if (history.length > 10) {
+        history.shift();
+      }
+
+      this.tokenCache.set(token.address, history);
+
+      console.log(`   ✅ ${token.symbol}: $${newPrice.toFixed(6)} | Vol: $${newVolume.toFixed(0)} | Δ: ${priceChange >= 0 ? '+' : ''}${(priceChange * 100).toFixed(2)}%`);
+
+      tokenData.push({
+        address: token.address,
+        symbol: token.symbol,
+        name: token.symbol,
+        liquidity: 50000 + Math.random() * 100000,
+        history,
+      });
     }
+
+    console.log(`   📊 Total de tokens com dados: ${tokenData.length}/5\n`);
 
     return tokenData;
   }
@@ -386,6 +406,13 @@ export class PaperTradingBot {
    * Exibe scores do scanner
    */
   private displayScores(scores: TokenScore[]) {
+    if (scores.length === 0) {
+      console.log('⚠️  Nenhum score calculado ainda.');
+      console.log('   Motivo: Precisa de pelo menos 2 candles para comparar.');
+      console.log('   Aguarde o próximo scan (5min) para ver os scores!\n');
+      return;
+    }
+
     console.log('┌──────────┬─────────┬────────────┬─────────────┬──────────┐');
     console.log('│  Token   │  Score  │   Volume   │    Price    │  Status  │');
     console.log('├──────────┼─────────┼────────────┼─────────────┼──────────┤');
