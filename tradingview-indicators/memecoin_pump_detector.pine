@@ -1,0 +1,221 @@
+//@version=5
+indicator("🚀 Memecoin Pump Detector ML", overlay=true, max_labels_count=500)
+
+// ============================================================================
+// CONFIGURAÇÕES
+// ============================================================================
+
+// Score Settings
+minScoreInput = input.int(70, "⭐ Score Mínimo", minval=50, maxval=90, group="Score")
+volumeWeight = input.int(30, "Volume Weight", minval=0, maxval=50, group="Score")
+priceWeight = input.int(40, "Price Weight", minval=0, maxval=50, group="Score")
+momentumWeight = input.int(30, "Momentum Weight", minval=0, maxval=50, group="Score")
+
+// Anti-Late Entry Filters
+maxPumpAgeBars = input.int(6, "⏱️ Max Pump Age (candles)", minval=1, maxval=20, group="Anti-Late Entry")
+maxRateOfChange = input.float(8.0, "📊 Max Rate of Change (%)", minval=1.0, maxval=20.0, group="Anti-Late Entry")
+buyStopPct = input.float(1.5, "⛔ Buy Stop (%)", minval=0.5, maxval=10.0, group="Anti-Late Entry")
+
+// Visual Settings
+showBuySignals = input.bool(true, "✅ Show BUY Signals", group="Visual")
+showSellSignals = input.bool(false, "❌ Show SELL Signals (shorts)", group="Visual")
+showLabels = input.bool(true, "🏷️ Show Labels", group="Visual")
+showTable = input.bool(true, "📊 Show Stats Table", group="Visual")
+
+// Alert Settings
+enableAlerts = input.bool(true, "🔔 Enable Alerts", group="Alerts")
+
+// ============================================================================
+// CÁLCULO DE INDICADORES
+// ============================================================================
+
+// Volume Spike (volume atual vs média 20 períodos)
+avgVolume = ta.sma(volume, 20)
+volumeSpike = avgVolume > 0 ? (volume / avgVolume) : 1.0
+volumeSpikePct = (volumeSpike - 1) * 100
+
+// Price Spike (variação % dos últimos 5 candles)
+priceChange5 = close >= close[5] ? ((close - close[5]) / close[5]) * 100 : 0
+priceSpike = priceChange5
+
+// Momentum (EMA 9 vs EMA 21)
+ema9 = ta.ema(close, 9)
+ema21 = ta.ema(close, 21)
+momentum = ((ema9 - ema21) / ema21) * 100
+
+// Rate of Change (variação % do último candle)
+rateOfChange = math.abs(((close - close[1]) / close[1]) * 100)
+
+// ============================================================================
+// CÁLCULO DE SCORE (0-100)
+// ============================================================================
+
+// Volume Score (0-30 pontos)
+volumeScore = math.min(volumeWeight, (volumeSpike - 1) / 1.5 * volumeWeight)
+
+// Price Score (0-40 pontos)
+priceScore = math.min(priceWeight, priceSpike / 10 * priceWeight)
+
+// Momentum Score (0-30 pontos)
+momentumScore = math.min(momentumWeight, math.abs(momentum) / 3 * momentumWeight)
+
+// SCORE TOTAL
+totalScore = volumeScore + priceScore + momentumScore
+
+// ============================================================================
+// ANTI-LATE ENTRY DETECTION
+// ============================================================================
+
+// Detecta início do pump (score cruza acima de minScore)
+var int pumpStartBar = na
+var float pumpStartPrice = na
+
+isPumpDetected = ta.crossover(totalScore, minScoreInput)
+
+if isPumpDetected
+    pumpStartBar := bar_index
+    pumpStartPrice := close
+
+// Calcula idade do pump em candles
+pumpAge = not na(pumpStartBar) ? bar_index - pumpStartBar : 999
+
+// Calcula price change desde início do pump
+priceChangeSincePump = not na(pumpStartPrice) ? ((close - pumpStartPrice) / pumpStartPrice) * 100 : 0
+
+// FILTROS
+isTooOld = pumpAge > maxPumpAgeBars
+isTooFast = rateOfChange > maxRateOfChange
+buyStopActive = priceChangeSincePump > buyStopPct
+
+// ============================================================================
+// SINAIS DE TRADE
+// ============================================================================
+
+// BUY Signal: score alto + pumps saudáveis + não late entry
+buySignal = totalScore >= minScoreInput and priceSpike > 0 and not isTooOld and not isTooFast and not buyStopActive
+
+// SELL Signal (para shorts): momentum negativo forte
+sellSignal = showSellSignals and totalScore >= minScoreInput and momentum < -2 and not isTooOld
+
+// Reset pump tracking quando score cai abaixo do mínimo
+if totalScore < minScoreInput - 10
+    pumpStartBar := na
+    pumpStartPrice := na
+
+// ============================================================================
+// VISUALIZAÇÃO
+// ============================================================================
+
+// Background color baseado no score
+bgcolor(totalScore >= 80 ? color.new(color.green, 90) :
+        totalScore >= minScoreInput ? color.new(color.yellow, 95) :
+        color.new(color.red, 97))
+
+// Setas de BUY
+if buySignal and showBuySignals
+    label.new(bar_index, low, "🚀 BUY\n" + str.tostring(totalScore, "#") + "/100",
+              style=label.style_label_up, color=color.new(color.green, 0),
+              textcolor=color.white, size=size.normal)
+    if enableAlerts
+        alert("🚀 BUY Signal: Score " + str.tostring(totalScore, "#") + "/100", alert.freq_once_per_bar_close)
+
+// Setas de SELL
+if sellSignal and showSellSignals
+    label.new(bar_index, high, "📉 SELL\n" + str.tostring(totalScore, "#") + "/100",
+              style=label.style_label_down, color=color.new(color.red, 0),
+              textcolor=color.white, size=size.normal)
+
+// Warnings de Late Entry
+if showLabels
+    if isTooOld and totalScore >= minScoreInput
+        label.new(bar_index, high, "⏱️ TOO OLD\n" + str.tostring(pumpAge) + " bars",
+                  style=label.style_label_down, color=color.new(color.orange, 20),
+                  textcolor=color.white, size=size.small)
+
+    if isTooFast
+        label.new(bar_index, high, "📊 TOO FAST\n" + str.tostring(rateOfChange, "#.#") + "%",
+                  style=label.style_label_down, color=color.new(color.red, 20),
+                  textcolor=color.white, size=size.small)
+
+    if buyStopActive and totalScore >= minScoreInput
+        label.new(bar_index, high, "⛔ BUY STOP\n+" + str.tostring(priceChangeSincePump, "#.#") + "%",
+                  style=label.style_label_down, color=color.new(color.purple, 20),
+                  textcolor=color.white, size=size.small)
+
+// ============================================================================
+// PAINEL DE ESTATÍSTICAS
+// ============================================================================
+
+if showTable
+    var table statsTable = table.new(position.top_right, 2, 9,
+                                      bgcolor=color.new(color.black, 10),
+                                      frame_color=color.gray,
+                                      frame_width=1)
+
+    // Headers
+    table.cell(statsTable, 0, 0, "Metric", bgcolor=color.new(color.blue, 70), text_color=color.white)
+    table.cell(statsTable, 1, 0, "Value", bgcolor=color.new(color.blue, 70), text_color=color.white)
+
+    // Score
+    scoreColor = totalScore >= 80 ? color.green :
+                 totalScore >= minScoreInput ? color.yellow : color.red
+    table.cell(statsTable, 0, 1, "⭐ Score", text_color=color.white)
+    table.cell(statsTable, 1, 1, str.tostring(totalScore, "#") + "/100",
+               bgcolor=color.new(scoreColor, 70), text_color=color.white)
+
+    // Volume Spike
+    volColor = volumeSpike >= 1.5 ? color.green :
+               volumeSpike >= 1.2 ? color.yellow : color.red
+    table.cell(statsTable, 0, 2, "📊 Volume", text_color=color.white)
+    table.cell(statsTable, 1, 2, str.tostring(volumeSpike, "#.##") + "x",
+               bgcolor=color.new(volColor, 70), text_color=color.white)
+
+    // Price Spike
+    table.cell(statsTable, 0, 3, "💹 Price Δ", text_color=color.white)
+    priceColor = priceSpike > 0 ? color.green : color.red
+    table.cell(statsTable, 1, 3, str.tostring(priceSpike, "#.#") + "%",
+               bgcolor=color.new(priceColor, 70), text_color=color.white)
+
+    // Momentum
+    table.cell(statsTable, 0, 4, "🎯 Momentum", text_color=color.white)
+    momColor = momentum > 0 ? color.green : color.red
+    table.cell(statsTable, 1, 4, str.tostring(momentum, "#.#") + "%",
+               bgcolor=color.new(momColor, 70), text_color=color.white)
+
+    // Rate of Change
+    table.cell(statsTable, 0, 5, "⚡ RoC", text_color=color.white)
+    rocColor = rateOfChange < maxRateOfChange ? color.green : color.red
+    table.cell(statsTable, 1, 5, str.tostring(rateOfChange, "#.#") + "%",
+               bgcolor=color.new(rocColor, 70), text_color=color.white)
+
+    // Pump Age
+    table.cell(statsTable, 0, 6, "⏱️ Pump Age", text_color=color.white)
+    ageColor = pumpAge <= maxPumpAgeBars ? color.green : color.red
+    ageText = not na(pumpStartBar) ? str.tostring(pumpAge) + " bars" : "N/A"
+    table.cell(statsTable, 1, 6, ageText,
+               bgcolor=color.new(ageColor, 70), text_color=color.white)
+
+    // Buy Stop
+    table.cell(statsTable, 0, 7, "⛔ Buy Stop", text_color=color.white)
+    stopColor = not buyStopActive ? color.green : color.red
+    table.cell(statsTable, 1, 7, str.tostring(priceChangeSincePump, "#.#") + "%",
+               bgcolor=color.new(stopColor, 70), text_color=color.white)
+
+    // Signal
+    table.cell(statsTable, 0, 8, "🎯 Signal", text_color=color.white)
+    signalText = buySignal ? "BUY 🚀" : sellSignal ? "SELL 📉" : "HOLD"
+    signalColor = buySignal ? color.green : sellSignal ? color.red : color.gray
+    table.cell(statsTable, 1, 8, signalText,
+               bgcolor=color.new(signalColor, 50), text_color=color.white)
+
+// ============================================================================
+// PLOTS (para criar alertas customizados)
+// ============================================================================
+
+plot(totalScore, "Score", color=color.new(color.blue, 0), linewidth=2, display=display.none)
+plot(buySignal ? 1 : 0, "Buy Signal", color=color.green, display=display.none)
+plot(sellSignal ? 1 : 0, "Sell Signal", color=color.red, display=display.none)
+
+// EMA lines (opcional - comentado por padrão)
+// plot(ema9, "EMA 9", color=color.new(color.green, 0), linewidth=1)
+// plot(ema21, "EMA 21", color=color.new(color.red, 0), linewidth=1)
