@@ -42,6 +42,7 @@ export class PaperTradingBot {
   private openPositions: Map<string, PaperPosition> = new Map();
   private tradeHistory: PaperTrade[] = [];
   private tokenCache: Map<string, any> = new Map();
+  private tokenPumpState: Map<string, boolean> = new Map(); // Rastreia se houve pump no último candle
   private scanCount: number = 0;
   private timeframe: 'M1' | 'M5' = 'M5';
 
@@ -156,34 +157,52 @@ export class PaperTradingBot {
 
       // Gera novo candle baseado no anterior (simula movimento real)
       const lastCandle = history[history.length - 1];
-      const isPump = Math.random() < pumpChance;
+      const hadPumpBefore = this.tokenPumpState.get(token.address) || false;
 
       let priceChange;
       let volumeMultiplier;
+      let isPump = false;
 
-      if (this.timeframe === 'M1') {
-        // M1: Movimentos menores, mais granulares
-        if (isPump) {
-          // PUMP em M1: 2-5%, volume 1.5-3x (menor que M5)
-          priceChange = 0.02 + Math.random() * 0.03;
-          volumeMultiplier = 1.5 + Math.random() * 1.5;
-          console.log(`   🔥 ${token.symbol}: PUMP M1! +${(priceChange * 100).toFixed(1)}%`);
+      // REALISMO: Se teve pump antes, 70% de chance de REVERSÃO (queda)
+      if (hadPumpBefore) {
+        const shouldReverse = Math.random() < 0.70; // 70% chance de mean reversion
+
+        if (shouldReverse) {
+          // REVERSÃO após pump: preço CAI forte! (realista!)
+          priceChange = -0.04 - Math.random() * 0.06; // -4% a -10%
+          volumeMultiplier = 1.5 + Math.random() * 1.0; // Volume ainda alto (panic sell)
+          console.log(`   📉 ${token.symbol}: REVERSÃO! ${(priceChange * 100).toFixed(1)}% (após pump)`);
         } else {
-          // Normal M1: -1% a +1%, menos volátil
-          priceChange = -0.01 + Math.random() * 0.02;
-          volumeMultiplier = 0.9 + Math.random() * 0.2;
+          // Continua subindo (raro, mas acontece)
+          priceChange = 0.01 + Math.random() * 0.03;
+          volumeMultiplier = 0.8 + Math.random() * 0.3;
         }
+
+        this.tokenPumpState.set(token.address, false); // Reset pump state
       } else {
-        // M5: Movimentos maiores, mais consolidados
-        if (isPump) {
-          // PUMP em M5: 5-12%, volume 2-4x
-          priceChange = 0.05 + Math.random() * 0.07;
-          volumeMultiplier = 2 + Math.random() * 2;
-          console.log(`   🔥 ${token.symbol}: PUMP M5! +${(priceChange * 100).toFixed(1)}%`);
+        // Comportamento normal: pode ou não ter pump
+        isPump = Math.random() < pumpChance;
+
+        if (this.timeframe === 'M1') {
+          if (isPump) {
+            priceChange = 0.02 + Math.random() * 0.03; // +2% a +5%
+            volumeMultiplier = 1.5 + Math.random() * 1.5;
+            console.log(`   🔥 ${token.symbol}: PUMP M1! +${(priceChange * 100).toFixed(1)}%`);
+            this.tokenPumpState.set(token.address, true); // Marca que teve pump
+          } else {
+            priceChange = -0.01 + Math.random() * 0.02;
+            volumeMultiplier = 0.9 + Math.random() * 0.2;
+          }
         } else {
-          // Normal M5: -3% a +3%, mais volátil
-          priceChange = -0.03 + Math.random() * 0.06;
-          volumeMultiplier = 0.8 + Math.random() * 0.4;
+          if (isPump) {
+            priceChange = 0.05 + Math.random() * 0.07; // +5% a +12%
+            volumeMultiplier = 2 + Math.random() * 2;
+            console.log(`   🔥 ${token.symbol}: PUMP M5! +${(priceChange * 100).toFixed(1)}%`);
+            this.tokenPumpState.set(token.address, true); // Marca que teve pump
+          } else {
+            priceChange = -0.03 + Math.random() * 0.06;
+            volumeMultiplier = 0.8 + Math.random() * 0.4;
+          }
         }
       }
 
@@ -304,7 +323,15 @@ export class PaperTradingBot {
       if (!token || token.history.length === 0) continue;
 
       const currentCandle = token.history[token.history.length - 1];
-      const entryPrice = currentCandle.close;
+      const detectedPrice = currentCandle.close;
+
+      // SLIPPAGE REALISTA: Na vida real, entre detectar e executar, o preço muda!
+      // - Se pump continua: preço sobe mais 0.5-2% (você compra mais caro)
+      // - Se pump terminou: preço já está caindo (você pega a queda)
+      const slippagePercent = -0.005 + Math.random() * 0.025; // -0.5% a +2%
+      const entryPrice = detectedPrice * (1 + slippagePercent);
+
+      console.log(`   💸 ${opp.symbol}: Detectado ${detectedPrice.toFixed(6)} → Entrada ${entryPrice.toFixed(6)} (slippage ${(slippagePercent * 100).toFixed(2)}%)`);
 
       // Calcula position size
       const baseCapital = Math.min(this.capital, this.initialCapital * 5);
