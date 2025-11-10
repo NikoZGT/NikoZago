@@ -67,6 +67,8 @@ export class MultiTokenScanner {
    * - 50-69:  MODERADO (pump médio)
    * - 30-49:  FRACO (não recomendado)
    * - 0-29:   MUITO FRACO (evitar)
+   *
+   * IMPORTANTE: Só compra em SUBIDAS (long only). Ignora quedas.
    */
   private calculateTokenScore(token: any, currentTimestamp: number): TokenScore | null {
     // Encontra candle atual
@@ -79,6 +81,24 @@ export class MultiTokenScanner {
     // Calcula sinais
     const volumeChange = ((currentCandle.volume - prevCandle.volume) / prevCandle.volume) * 100;
     const priceChange = ((currentCandle.close - prevCandle.close) / prevCandle.close) * 100;
+
+    // CRÍTICO: Só compra em SUBIDAS! Se preço caindo, score = 0
+    // Mesmo que volume esteja alto (panic selling), NÃO COMPRA!
+    if (priceChange < 0) {
+      return {
+        address: token.address,
+        symbol: token.symbol,
+        score: 0,
+        signals: {
+          volumeSpike: 0,
+          priceSpike: 0,
+          momentum: 0,
+          liquidity: 0,
+        },
+        currentPrice: currentCandle.close,
+        timestamp: new Date(currentTimestamp),
+      };
+    }
 
     // Momentum (média dos últimos 3 candles)
     let momentumVolume = 0;
