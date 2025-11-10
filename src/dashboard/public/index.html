@@ -429,19 +429,61 @@
 
       tradesList.innerHTML = trades.map(trade => {
         const isProfit = trade.pnl > 0;
-        const color = isProfit ? 'text-green-400' : 'text-red-400';
+        const pnlColor = isProfit ? 'text-green-400' : 'text-red-400';
+        const bgColor = isProfit ? 'bg-green-900/20' : 'bg-red-900/20';
+        const borderColor = isProfit ? 'border-green-700' : 'border-red-700';
         const icon = isProfit ? '✅' : '❌';
         const sign = isProfit ? '+' : '';
 
+        // Calcula tempo de hold
+        const entryTime = new Date(trade.entryTime);
+        const exitTime = new Date(trade.exitTime);
+        const holdTimeMs = exitTime - entryTime;
+        const holdMinutes = Math.floor(holdTimeMs / 60000);
+        const holdSeconds = Math.floor((holdTimeMs % 60000) / 1000);
+
+        // Formata horário
+        const exitTimeStr = exitTime.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+        // Emoji baseado no exit reason
+        let reasonEmoji = '🔔';
+        if (trade.exitReason === 'Take Profit') reasonEmoji = '🎯';
+        else if (trade.exitReason === 'Stop Loss') reasonEmoji = '🛑';
+        else if (trade.exitReason === 'Trailing Stop') reasonEmoji = '📉';
+
         return `
-          <div class="flex justify-between items-center p-3 rounded border border-gray-700">
-            <div class="flex items-center gap-2">
-              <span>${icon}</span>
-              <span class="font-bold">${trade.tokenSymbol}</span>
+          <div class="p-4 ${bgColor} rounded border ${borderColor} mb-3">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <div class="font-bold text-lg">${icon} ${trade.tokenSymbol}</div>
+                <div class="text-xs text-gray-400">Hold: ${holdMinutes}min ${holdSeconds}s | Fechado ${exitTimeStr}</div>
+              </div>
+              <div class="text-right">
+                <div class="${pnlColor} font-bold text-xl">${sign}${trade.pnlPercent.toFixed(2)}%</div>
+                <div class="${pnlColor} text-sm font-semibold">${sign}$${trade.pnl.toFixed(2)}</div>
+              </div>
             </div>
-            <div class="text-right">
-              <div class="${color} font-semibold">${sign}${trade.pnlPercent.toFixed(2)}%</div>
-              <div class="text-sm text-gray-400">${sign}$${trade.pnl.toFixed(2)}</div>
+            <div class="grid grid-cols-2 gap-2 text-xs mb-2">
+              <div>
+                <span class="text-gray-400">Entry:</span>
+                <span class="text-white font-mono ml-1">$${trade.entryPrice.toFixed(6)}</span>
+              </div>
+              <div>
+                <span class="text-gray-400">Exit:</span>
+                <span class="text-white font-mono ml-1">$${trade.exitPrice.toFixed(6)}</span>
+              </div>
+              <div>
+                <span class="text-gray-400">Investido:</span>
+                <span class="text-white ml-1">$${trade.investedUSD.toFixed(2)}</span>
+              </div>
+              <div>
+                <span class="text-gray-400">Retorno:</span>
+                <span class="text-white ml-1">$${trade.returnUSD.toFixed(2)}</span>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-gray-700 text-xs flex items-center gap-2">
+              <span class="text-gray-400">Motivo:</span>
+              <span class="text-white font-semibold">${reasonEmoji} ${trade.exitReason}</span>
             </div>
           </div>
         `;
