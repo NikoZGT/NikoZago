@@ -1,6 +1,6 @@
 # 🚀 Memecoin Pump Detector - TradingView Indicator
 
-Indicador Pine Script que detecta pumps de memecoins usando a mesma lógica do bot de trading automatizado.
+Indicador Pine Script v6 que detecta pumps de memecoins usando a mesma lógica do bot de trading automatizado.
 
 ## 📊 O que o Indicador Faz
 

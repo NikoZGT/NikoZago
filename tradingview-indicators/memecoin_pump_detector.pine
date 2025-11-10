@@ -1,4 +1,4 @@
-//@version=5
+//@version=6
 indicator("🚀 Memecoin Pump Detector ML", overlay=true, max_labels_count=500)
 
 // ============================================================================
