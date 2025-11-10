@@ -208,35 +208,35 @@ export class Backtester {
     let pumpDuration = 0;
 
     for (let time = startTime; time <= endTime; time += interval) {
-      // 10% de chance de iniciar um pump a cada candle
-      if (!pumpPhase && Math.random() < 0.10) {
+      // 1.5% de chance de iniciar um pump a cada candle (realista)
+      if (!pumpPhase && Math.random() < 0.015) {
         pumpPhase = true;
-        pumpDuration = Math.floor(Math.random() * 15) + 10; // 10-25 candles de pump
+        pumpDuration = Math.floor(Math.random() * 10) + 8; // 8-18 candles de pump
       }
 
       let priceChange = 0;
       let volumeMultiplier = 1;
 
       if (pumpPhase && pumpDuration > 0) {
-        // PUMP: Alta de 2-8% por candle (moderado mas consistente)
-        priceChange = (Math.random() * 0.06) + 0.02; // +2% a +8%
-        volumeMultiplier = 2 + (Math.random() * 4); // 2x a 6x volume
+        // PUMP: Alta de 1.5-5% por candle (realista)
+        priceChange = (Math.random() * 0.035) + 0.015; // +1.5% a +5%
+        volumeMultiplier = 1.5 + (Math.random() * 2.5); // 1.5x a 4x volume
         pumpDuration--;
 
         if (pumpDuration === 0) {
           pumpPhase = false;
         }
       } else {
-        // Normal: movimento leve (sem dumps fortes)
+        // Normal: movimento lateral com volatilidade
         const rand = Math.random();
-        if (rand < 0.05) {
-          // 5% chance de pequena correção
-          priceChange = -(Math.random() * 0.03); // -0% a -3%
-          volumeMultiplier = 1 + Math.random();
+        if (rand < 0.15) {
+          // 15% chance de correção
+          priceChange = -(Math.random() * 0.05); // -0% a -5%
+          volumeMultiplier = 0.8 + Math.random();
         } else {
           // Movimento normal lateral
-          priceChange = (Math.random() - 0.5) * 0.04; // ±2%
-          volumeMultiplier = 0.7 + (Math.random() * 1); // 0.7x a 1.7x
+          priceChange = (Math.random() - 0.5) * 0.05; // ±2.5%
+          volumeMultiplier = 0.5 + (Math.random() * 1.5); // 0.5x a 2x
         }
       }
 
@@ -281,7 +281,7 @@ export class Backtester {
   }
 
   /**
-   * Simula trading com dados históricos
+   * Simula trading com dados históricos (CANDLE POR CANDLE)
    */
   private async simulateTrading(historicalData: any[]): Promise<BacktestTrade[]> {
     const trades: BacktestTrade[] = [];
@@ -292,44 +292,27 @@ export class Backtester {
 
     logger.info('Simulating trading...');
 
-    // Para cada token
-    for (const token of historicalData) {
-      // Para cada ponto no histórico
-      for (let i = 0; i < token.history.length; i++) {
-        const candle = token.history[i];
-        const time = new Date(candle.timestamp);
+    // Obter todos os timestamps únicos
+    const allTimestamps = new Set<number>();
+    historicalData.forEach(token => {
+      token.history.forEach((candle: any) => allTimestamps.add(candle.timestamp));
+    });
+    const sortedTimestamps = Array.from(allTimestamps).sort((a, b) => a - b);
 
-        // Verificar sinais de entrada
-        const entrySignal = this.evaluateEntrySignal(token, candle, i);
+    // Processar CANDLE POR CANDLE em ordem cronológica
+    for (const timestamp of sortedTimestamps) {
+      const time = new Date(timestamp);
 
-        // Circuit breaker - parar de tradear após perdas consecutivas
-        if (consecutiveLosses >= this.botConfig.maxConsecutiveLosses) {
-          circuitBreakerActive = true;
-        }
+      // Para cada token neste timestamp
+      for (const token of historicalData) {
+        const candleIndex = token.history.findIndex((c: any) => c.timestamp === timestamp);
+        if (candleIndex === -1) continue;
 
-        if (entrySignal.shouldEnter &&
-            openPositions.size < this.botConfig.maxConcurrentPositions &&
-            !circuitBreakerActive) {
-          // Abrir posição
-          const positionSize = (currentCapital * this.botConfig.positionSizePercent) / 100;
-          const amount = positionSize / candle.close;
+        const candle = token.history[candleIndex];
 
-          openPositions.set(token.address, {
-            tokenSymbol: token.symbol,
-            tokenAddress: token.address,
-            entryTime: time,
-            entryPrice: candle.close,
-            amount,
-            investedUSD: positionSize,
-            entryIndex: i,
-            signals: entrySignal,
-          });
-
-          currentCapital -= positionSize;
-        }
-
-        // Verificar posições abertas para saída
-        openPositions.forEach((position, address) => {
+        // Primeiro: Verificar saídas de posições abertas DESTE token
+        if (openPositions.has(token.address)) {
+          const position = openPositions.get(token.address);
           const exitSignal = this.evaluateExitSignal(position, candle, time);
 
           if (exitSignal.shouldExit) {
@@ -357,7 +340,7 @@ export class Backtester {
             });
 
             currentCapital += returnUSD;
-            openPositions.delete(address);
+            openPositions.delete(token.address);
 
             // Rastrear perdas consecutivas para circuit breaker
             if (pnl < 0) {
@@ -367,7 +350,43 @@ export class Backtester {
               circuitBreakerActive = false; // Reset circuit breaker em win
             }
           }
-        });
+        }
+
+        // Segundo: Verificar sinais de entrada para novos trades
+        if (!openPositions.has(token.address)) {
+          const entrySignal = this.evaluateEntrySignal(token, candle, candleIndex);
+
+          // Circuit breaker
+          if (consecutiveLosses >= this.botConfig.maxConsecutiveLosses) {
+            circuitBreakerActive = true;
+          }
+
+          if (entrySignal.shouldEnter &&
+              openPositions.size < this.botConfig.maxConcurrentPositions &&
+              !circuitBreakerActive &&
+              currentCapital > 0) {
+            // Abrir posição - usar capital inicial para evitar compound exponencial
+            const baseCapital = Math.min(currentCapital, this.config.initialCapital * 5); // Limita a 5x capital inicial
+            const positionSize = (baseCapital * this.botConfig.positionSizePercent) / 100;
+
+            // Garantir que não investe mais do que tem
+            const actualPositionSize = Math.min(positionSize, currentCapital * 0.9);
+            const amount = actualPositionSize / candle.close;
+
+            openPositions.set(token.address, {
+              tokenSymbol: token.symbol,
+              tokenAddress: token.address,
+              entryTime: time,
+              entryPrice: candle.close,
+              amount,
+              investedUSD: actualPositionSize,
+              candleIndex,
+              signals: entrySignal,
+            });
+
+            currentCapital -= actualPositionSize;
+          }
+        }
       }
     }
 
@@ -427,32 +446,23 @@ export class Backtester {
       momentumPositive = candle.close > token.history[index - 1].close;
     }
 
-    // DETECTA INTERESSE FORTE DE COMPRA - MUITO agressivo:
-    // "Do nada tem muito interesse de compra? Compra!"
+    // DETECTA INTERESSE FORTE DE COMPRA - Seletivo mas ativo:
+    // "Do nada tem MUITO interesse de compra? Compra!"
     const shouldEnter = (
       // Spike de volume + preço subindo
-      (volumeIncrease > 50 && priceIncrease > 1.5) ||
+      (volumeIncrease > 80 && priceIncrease > 2.5) ||
 
-      // Preço pump forte
-      (priceIncrease > 4 && volumeIncrease > 20) ||
+      // Preço pump forte com volume
+      (priceIncrease > 6 && volumeIncrease > 40) ||
 
-      // Volume alto sozinho
-      (volumeIncrease > 80) ||
+      // Volume explosivo
+      (volumeIncrease > 120) ||
 
-      // Pump médio com momentum
-      (momentumPositive && volumeIncrease > 35 && priceIncrease > 2) ||
+      // Pump bom com momentum
+      (momentumPositive && volumeIncrease > 70 && priceIncrease > 4) ||
 
-      // Interesse crescente
-      (volumeIncrease > 45 && priceIncrease > 3) ||
-
-      // Volume médio + preço subindo
-      (volumeIncrease > 60 && priceIncrease > 1) ||
-
-      // Preço subindo forte
-      (priceIncrease > 6) ||
-
-      // Qualquer interesse razoável
-      (volumeIncrease > 40 && priceIncrease > 2.5)
+      // Preço pump muito forte
+      (priceIncrease > 10)
     );
 
     // Score baseado na força dos sinais
