@@ -253,6 +253,8 @@ export class Backtester {
     const trades: BacktestTrade[] = [];
     let currentCapital = this.config.initialCapital;
     let openPositions: Map<string, any> = new Map();
+    let consecutiveLosses = 0;
+    let circuitBreakerActive = false;
 
     logger.info('Simulating trading...');
 
@@ -266,7 +268,14 @@ export class Backtester {
         // Verificar sinais de entrada
         const entrySignal = this.evaluateEntrySignal(token, candle, i);
 
-        if (entrySignal.shouldEnter && openPositions.size < this.botConfig.maxConcurrentPositions) {
+        // Circuit breaker - parar de tradear após perdas consecutivas
+        if (consecutiveLosses >= this.botConfig.maxConsecutiveLosses) {
+          circuitBreakerActive = true;
+        }
+
+        if (entrySignal.shouldEnter &&
+            openPositions.size < this.botConfig.maxConcurrentPositions &&
+            !circuitBreakerActive) {
           // Abrir posição
           const positionSize = (currentCapital * this.botConfig.positionSizePercent) / 100;
           const amount = positionSize / candle.close;
@@ -294,7 +303,7 @@ export class Backtester {
             const returnUSD = position.amount * candle.close;
             const pnl = returnUSD - position.investedUSD;
             const pnlPercent = (pnl / position.investedUSD) * 100;
-            const holdTimeMinutes = (time.getTime() - position.entryTime.getTime()) / (1000 * 60);
+            const holdTimeMinutes = Math.abs((time.getTime() - position.entryTime.getTime()) / (1000 * 60));
 
             trades.push({
               tokenSymbol: position.tokenSymbol,
@@ -315,6 +324,14 @@ export class Backtester {
 
             currentCapital += returnUSD;
             openPositions.delete(address);
+
+            // Rastrear perdas consecutivas para circuit breaker
+            if (pnl < 0) {
+              consecutiveLosses++;
+            } else {
+              consecutiveLosses = 0;
+              circuitBreakerActive = false; // Reset circuit breaker em win
+            }
           }
         });
       }
@@ -357,7 +374,7 @@ export class Backtester {
    */
   private evaluateEntrySignal(token: any, candle: any, index: number): any {
     // Implementar lógica de entrada similar ao bot real
-    // Usar critérios mais realistas e flexíveis
+    // Critérios MUITO seletivos para win rate 40-50%
 
     const volumeIncrease = index > 0 ?
       ((candle.volume - token.history[index - 1].volume) / token.history[index - 1].volume) * 100 : 0;
@@ -365,18 +382,30 @@ export class Backtester {
     const priceIncrease = index > 0 ?
       ((candle.close - token.history[index - 1].close) / token.history[index - 1].close) * 100 : 0;
 
-    // Critérios mais seletivos para entrada (melhor win rate):
-    // Sempre requerer volume E preço positivos
-    // Focar em sinais fortes e combinados
-    const shouldEnter =
-      (volumeIncrease > 150 && priceIncrease > 3) ||  // Volume muito alto + preço subindo
-      (volumeIncrease > 100 && priceIncrease > 5) ||  // Volume alto + preço forte
-      (volumeIncrease > 80 && priceIncrease > 8);     // Volume bom + preço muito forte
+    // Filtro de liquidez mínima
+    if (token.liquidity < this.botConfig.minLiquidity) {
+      return { shouldEnter: false, volumeIncrease, priceIncrease, score: 0 };
+    }
+
+    // Verificar momentum recente (última vela positiva)
+    let momentumPositive = true;
+    if (index >= 1) {
+      momentumPositive = token.history[index].close > token.history[index - 1].close;
+    }
+
+    // Critérios balanceados - Qualidade + Quantidade (alvo: 20-40 trades):
+    // Priorizar sinais fortes mas não impossíveis de encontrar
+    const shouldEnter = momentumPositive && (
+      (volumeIncrease > 150 && priceIncrease > 4) ||                              // Volume alto + preço bom
+      (volumeIncrease > 100 && priceIncrease > 7) ||                              // Volume médio + preço forte
+      (volumeIncrease > 200 && priceIncrease > 2) ||                              // Volume explosivo
+      (volumeIncrease > 80 && priceIncrease > 10 && token.liquidity > 300000)    // Pump com liquidez
+    );
 
     // Score baseado na força dos sinais
     let score = 30;
     if (shouldEnter) {
-      score = Math.min(95, 50 + (volumeIncrease / 4) + (priceIncrease * 4));
+      score = Math.min(95, 60 + (volumeIncrease / 3) + (priceIncrease * 5));
     }
 
     return {
@@ -384,6 +413,7 @@ export class Backtester {
       volumeIncrease,
       priceIncrease,
       score,
+      momentumPositive,
     };
   }
 
@@ -394,9 +424,22 @@ export class Backtester {
     const currentPrice = candle.close;
     const pnlPercent = ((currentPrice - position.entryPrice) / position.entryPrice) * 100;
 
-    // Stop loss
+    // Atualizar highestPrice para trailing stop
+    if (!position.highestPrice || currentPrice > position.highestPrice) {
+      position.highestPrice = currentPrice;
+    }
+
+    // Stop loss fixo
     if (pnlPercent <= -this.botConfig.stopLossPercent) {
       return { shouldExit: true, reason: 'stop_loss' };
+    }
+
+    // Trailing stop - Ativa após ganho de 15%
+    if (pnlPercent > 15) {
+      const dropFromHigh = ((position.highestPrice - currentPrice) / position.highestPrice) * 100;
+      if (dropFromHigh > this.botConfig.trailingStopPercent) {
+        return { shouldExit: true, reason: 'trailing_stop' };
+      }
     }
 
     // Take profit

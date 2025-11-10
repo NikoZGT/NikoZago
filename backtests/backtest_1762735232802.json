@@ -1,0 +1,151 @@
+{
+  "config": {
+    "startDate": "2025-11-03T00:40:32.768Z",
+    "endDate": "2025-11-10T00:40:32.768Z",
+    "initialCapital": 10,
+    "network": "solana"
+  },
+  "startCapital": 10,
+  "endCapital": 9.951738757398555,
+  "totalPnl": -0.04826124260144504,
+  "totalPnlPercent": -0.4826124260144504,
+  "totalTrades": 5,
+  "winningTrades": 2,
+  "losingTrades": 3,
+  "winRate": 40,
+  "avgWin": 0.22147795622501654,
+  "avgLoss": 0.16373905168382605,
+  "profitFactor": 0.9017517159057944,
+  "maxDrawdown": 0.3164084433388048,
+  "maxDrawdownPercent": 3.081456051935869,
+  "sharpeRatio": -1.3962961415346888,
+  "trades": [
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-05T17:30:32.768Z",
+      "exitTime": "2025-11-05T18:50:32.768Z",
+      "entryPrice": 0.00009181848124530983,
+      "exitPrice": 0.00008111803430003854,
+      "amount": 16336.580388347704,
+      "investedUSD": 1.5,
+      "returnUSD": 1.3251912882873258,
+      "pnl": -0.1748087117126742,
+      "pnlPercent": -11.653914114178281,
+      "holdTimeMinutes": 80,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 919.1523490344432,
+        "priceIncrease": 3.0912484562577385,
+        "score": 95,
+        "trendPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-08T13:30:32.768Z",
+      "exitTime": "2025-11-08T15:35:32.768Z",
+      "entryPrice": 0.000029546661118181665,
+      "exitPrice": 0.00003155745983768675,
+      "amount": 49879.70340703582,
+      "investedUSD": 1.4737786932430987,
+      "returnUSD": 1.5740767369832598,
+      "pnl": 0.10029804374016105,
+      "pnlPercent": 6.805502359343511,
+      "holdTimeMinutes": 125,
+      "exitReason": "max_hold_time",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 1492.8657070980762,
+        "priceIncrease": 4.135126153126727,
+        "score": 95,
+        "trendPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-08T20:50:32.768Z",
+      "exitTime": "2025-11-08T22:55:32.768Z",
+      "entryPrice": 0.00003847068194255198,
+      "exitPrice": 0.00004732484280809489,
+      "amount": 38700.20817482189,
+      "investedUSD": 1.488823399804123,
+      "returnUSD": 1.831481268513995,
+      "pnl": 0.342657868709872,
+      "pnlPercent": 23.015346800362877,
+      "holdTimeMinutes": 125,
+      "exitReason": "max_hold_time",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 325.5379621103382,
+        "priceIncrease": 4.658203152594114,
+        "score": 95,
+        "trendPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-09T04:35:32.768Z",
+      "exitTime": "2025-11-09T05:25:32.768Z",
+      "entryPrice": 0.0000838685989483465,
+      "exitPrice": 0.00007360154554542143,
+      "amount": 15609.99926683316,
+      "investedUSD": 1.3091887680940133,
+      "returnUSD": 1.148920072001816,
+      "pnl": -0.1602686960921973,
+      "pnlPercent": -12.241832499489359,
+      "holdTimeMinutes": 50,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 2034.459388221554,
+        "priceIncrease": 3.5442056006005154,
+        "score": 95,
+        "trendPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-09T20:55:32.768Z",
+      "exitTime": "2025-11-09T21:55:32.768Z",
+      "entryPrice": 0.00003121895328222739,
+      "exitPrice": 0.00002742599113617945,
+      "amount": 41165.64870263619,
+      "investedUSD": 1.2851484636801838,
+      "returnUSD": 1.1290087164335771,
+      "pnl": -0.15613974724660662,
+      "pnlPercent": -12.149549383538217,
+      "holdTimeMinutes": 60,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 1292.834675394827,
+        "priceIncrease": 3.172142958379371,
+        "score": 95,
+        "trendPositive": true
+      }
+    }
+  ],
+  "dailyPnl": [
+    {
+      "date": "2025-11-05",
+      "pnl": -0.1748087117126742,
+      "capital": 9.825191288287325
+    },
+    {
+      "date": "2025-11-08",
+      "pnl": 0.4429559124500331,
+      "capital": 10.268147200737356
+    },
+    {
+      "date": "2025-11-09",
+      "pnl": -0.3164084433388039,
+      "capital": 9.951738757398552
+    }
+  ]
+}
