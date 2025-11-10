@@ -82,13 +82,14 @@ export class DashboardServer {
             const botId = data.botId || `bot-${this.bots.size + 1}`;
             const timeframe = data.timeframe || 'M5';
             const checkInterval = data.checkInterval || 15000;
+            const minScore = data.minScore || 70;
             const riskConfig = data.riskConfig || {
               stopLoss: 5,
               takeProfit: 15,
               trailingStop: 5,
               buyStop: 3
             };
-            await this.startBot(botId, timeframe, checkInterval, riskConfig);
+            await this.startBot(botId, timeframe, checkInterval, riskConfig, minScore);
           } else if (data.type === 'stop') {
             const botId = data.botId || 'bot-1';
             await this.stopBot(botId);
@@ -116,7 +117,8 @@ export class DashboardServer {
       takeProfit: 15,
       trailingStop: 5,
       buyStop: 3
-    }
+    },
+    minScore: number = 70
   ) {
     if (this.bots.has(botId)) {
       this.broadcast({ type: 'error', message: `Bot ${botId} já está rodando` });
@@ -136,8 +138,9 @@ export class DashboardServer {
     console.log(`📊 Timeframe: ${timeframeNames[timeframe]}`);
     console.log(`🛑 Stop Loss: ${riskConfig.stopLoss}% | 🎯 Take Profit: ${riskConfig.takeProfit}%`);
     console.log(`📉 Trailing Stop: ${riskConfig.trailingStop}% | ⛔ Buy Stop: ${riskConfig.buyStop}%`);
+    console.log(`⭐ Score Mínimo: ${minScore}`);
 
-    const bot = new PaperTradingBot(10, timeframe, botId, riskConfig);
+    const bot = new PaperTradingBot(10, timeframe, botId, riskConfig, minScore);
     const botInstance: BotInstance = {
       id: botId,
       bot,

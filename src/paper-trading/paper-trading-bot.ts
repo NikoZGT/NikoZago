@@ -44,6 +44,7 @@ export class PaperTradingBot {
   private tokenCache: Map<string, any> = new Map();
   private tokenPumpState: Map<string, boolean> = new Map(); // Rastreia se houve pump no último candle
   private tokenInitialPrice: Map<string, number> = new Map(); // Preço inicial detectado (para buyStop)
+  private tokenPumpStartTime: Map<string, number> = new Map(); // Timestamp quando pump começou (para Pump Age Filter)
   private scanCount: number = 0;
   private timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5';
   private botId: string = 'bot-1'; // ID único do bot
@@ -53,6 +54,13 @@ export class PaperTradingBot {
   private takeProfitPercent: number = 15;
   private trailingStopPercent: number = 5;
   private buyStopPercent: number = 3; // Não compra se já subiu X% desde detecção
+
+  // Anti-Late Entry Filters (Opção A)
+  private readonly MAX_PUMP_AGE_MS: number = 30000; // 30 segundos - só compra pumps com < 30s
+  private readonly MAX_RATE_OF_CHANGE: number = 0.08; // 8% - skip pumps muito rápidos (reversão iminente)
+
+  // Score Filtering
+  private minScore: number = 70; // Score mínimo para compra (configurável)
 
   // Tokens populares para monitorar
   private readonly TOKENS = [
@@ -67,7 +75,8 @@ export class PaperTradingBot {
     initialCapital: number = 10,
     timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5',
     botId: string = 'bot-1',
-    riskConfig?: { stopLoss: number; takeProfit: number; trailingStop: number; buyStop: number }
+    riskConfig?: { stopLoss: number; takeProfit: number; trailingStop: number; buyStop: number },
+    minScore?: number
   ) {
     this.botConfig = loadConfig();
     this.scanner = new MultiTokenScanner();
@@ -82,6 +91,11 @@ export class PaperTradingBot {
       this.takeProfitPercent = riskConfig.takeProfit;
       this.trailingStopPercent = riskConfig.trailingStop;
       this.buyStopPercent = riskConfig.buyStop;
+    }
+
+    // Aplica score mínimo personalizado
+    if (minScore !== undefined) {
+      this.minScore = minScore;
     }
   }
 
@@ -341,15 +355,14 @@ export class PaperTradingBot {
       return;
     }
 
-    // Filtra tokens com score > 70 que não estão abertos
-    const minScore = 70;
+    // Filtra tokens com score >= minScore que não estão abertos
     const opportunities = scores
-      .filter(s => s.score >= minScore && !this.openPositions.has(s.address))
+      .filter(s => s.score >= this.minScore && !this.openPositions.has(s.address))
       .slice(0, availableSlots);
 
     if (opportunities.length === 0) {
       const maxScore = Math.max(...scores.map(s => s.score));
-      console.log(`   💤 Nenhuma oportunidade (score < 70). Maior score: ${maxScore.toFixed(0)}/100`);
+      console.log(`   💤 Nenhuma oportunidade (score < ${this.minScore}). Maior score: ${maxScore.toFixed(0)}/100`);
       return;
     }
 
@@ -365,6 +378,8 @@ export class PaperTradingBot {
       // BUY STOP: Guarda preço inicial na primeira detecção
       if (!this.tokenInitialPrice.has(opp.address)) {
         this.tokenInitialPrice.set(opp.address, detectedPrice);
+        // Também marca quando pump começou (primeira detecção com score > 70)
+        this.tokenPumpStartTime.set(opp.address, Date.now());
       }
 
       const initialPrice = this.tokenInitialPrice.get(opp.address)!;
@@ -375,6 +390,34 @@ export class PaperTradingBot {
         console.log(`   ⛔ ${opp.symbol}: BUY STOP ativado! Preço já subiu ${priceChangePercent.toFixed(2)}% (limite: ${this.buyStopPercent}%)`);
         console.log(`      Preço inicial: ${initialPrice.toFixed(6)} → Atual: ${detectedPrice.toFixed(6)}`);
         continue; // Pula essa oportunidade
+      }
+
+      // ⏱️ PUMP AGE FILTER: Não compra pumps muito velhos (provavelmente já revertendo)
+      const pumpStartTime = this.tokenPumpStartTime.get(opp.address) || Date.now();
+      const pumpAgeMs = Date.now() - pumpStartTime;
+      const pumpAgeSec = pumpAgeMs / 1000;
+
+      if (pumpAgeMs > this.MAX_PUMP_AGE_MS) {
+        console.log(`   ⏱️ ${opp.symbol}: PUMP MUITO VELHO! ${pumpAgeSec.toFixed(1)}s (máx: ${this.MAX_PUMP_AGE_MS/1000}s)`);
+        console.log(`      Pump começou há muito tempo, provável reversão iminente`);
+        // Reset tracking para tentar novamente se houver novo pump
+        this.tokenInitialPrice.delete(opp.address);
+        this.tokenPumpStartTime.delete(opp.address);
+        continue;
+      }
+
+      // 📊 RATE OF CHANGE LIMIT: Skip pumps muito rápidos (reversão iminente)
+      if (token.history.length >= 2) {
+        const previousCandle = token.history[token.history.length - 2];
+        const rateOfChange = Math.abs((currentCandle.close - previousCandle.close) / previousCandle.close);
+
+        if (rateOfChange > this.MAX_RATE_OF_CHANGE) {
+          console.log(`   📊 ${opp.symbol}: PUMP MUITO RÁPIDO! +${(rateOfChange * 100).toFixed(1)}% (máx: ${this.MAX_RATE_OF_CHANGE * 100}%)`);
+          console.log(`      Pumps explosivos revertem rápido demais - esperando estabilização`);
+          continue;
+        }
+
+        console.log(`   ✅ ${opp.symbol}: Pump saudável! Idade: ${pumpAgeSec.toFixed(1)}s | Velocidade: ${(rateOfChange * 100).toFixed(1)}%`);
       }
 
       // SLIPPAGE REALISTA: Na vida real, entre detectar e executar, o preço muda!

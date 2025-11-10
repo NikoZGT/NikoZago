@@ -67,6 +67,8 @@
       </div>
       <!-- Seletor de Intervalo -->
       <select id="check-interval" class="px-3 py-2 bg-gray-700 rounded text-sm font-semibold border border-gray-600">
+        <option value="250">Check: 0.25s ⚡</option>
+        <option value="500">Check: 0.5s ⚡</option>
         <option value="1000">Check: 1s</option>
         <option value="5000">Check: 5s</option>
         <option value="7000">Check: 7s</option>
@@ -103,7 +105,7 @@
   <!-- Risk Management -->
   <div class="card mb-6">
     <h2 class="text-xl font-bold mb-4">⚙️ Gerenciamento de Risco</h2>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
       <!-- Stop Loss -->
       <div>
         <label class="block text-sm text-gray-400 mb-2">🛑 Stop Loss (%)</label>
@@ -155,13 +157,28 @@
         <input
           type="number"
           id="buy-stop"
-          value="3"
+          value="1.5"
           min="0"
           max="10"
           step="0.5"
           class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:border-blue-500 focus:outline-none"
         />
-        <div class="text-xs text-gray-500 mt-1">Não compra se já subiu X%</div>
+        <div class="text-xs text-gray-500 mt-1">Não compra se já subiu X% ⚡</div>
+      </div>
+
+      <!-- Score Mínimo -->
+      <div>
+        <label class="block text-sm text-gray-400 mb-2">⭐ Score Mínimo</label>
+        <input
+          type="number"
+          id="min-score"
+          value="70"
+          min="50"
+          max="90"
+          step="5"
+          class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:border-blue-500 focus:outline-none"
+        />
+        <div class="text-xs text-gray-500 mt-1">Compra apenas score ≥ X</div>
       </div>
     </div>
     <div class="mt-3 text-sm text-yellow-400">
@@ -237,6 +254,7 @@
     const takeProfitInput = document.getElementById('take-profit');
     const trailingStopInput = document.getElementById('trailing-stop');
     const buyStopInput = document.getElementById('buy-stop');
+    const minScoreInput = document.getElementById('min-score');
     const capitalEl = document.getElementById('capital');
     const pnlEl = document.getElementById('pnl');
     const winrateEl = document.getElementById('winrate');
@@ -309,6 +327,7 @@
         const takeProfit = parseFloat(takeProfitInput.value);
         const trailingStop = parseFloat(trailingStopInput.value);
         const buyStop = parseFloat(buyStopInput.value);
+        const minScore = parseInt(minScoreInput.value);
 
         // Validação
         if (stopLoss < 1 || stopLoss > 20) {
@@ -327,6 +346,10 @@
           addLog('❌ Buy Stop deve estar entre 0% e 10%');
           return;
         }
+        if (minScore < 50 || minScore > 90) {
+          addLog('❌ Score Mínimo deve estar entre 50 e 90');
+          return;
+        }
 
         ws.send(JSON.stringify({
           type: 'start',
@@ -338,11 +361,13 @@
             takeProfit: takeProfit,
             trailingStop: trailingStop,
             buyStop: buyStop
-          }
+          },
+          minScore: minScore
         }));
         addLog(`🚀 Iniciando bot em ${currentTimeframe} (check: ${checkInterval/1000}s)`);
         addLog(`   🛑 Stop Loss: ${stopLoss}% | 🎯 Take Profit: ${takeProfit}%`);
         addLog(`   📉 Trailing: ${trailingStop}% | ⛔ Buy Stop: ${buyStop}%`);
+        addLog(`   ⭐ Score Mínimo: ${minScore}`);
       }
     });
 
