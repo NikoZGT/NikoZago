@@ -82,7 +82,13 @@ export class DashboardServer {
             const botId = data.botId || `bot-${this.bots.size + 1}`;
             const timeframe = data.timeframe || 'M5';
             const checkInterval = data.checkInterval || 15000;
-            await this.startBot(botId, timeframe, checkInterval);
+            const riskConfig = data.riskConfig || {
+              stopLoss: 5,
+              takeProfit: 15,
+              trailingStop: 5,
+              buyStop: 3
+            };
+            await this.startBot(botId, timeframe, checkInterval, riskConfig);
           } else if (data.type === 'stop') {
             const botId = data.botId || 'bot-1';
             await this.stopBot(botId);
@@ -101,7 +107,17 @@ export class DashboardServer {
     });
   }
 
-  private async startBot(botId: string, timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5', checkInterval: number = 15000) {
+  private async startBot(
+    botId: string,
+    timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5',
+    checkInterval: number = 15000,
+    riskConfig: { stopLoss: number; takeProfit: number; trailingStop: number; buyStop: number } = {
+      stopLoss: 5,
+      takeProfit: 15,
+      trailingStop: 5,
+      buyStop: 3
+    }
+  ) {
     if (this.bots.has(botId)) {
       this.broadcast({ type: 'error', message: `Bot ${botId} já está rodando` });
       return;
@@ -118,8 +134,10 @@ export class DashboardServer {
     console.log(`🚀 Iniciando ${botId} com candles ${timeframe}...`);
     console.log(`⏱️  Check: a cada ${checkInterval / 1000}s`);
     console.log(`📊 Timeframe: ${timeframeNames[timeframe]}`);
+    console.log(`🛑 Stop Loss: ${riskConfig.stopLoss}% | 🎯 Take Profit: ${riskConfig.takeProfit}%`);
+    console.log(`📉 Trailing Stop: ${riskConfig.trailingStop}% | ⛔ Buy Stop: ${riskConfig.buyStop}%`);
 
-    const bot = new PaperTradingBot(10, timeframe, botId);
+    const bot = new PaperTradingBot(10, timeframe, botId, riskConfig);
     const botInstance: BotInstance = {
       id: botId,
       bot,

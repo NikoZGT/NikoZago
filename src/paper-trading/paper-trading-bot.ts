@@ -43,9 +43,16 @@ export class PaperTradingBot {
   private tradeHistory: PaperTrade[] = [];
   private tokenCache: Map<string, any> = new Map();
   private tokenPumpState: Map<string, boolean> = new Map(); // Rastreia se houve pump no último candle
+  private tokenInitialPrice: Map<string, number> = new Map(); // Preço inicial detectado (para buyStop)
   private scanCount: number = 0;
   private timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5';
   private botId: string = 'bot-1'; // ID único do bot
+
+  // Configurações de Risco (configuráveis pelo usuário)
+  private stopLossPercent: number = 5;
+  private takeProfitPercent: number = 15;
+  private trailingStopPercent: number = 5;
+  private buyStopPercent: number = 3; // Não compra se já subiu X% desde detecção
 
   // Tokens populares para monitorar
   private readonly TOKENS = [
@@ -56,13 +63,26 @@ export class PaperTradingBot {
     { address: 'ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82', symbol: 'BOME' },
   ];
 
-  constructor(initialCapital: number = 10, timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5', botId: string = 'bot-1') {
+  constructor(
+    initialCapital: number = 10,
+    timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5',
+    botId: string = 'bot-1',
+    riskConfig?: { stopLoss: number; takeProfit: number; trailingStop: number; buyStop: number }
+  ) {
     this.botConfig = loadConfig();
     this.scanner = new MultiTokenScanner();
     this.initialCapital = initialCapital;
     this.capital = initialCapital;
     this.timeframe = timeframe;
     this.botId = botId;
+
+    // Aplica configurações de risco personalizadas
+    if (riskConfig) {
+      this.stopLossPercent = riskConfig.stopLoss;
+      this.takeProfitPercent = riskConfig.takeProfit;
+      this.trailingStopPercent = riskConfig.trailingStop;
+      this.buyStopPercent = riskConfig.buyStop;
+    }
   }
 
   /**
@@ -285,13 +305,13 @@ export class PaperTradingBot {
       let exitReason = '';
       let shouldExit = false;
 
-      if (pnlPercent <= -this.botConfig.stopLossPercent) {
+      if (pnlPercent <= -this.stopLossPercent) {
         exitReason = 'Stop Loss';
         shouldExit = true;
-      } else if (pnlPercent >= this.botConfig.takeProfitPercent) {
+      } else if (pnlPercent >= this.takeProfitPercent) {
         exitReason = 'Take Profit';
         shouldExit = true;
-      } else if (pnlPercent > 10 && dropFromHigh > this.botConfig.trailingStopPercent) {
+      } else if (pnlPercent > 10 && dropFromHigh > this.trailingStopPercent) {
         exitReason = 'Trailing Stop';
         shouldExit = true;
       }
@@ -341,6 +361,21 @@ export class PaperTradingBot {
 
       const currentCandle = token.history[token.history.length - 1];
       const detectedPrice = currentCandle.close;
+
+      // BUY STOP: Guarda preço inicial na primeira detecção
+      if (!this.tokenInitialPrice.has(opp.address)) {
+        this.tokenInitialPrice.set(opp.address, detectedPrice);
+      }
+
+      const initialPrice = this.tokenInitialPrice.get(opp.address)!;
+      const priceChangePercent = ((detectedPrice - initialPrice) / initialPrice) * 100;
+
+      // BUY STOP: Não compra se preço já subiu muito desde primeira detecção
+      if (priceChangePercent > this.buyStopPercent) {
+        console.log(`   ⛔ ${opp.symbol}: BUY STOP ativado! Preço já subiu ${priceChangePercent.toFixed(2)}% (limite: ${this.buyStopPercent}%)`);
+        console.log(`      Preço inicial: ${initialPrice.toFixed(6)} → Atual: ${detectedPrice.toFixed(6)}`);
+        continue; // Pula essa oportunidade
+      }
 
       // SLIPPAGE REALISTA: Na vida real, entre detectar e executar, o preço muda!
       // - Se pump continua: preço sobe mais 0.5-2% (você compra mais caro)
