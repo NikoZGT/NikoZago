@@ -446,23 +446,29 @@ export class Backtester {
       momentumPositive = candle.close > token.history[index - 1].close;
     }
 
-    // DETECTA INTERESSE FORTE DE COMPRA - Seletivo mas ativo:
-    // "Do nada tem MUITO interesse de compra? Compra!"
+    // Thresholds dinâmicos (MOMENTUM STRATEGY - BEST WIN RATE)
+    const thresholds = (global as any).currentStrategyThresholds || {
+      volumeSpike: 150,      // Só entra em volume MUITO alto
+      priceSpike: 6,         // Preço subindo forte
+      volumeExplosive: 180,  // Volume explosivo
+      momentumVolume: 120,   // Momentum forte
+      momentumPrice: 8,      // Preço pump forte
+      pricePump: 18,         // Pump extremo
+    };
+
+    // DETECTA INTERESSE FORTE DE COMPRA
     const shouldEnter = (
       // Spike de volume + preço subindo
-      (volumeIncrease > 80 && priceIncrease > 2.5) ||
-
-      // Preço pump forte com volume
-      (priceIncrease > 6 && volumeIncrease > 40) ||
+      (volumeIncrease > thresholds.volumeSpike && priceIncrease > thresholds.priceSpike) ||
 
       // Volume explosivo
-      (volumeIncrease > 120) ||
+      (volumeIncrease > thresholds.volumeExplosive) ||
 
       // Pump bom com momentum
-      (momentumPositive && volumeIncrease > 70 && priceIncrease > 4) ||
+      (momentumPositive && volumeIncrease > thresholds.momentumVolume && priceIncrease > thresholds.momentumPrice) ||
 
       // Preço pump muito forte
-      (priceIncrease > 10)
+      (priceIncrease > thresholds.pricePump)
     );
 
     // Score baseado na força dos sinais

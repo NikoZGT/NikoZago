@@ -9,6 +9,7 @@
     "dev": "ts-node src/bot.ts",
     "dev:advanced": "ts-node src/bot-advanced.ts",
     "backtest": "ts-node src/backtesting/run-backtest.ts",
+    "test:strategies": "ts-node src/backtesting/test-strategies.ts",
     "build": "tsc",
     "test": "jest",
     "lint": "eslint src --ext .ts"

@@ -25,10 +25,10 @@ export function loadConfig(): BotConfig {
   }
 
   return {
-    // Capital Management
+    // Capital Management (MOMENTUM STRATEGY - BEST PERFORMANCE)
     initialCapital: parseFloat(process.env.INITIAL_CAPITAL || '10'),
     currentCapital: parseFloat(process.env.INITIAL_CAPITAL || '10'),
-    positionSizePercent: parseFloat(process.env.POSITION_SIZE_PERCENT || '15'),
+    positionSizePercent: parseFloat(process.env.POSITION_SIZE_PERCENT || '25'), // Agressivo em pumps fortes
     maxConcurrentPositions: parseInt(process.env.MAX_CONCURRENT_POSITIONS || '3'),
     weeklyGrowthTarget: parseFloat(process.env.WEEKLY_GROWTH_TARGET || '3.5'),
 
@@ -37,9 +37,9 @@ export function loadConfig(): BotConfig {
     rpcUrl,
     walletPrivateKey,
 
-    // Risk Management
+    // Risk Management (MOMENTUM STRATEGY)
     stopLossPercent: parseFloat(process.env.STOP_LOSS_PERCENT || '8'),
-    takeProfitPercent: parseFloat(process.env.TAKE_PROFIT_PERCENT || '30'),
+    takeProfitPercent: parseFloat(process.env.TAKE_PROFIT_PERCENT || '35'),
     trailingStopPercent: parseFloat(process.env.TRAILING_STOP_PERCENT || '10'),
     maxConsecutiveLosses: parseInt(process.env.MAX_CONSECUTIVE_LOSSES || '10'),
 
