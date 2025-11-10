@@ -7,16 +7,21 @@ import { PaperTradingBot } from '../paper-trading/paper-trading-bot';
 /**
  * Dashboard Server - WebSocket + Web Interface
  */
+interface BotInstance {
+  id: string;
+  bot: PaperTradingBot;
+  timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1';
+  checkInterval: number;
+  isRunning: boolean;
+}
+
 export class DashboardServer {
   private app: express.Application;
   private server: any;
   private wss: WebSocketServer;
-  private bot: PaperTradingBot | null = null;
+  private bots: Map<string, BotInstance> = new Map();
   private clients: Set<WebSocket> = new Set();
-  private isRunning: boolean = false;
-  private timeframe: 'M1' | 'M5' = 'M5';
-  private scanIntervalMs: number = 15000; // Fixo: 15 segundos
-  private quickCheckIntervalMs: number = 2000; // 2 segundos para verificar posições
+  private defaultCheckInterval: number = 15000; // 15 segundos padrão
 
   constructor(port: number = 3000) {
     this.app = express();
@@ -47,7 +52,12 @@ export class DashboardServer {
     // API status
     this.app.get('/api/status', (req, res) => {
       res.json({
-        isRunning: this.isRunning,
+        bots: Array.from(this.bots.values()).map(b => ({
+          id: b.id,
+          timeframe: b.timeframe,
+          checkInterval: b.checkInterval,
+          isRunning: b.isRunning,
+        })),
         clients: this.clients.size,
       });
     });
@@ -61,7 +71,7 @@ export class DashboardServer {
       // Envia status inicial
       ws.send(JSON.stringify({
         type: 'status',
-        data: { isRunning: this.isRunning },
+        data: { bots: Array.from(this.bots.values()).map(b => ({ id: b.id, timeframe: b.timeframe, isRunning: b.isRunning })) },
       }));
 
       ws.on('message', async (message: string) => {
@@ -69,9 +79,15 @@ export class DashboardServer {
           const data = JSON.parse(message.toString());
 
           if (data.type === 'start') {
-            await this.startBot(data.timeframe || 'M5');
+            const botId = data.botId || `bot-${this.bots.size + 1}`;
+            const timeframe = data.timeframe || 'M5';
+            const checkInterval = data.checkInterval || 15000;
+            await this.startBot(botId, timeframe, checkInterval);
           } else if (data.type === 'stop') {
-            await this.stopBot();
+            const botId = data.botId || 'bot-1';
+            await this.stopBot(botId);
+          } else if (data.type === 'stopAll') {
+            await this.stopAllBots();
           }
         } catch (error) {
           console.error('Erro ao processar mensagem:', error);
@@ -85,54 +101,76 @@ export class DashboardServer {
     });
   }
 
-  private async startBot(timeframe: 'M1' | 'M5' = 'M5') {
-    if (this.isRunning) {
-      this.broadcast({ type: 'error', message: 'Bot já está rodando' });
+  private async startBot(botId: string, timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5', checkInterval: number = 15000) {
+    if (this.bots.has(botId)) {
+      this.broadcast({ type: 'error', message: `Bot ${botId} já está rodando` });
       return;
     }
 
-    // Configura timeframe dos candles
-    this.timeframe = timeframe;
-    this.scanIntervalMs = 15000; // FIXO: Analisa a cada 15 segundos
+    const timeframeNames: Record<string, string> = {
+      'M1': '1 minuto',
+      'M5': '5 minutos',
+      'M15': '15 minutos',
+      'M30': '30 minutos',
+      'H1': '1 hora',
+    };
 
-    console.log(`🚀 Iniciando bot com candles ${timeframe}...`);
-    console.log(`⏱️  Scan completo: a cada 15 segundos`);
-    console.log(`⚡ Check de posições: a cada 2 segundos (proteção rápida)`);
-    console.log(`📊 Timeframe dos candles: ${timeframe === 'M1' ? '1 minuto' : '5 minutos'}`);
+    console.log(`🚀 Iniciando ${botId} com candles ${timeframe}...`);
+    console.log(`⏱️  Check: a cada ${checkInterval / 1000}s`);
+    console.log(`📊 Timeframe: ${timeframeNames[timeframe]}`);
 
-    this.isRunning = true;
-    this.broadcast({ type: 'status', data: { isRunning: true } });
+    const bot = new PaperTradingBot(10, timeframe, botId);
+    const botInstance: BotInstance = {
+      id: botId,
+      bot,
+      timeframe,
+      checkInterval,
+      isRunning: true,
+    };
 
-    // Cria bot com timeframe configurado
-    this.bot = new PaperTradingBot(10, timeframe);
+    this.bots.set(botId, botInstance);
+    this.broadcast({ type: 'status', data: { bots: Array.from(this.bots.values()).map(b => ({ id: b.id, timeframe: b.timeframe, isRunning: b.isRunning })) } });
 
-    // Inicia bot com dois loops: scan completo + check rápido
-    this.runMainScanLoop();
-    this.runQuickCheckLoop();
+    // Inicia loops para este bot
+    this.runBotLoops(botId);
   }
 
   /**
-   * Loop principal: Scan completo a cada 15 segundos
-   * Busca novas oportunidades e atualiza candles
+   * Inicia loops para um bot específico
    */
-  private async runMainScanLoop() {
-    while (this.isRunning && this.bot) {
+  private async runBotLoops(botId: string) {
+    const botInstance = this.bots.get(botId);
+    if (!botInstance) return;
+
+    // Loop principal + Quick check
+    this.runMainScanLoop(botId);
+    this.runQuickCheckLoop(botId);
+  }
+
+  /**
+   * Loop principal: Scan completo
+   */
+  private async runMainScanLoop(botId: string) {
+    const botInstance = this.bots.get(botId);
+    if (!botInstance) return;
+
+    while (botInstance.isRunning && this.bots.has(botId)) {
       try {
-        const data = await this.bot.scanOnce();
+        const data = await botInstance.bot.scanOnce();
 
         // Envia dados para todos os clientes
         this.broadcast({
           type: 'update',
-          data,
+          data: { ...data, botId },
         });
 
-        // Aguarda 15 segundos antes do próximo scan completo
-        await this.sleep(this.scanIntervalMs);
+        // Aguarda conforme intervalo configurado
+        await this.sleep(botInstance.checkInterval);
       } catch (error: any) {
-        console.error('Erro no scan completo:', error);
+        console.error(`Erro no scan do ${botId}:`, error);
         this.broadcast({
           type: 'error',
-          message: error.message,
+          message: `${botId}: ${error.message}`,
         });
       }
     }
@@ -140,40 +178,52 @@ export class DashboardServer {
 
   /**
    * Loop rápido: Verifica posições abertas a cada 2 segundos
-   * Proteção contra quedas súbitas (trailing stop, take profit, stop loss)
    */
-  private async runQuickCheckLoop() {
-    while (this.isRunning && this.bot) {
+  private async runQuickCheckLoop(botId: string) {
+    const botInstance = this.bots.get(botId);
+    if (!botInstance) return;
+
+    while (botInstance.isRunning && this.bots.has(botId)) {
       try {
         // Só verifica se tiver posições abertas
-        if (this.bot.hasOpenPositions()) {
-          const data = await this.bot.checkPositionsQuick();
+        if (botInstance.bot.hasOpenPositions()) {
+          const data = await botInstance.bot.checkPositionsQuick();
 
           // Envia dados atualizados
           this.broadcast({
             type: 'quick_update',
-            data,
+            data: { ...data, botId },
           });
         }
 
         // Aguarda 2 segundos antes do próximo check
-        await this.sleep(this.quickCheckIntervalMs);
+        await this.sleep(2000);
       } catch (error: any) {
-        console.error('Erro no check rápido:', error);
+        console.error(`Erro no check rápido do ${botId}:`, error);
       }
     }
   }
 
-  private stopBot() {
-    if (!this.isRunning) {
-      this.broadcast({ type: 'error', message: 'Bot não está rodando' });
+  private stopBot(botId: string) {
+    const botInstance = this.bots.get(botId);
+    if (!botInstance) {
+      this.broadcast({ type: 'error', message: `Bot ${botId} não encontrado` });
       return;
     }
 
-    console.log('🛑 Parando bot...');
-    this.isRunning = false;
-    this.bot = null;
-    this.broadcast({ type: 'status', data: { isRunning: false } });
+    console.log(`🛑 Parando ${botId}...`);
+    botInstance.isRunning = false;
+    this.bots.delete(botId);
+    this.broadcast({ type: 'status', data: { bots: Array.from(this.bots.values()).map(b => ({ id: b.id, timeframe: b.timeframe, isRunning: b.isRunning })) } });
+  }
+
+  private async stopAllBots() {
+    console.log('🛑 Parando todos os bots...');
+    for (const [botId, botInstance] of this.bots.entries()) {
+      botInstance.isRunning = false;
+    }
+    this.bots.clear();
+    this.broadcast({ type: 'status', data: { bots: [] } });
   }
 
   private broadcast(data: any) {

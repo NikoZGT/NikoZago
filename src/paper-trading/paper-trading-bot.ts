@@ -44,7 +44,8 @@ export class PaperTradingBot {
   private tokenCache: Map<string, any> = new Map();
   private tokenPumpState: Map<string, boolean> = new Map(); // Rastreia se houve pump no último candle
   private scanCount: number = 0;
-  private timeframe: 'M1' | 'M5' = 'M5';
+  private timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5';
+  private botId: string = 'bot-1'; // ID único do bot
 
   // Tokens populares para monitorar
   private readonly TOKENS = [
@@ -55,12 +56,27 @@ export class PaperTradingBot {
     { address: 'ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82', symbol: 'BOME' },
   ];
 
-  constructor(initialCapital: number = 10, timeframe: 'M1' | 'M5' = 'M5') {
+  constructor(initialCapital: number = 10, timeframe: 'M1' | 'M5' | 'M15' | 'M30' | 'H1' = 'M5', botId: string = 'bot-1') {
     this.botConfig = loadConfig();
     this.scanner = new MultiTokenScanner();
     this.initialCapital = initialCapital;
     this.capital = initialCapital;
     this.timeframe = timeframe;
+    this.botId = botId;
+  }
+
+  /**
+   * Retorna ID do bot
+   */
+  getBotId(): string {
+    return this.botId;
+  }
+
+  /**
+   * Retorna timeframe do bot
+   */
+  getTimeframe(): string {
+    return this.timeframe;
   }
 
   /**
@@ -133,8 +149,17 @@ export class PaperTradingBot {
     console.log(`   📊 Gerando candles ${this.timeframe} realistas...`);
 
     // Configuração baseada no timeframe
-    const candlePeriodMs = this.timeframe === 'M1' ? 60 * 1000 : 5 * 60 * 1000; // M1 = 1min, M5 = 5min
-    const pumpChance = this.timeframe === 'M1' ? 0.20 : 0.25; // M1: 20%, M5: 25% (aumentado para testes)
+    const timeframeConfig: Record<string, { periodMs: number; pumpChance: number; pumpRange: [number, number] }> = {
+      'M1': { periodMs: 60 * 1000, pumpChance: 0.20, pumpRange: [0.02, 0.05] },        // 1min: +2-5%
+      'M5': { periodMs: 5 * 60 * 1000, pumpChance: 0.25, pumpRange: [0.05, 0.12] },    // 5min: +5-12%
+      'M15': { periodMs: 15 * 60 * 1000, pumpChance: 0.30, pumpRange: [0.08, 0.18] },  // 15min: +8-18%
+      'M30': { periodMs: 30 * 60 * 1000, pumpChance: 0.35, pumpRange: [0.12, 0.25] },  // 30min: +12-25%
+      'H1': { periodMs: 60 * 60 * 1000, pumpChance: 0.40, pumpRange: [0.15, 0.35] },   // 1h: +15-35%
+    };
+
+    const config = timeframeConfig[this.timeframe];
+    const candlePeriodMs = config.periodMs;
+    const pumpChance = config.pumpChance;
 
     for (const token of this.TOKENS) {
       // Busca histórico (últimos candles)
@@ -183,26 +208,18 @@ export class PaperTradingBot {
         // Comportamento normal: pode ou não ter pump
         isPump = Math.random() < pumpChance;
 
-        if (this.timeframe === 'M1') {
-          if (isPump) {
-            priceChange = 0.02 + Math.random() * 0.03; // +2% a +5%
-            volumeMultiplier = 1.5 + Math.random() * 1.5;
-            console.log(`   🔥 ${token.symbol}: PUMP M1! +${(priceChange * 100).toFixed(1)}%`);
-            this.tokenPumpState.set(token.address, true); // Marca que teve pump
-          } else {
-            priceChange = -0.01 + Math.random() * 0.02;
-            volumeMultiplier = 0.9 + Math.random() * 0.2;
-          }
+        if (isPump) {
+          // PUMP: usa range do timeframe
+          const [minPump, maxPump] = config.pumpRange;
+          priceChange = minPump + Math.random() * (maxPump - minPump);
+          volumeMultiplier = 1.5 + Math.random() * 2.5;
+          console.log(`   🔥 ${token.symbol}: PUMP ${this.timeframe}! +${(priceChange * 100).toFixed(1)}%`);
+          this.tokenPumpState.set(token.address, true); // Marca que teve pump
         } else {
-          if (isPump) {
-            priceChange = 0.05 + Math.random() * 0.07; // +5% a +12%
-            volumeMultiplier = 2 + Math.random() * 2;
-            console.log(`   🔥 ${token.symbol}: PUMP M5! +${(priceChange * 100).toFixed(1)}%`);
-            this.tokenPumpState.set(token.address, true); // Marca que teve pump
-          } else {
-            priceChange = -0.03 + Math.random() * 0.06;
-            volumeMultiplier = 0.8 + Math.random() * 0.4;
-          }
+          // Normal: pequenas variações
+          const normalRange = config.pumpRange[0] / 3; // 1/3 do pump mínimo
+          priceChange = -normalRange + Math.random() * (normalRange * 2);
+          volumeMultiplier = 0.8 + Math.random() * 0.4;
         }
       }
 

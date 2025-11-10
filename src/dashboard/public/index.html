@@ -45,16 +45,33 @@
         📊 Candles M5
       </div>
     </div>
-    <div class="flex gap-3">
+    <div class="flex gap-3 flex-wrap">
       <!-- Seletor de Timeframe -->
       <div class="flex gap-2">
-        <button id="btn-m1" class="px-4 py-3 bg-blue-600/30 hover:bg-blue-600 rounded-lg font-semibold transition border border-blue-600">
+        <button id="btn-m1" class="px-3 py-2 bg-blue-600/30 hover:bg-blue-600 rounded text-sm font-semibold transition border border-blue-600">
           M1
         </button>
-        <button id="btn-m5" class="px-4 py-3 bg-blue-600 rounded-lg font-semibold transition border border-blue-600">
+        <button id="btn-m5" class="px-3 py-2 bg-blue-600 rounded text-sm font-semibold transition border border-blue-600">
           M5
         </button>
+        <button id="btn-m15" class="px-3 py-2 bg-blue-600/30 hover:bg-blue-600 rounded text-sm font-semibold transition border border-blue-600">
+          M15
+        </button>
+        <button id="btn-m30" class="px-3 py-2 bg-blue-600/30 hover:bg-blue-600 rounded text-sm font-semibold transition border border-blue-600">
+          M30
+        </button>
+        <button id="btn-h1" class="px-3 py-2 bg-blue-600/30 hover:bg-blue-600 rounded text-sm font-semibold transition border border-blue-600">
+          H1
+        </button>
       </div>
+      <!-- Seletor de Intervalo -->
+      <select id="check-interval" class="px-3 py-2 bg-gray-700 rounded text-sm font-semibold border border-gray-600">
+        <option value="1000">Check: 1s</option>
+        <option value="5000">Check: 5s</option>
+        <option value="7000">Check: 7s</option>
+        <option value="10000">Check: 10s</option>
+        <option value="15000" selected>Check: 15s</option>
+      </select>
       <!-- Botão Start/Stop -->
       <button id="toggle-bot" class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition">
         ▶️ Iniciar Bot
@@ -140,6 +157,10 @@
     const timeframeBadge = document.getElementById('timeframe-badge');
     const btnM1 = document.getElementById('btn-m1');
     const btnM5 = document.getElementById('btn-m5');
+    const btnM15 = document.getElementById('btn-m15');
+    const btnM30 = document.getElementById('btn-m30');
+    const btnH1 = document.getElementById('btn-h1');
+    const checkIntervalSelect = document.getElementById('check-interval');
     const capitalEl = document.getElementById('capital');
     const pnlEl = document.getElementById('pnl');
     const winrateEl = document.getElementById('winrate');
@@ -161,7 +182,8 @@
         const message = JSON.parse(event.data);
 
         if (message.type === 'status') {
-          updateStatus(message.data.isRunning);
+          const hasRunningBots = message.data.bots && message.data.bots.length > 0;
+          updateStatus(hasRunningBots);
         } else if (message.type === 'update') {
           updateDashboard(message.data, false); // Scan completo
         } else if (message.type === 'quick_update') {
@@ -184,11 +206,17 @@
     // Toggle bot
     toggleBtn.addEventListener('click', () => {
       if (isRunning) {
-        ws.send(JSON.stringify({ type: 'stop' }));
+        ws.send(JSON.stringify({ type: 'stop', botId: 'bot-1' }));
         addLog('🛑 Parando bot...');
       } else {
-        ws.send(JSON.stringify({ type: 'start', timeframe: currentTimeframe }));
-        addLog(`🚀 Iniciando bot em ${currentTimeframe}...`);
+        const checkInterval = parseInt(checkIntervalSelect.value);
+        ws.send(JSON.stringify({
+          type: 'start',
+          botId: 'bot-1',
+          timeframe: currentTimeframe,
+          checkInterval: checkInterval
+        }));
+        addLog(`🚀 Iniciando bot em ${currentTimeframe} (check: ${checkInterval/1000}s)...`);
       }
     });
 
@@ -209,24 +237,59 @@
       setTimeframe('M5');
     });
 
+    btnM15.addEventListener('click', () => {
+      if (isRunning) {
+        addLog('⚠️ Pare o bot antes de mudar o timeframe');
+        return;
+      }
+      setTimeframe('M15');
+    });
+
+    btnM30.addEventListener('click', () => {
+      if (isRunning) {
+        addLog('⚠️ Pare o bot antes de mudar o timeframe');
+        return;
+      }
+      setTimeframe('M30');
+    });
+
+    btnH1.addEventListener('click', () => {
+      if (isRunning) {
+        addLog('⚠️ Pare o bot antes de mudar o timeframe');
+        return;
+      }
+      setTimeframe('H1');
+    });
+
     // Define timeframe
     function setTimeframe(timeframe) {
       currentTimeframe = timeframe;
       timeframeBadge.textContent = `📊 Candles ${timeframe}`;
 
-      // Atualiza estilos dos botões
-      if (timeframe === 'M1') {
-        btnM1.className = 'px-4 py-3 bg-blue-600 rounded-lg font-semibold transition border border-blue-600';
-        btnM5.className = 'px-4 py-3 bg-blue-600/30 hover:bg-blue-600 rounded-lg font-semibold transition border border-blue-600';
-      } else {
-        btnM1.className = 'px-4 py-3 bg-blue-600/30 hover:bg-blue-600 rounded-lg font-semibold transition border border-blue-600';
-        btnM5.className = 'px-4 py-3 bg-blue-600 rounded-lg font-semibold transition border border-blue-600';
+      // Reseta todos os botões para o estilo inactive
+      const activeClass = 'px-3 py-2 bg-blue-600 rounded text-sm font-semibold transition border border-blue-600';
+      const inactiveClass = 'px-3 py-2 bg-blue-600/30 hover:bg-blue-600 rounded text-sm font-semibold transition border border-blue-600';
+
+      btnM1.className = inactiveClass;
+      btnM5.className = inactiveClass;
+      btnM15.className = inactiveClass;
+      btnM30.className = inactiveClass;
+      btnH1.className = inactiveClass;
+
+      // Ativa o botão selecionado
+      const btnMap = { 'M1': btnM1, 'M5': btnM5, 'M15': btnM15, 'M30': btnM30, 'H1': btnH1 };
+      if (btnMap[timeframe]) {
+        btnMap[timeframe].className = activeClass;
       }
 
-      const desc = timeframe === 'M1'
-        ? 'Candles de 1 minuto (mais rápido, detecta movimentos pequenos)'
-        : 'Candles de 5 minutos (menos ruído, movimentos maiores)';
-      addLog(`📊 Timeframe alterado para ${timeframe} - ${desc}`);
+      const descriptions = {
+        'M1': 'Candles de 1 minuto (movimentos rápidos)',
+        'M5': 'Candles de 5 minutos (balanço)',
+        'M15': 'Candles de 15 minutos (tendências curtas)',
+        'M30': 'Candles de 30 minutos (tendências médias)',
+        'H1': 'Candles de 1 hora (tendências longas)',
+      };
+      addLog(`📊 Timeframe alterado para ${timeframe} - ${descriptions[timeframe]}`);
     }
 
     // Atualiza status
