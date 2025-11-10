@@ -1,0 +1,75 @@
+{
+  "config": {
+    "startDate": "2025-11-03T01:06:12.899Z",
+    "endDate": "2025-11-10T01:06:12.899Z",
+    "initialCapital": 10,
+    "network": "solana"
+  },
+  "startCapital": 10,
+  "endCapital": 9.830493997434626,
+  "totalPnl": -0.16950600256537396,
+  "totalPnlPercent": -1.6950600256537396,
+  "totalTrades": 2,
+  "winningTrades": 0,
+  "losingTrades": 2,
+  "winRate": 0,
+  "avgWin": 0,
+  "avgLoss": 0.08475300128268698,
+  "profitFactor": 0,
+  "maxDrawdown": 0.16950600256537385,
+  "maxDrawdownPercent": 1.6950600256537385,
+  "sharpeRatio": -409.3001530521855,
+  "trades": [
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-03T02:36:12.899Z",
+      "exitTime": "2025-11-03T02:51:12.899Z",
+      "entryPrice": 0.0008549038958055666,
+      "exitPrice": 0.0007740750444776728,
+      "amount": 1267.6863508485876,
+      "investedUSD": 1.08375,
+      "returnUSD": 0.9812843684168592,
+      "pnl": -0.10246563158314081,
+      "pnlPercent": -9.454729557844596,
+      "holdTimeMinutes": 15,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 147.80276701224471,
+        "priceIncrease": -0.050316857683461245,
+        "score": 95,
+        "momentumPositive": false
+      }
+    },
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-03T04:26:12.899Z",
+      "exitTime": "2025-11-03T04:41:12.899Z",
+      "entryPrice": 0.000921933917789403,
+      "exitPrice": 0.0008277333301380768,
+      "amount": 711.6767809387371,
+      "investedUSD": 0.6561189628506006,
+      "returnUSD": 0.5890785918683674,
+      "pnl": -0.06704037098223314,
+      "pnlPercent": -10.21771580735403,
+      "holdTimeMinutes": 15,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 474.7075971164635,
+        "priceIncrease": -1.1836603638813263,
+        "score": 95,
+        "momentumPositive": false
+      }
+    }
+  ],
+  "dailyPnl": [
+    {
+      "date": "2025-11-03",
+      "pnl": -0.16950600256537396,
+      "capital": 9.830493997434626
+    }
+  ]
+}

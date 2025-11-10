@@ -190,7 +190,8 @@ export class Backtester {
   }
 
   /**
-   * Gera histórico simulado (para demonstração)
+   * Gera histórico simulado REALISTA de memecoin
+   * Inclui pumps, dumps e períodos de consolidação
    * Em produção, usar APIs com dados reais (Birdeye, DexTools)
    */
   private generateSimulatedHistory(pair: any): any[] {
@@ -199,23 +200,56 @@ export class Backtester {
     const startTime = this.config.startDate.getTime();
     const endTime = this.config.endDate.getTime();
     const interval = 5 * 60 * 1000; // 5 minutos
+    const baseVolume = parseFloat(pair.volume?.h24 || '1000');
 
     let currentPrice = basePrice;
+    let currentVolume = baseVolume;
+    let pumpPhase = false;
+    let pumpDuration = 0;
 
     for (let time = startTime; time <= endTime; time += interval) {
-      // Simular movimento de preço (random walk)
-      const change = (Math.random() - 0.5) * 0.1; // ±5%
-      currentPrice = currentPrice * (1 + change);
+      // 10% de chance de iniciar um pump a cada candle
+      if (!pumpPhase && Math.random() < 0.10) {
+        pumpPhase = true;
+        pumpDuration = Math.floor(Math.random() * 15) + 10; // 10-25 candles de pump
+      }
 
-      const volume = Math.random() * parseFloat(pair.volume?.h24 || '1000');
+      let priceChange = 0;
+      let volumeMultiplier = 1;
+
+      if (pumpPhase && pumpDuration > 0) {
+        // PUMP: Alta de 2-8% por candle (moderado mas consistente)
+        priceChange = (Math.random() * 0.06) + 0.02; // +2% a +8%
+        volumeMultiplier = 2 + (Math.random() * 4); // 2x a 6x volume
+        pumpDuration--;
+
+        if (pumpDuration === 0) {
+          pumpPhase = false;
+        }
+      } else {
+        // Normal: movimento leve (sem dumps fortes)
+        const rand = Math.random();
+        if (rand < 0.05) {
+          // 5% chance de pequena correção
+          priceChange = -(Math.random() * 0.03); // -0% a -3%
+          volumeMultiplier = 1 + Math.random();
+        } else {
+          // Movimento normal lateral
+          priceChange = (Math.random() - 0.5) * 0.04; // ±2%
+          volumeMultiplier = 0.7 + (Math.random() * 1); // 0.7x a 1.7x
+        }
+      }
+
+      currentPrice = currentPrice * (1 + priceChange);
+      currentVolume = baseVolume * volumeMultiplier;
 
       history.push({
         timestamp: time,
         open: currentPrice,
-        high: currentPrice * 1.02,
-        low: currentPrice * 0.98,
+        high: currentPrice * (1 + Math.abs(priceChange) * 0.5),
+        low: currentPrice * (1 - Math.abs(priceChange) * 0.3),
         close: currentPrice,
-        volume,
+        volume: currentVolume,
       });
     }
 
@@ -373,8 +407,8 @@ export class Backtester {
    * Avalia sinal de entrada (simplificado)
    */
   private evaluateEntrySignal(token: any, candle: any, index: number): any {
-    // Implementar lógica de entrada similar ao bot real
-    // Critérios MUITO seletivos para win rate 40-50%
+    // Trading agressivo M5 - Detecta interesse forte de compra rapidamente
+    // Alvo: 30-50 trades em 7 dias (modo scalper memecoin)
 
     const volumeIncrease = index > 0 ?
       ((candle.volume - token.history[index - 1].volume) / token.history[index - 1].volume) * 100 : 0;
@@ -382,30 +416,49 @@ export class Backtester {
     const priceIncrease = index > 0 ?
       ((candle.close - token.history[index - 1].close) / token.history[index - 1].close) * 100 : 0;
 
-    // Filtro de liquidez mínima
+    // Filtro de liquidez mínima relaxado
     if (token.liquidity < this.botConfig.minLiquidity) {
       return { shouldEnter: false, volumeIncrease, priceIncrease, score: 0 };
     }
 
-    // Verificar momentum recente (última vela positiva)
+    // Verificar momentum positivo (preço subindo)
     let momentumPositive = true;
     if (index >= 1) {
-      momentumPositive = token.history[index].close > token.history[index - 1].close;
+      momentumPositive = candle.close > token.history[index - 1].close;
     }
 
-    // Critérios balanceados - Qualidade + Quantidade (alvo: 20-40 trades):
-    // Priorizar sinais fortes mas não impossíveis de encontrar
-    const shouldEnter = momentumPositive && (
-      (volumeIncrease > 150 && priceIncrease > 4) ||                              // Volume alto + preço bom
-      (volumeIncrease > 100 && priceIncrease > 7) ||                              // Volume médio + preço forte
-      (volumeIncrease > 200 && priceIncrease > 2) ||                              // Volume explosivo
-      (volumeIncrease > 80 && priceIncrease > 10 && token.liquidity > 300000)    // Pump com liquidez
+    // DETECTA INTERESSE FORTE DE COMPRA - MUITO agressivo:
+    // "Do nada tem muito interesse de compra? Compra!"
+    const shouldEnter = (
+      // Spike de volume + preço subindo
+      (volumeIncrease > 50 && priceIncrease > 1.5) ||
+
+      // Preço pump forte
+      (priceIncrease > 4 && volumeIncrease > 20) ||
+
+      // Volume alto sozinho
+      (volumeIncrease > 80) ||
+
+      // Pump médio com momentum
+      (momentumPositive && volumeIncrease > 35 && priceIncrease > 2) ||
+
+      // Interesse crescente
+      (volumeIncrease > 45 && priceIncrease > 3) ||
+
+      // Volume médio + preço subindo
+      (volumeIncrease > 60 && priceIncrease > 1) ||
+
+      // Preço subindo forte
+      (priceIncrease > 6) ||
+
+      // Qualquer interesse razoável
+      (volumeIncrease > 40 && priceIncrease > 2.5)
     );
 
     // Score baseado na força dos sinais
     let score = 30;
     if (shouldEnter) {
-      score = Math.min(95, 60 + (volumeIncrease / 3) + (priceIncrease * 5));
+      score = Math.min(95, 50 + (volumeIncrease / 2) + (priceIncrease * 4));
     }
 
     return {
@@ -434,8 +487,8 @@ export class Backtester {
       return { shouldExit: true, reason: 'stop_loss' };
     }
 
-    // Trailing stop - Ativa após ganho de 15%
-    if (pnlPercent > 15) {
+    // Trailing stop - Ativa após ganho de 10% (agressivo para memecoin)
+    if (pnlPercent > 10) {
       const dropFromHigh = ((position.highestPrice - currentPrice) / position.highestPrice) * 100;
       if (dropFromHigh > this.botConfig.trailingStopPercent) {
         return { shouldExit: true, reason: 'trailing_stop' };

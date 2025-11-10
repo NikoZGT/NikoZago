@@ -29,7 +29,7 @@ export function loadConfig(): BotConfig {
     initialCapital: parseFloat(process.env.INITIAL_CAPITAL || '10'),
     currentCapital: parseFloat(process.env.INITIAL_CAPITAL || '10'),
     positionSizePercent: parseFloat(process.env.POSITION_SIZE_PERCENT || '15'),
-    maxConcurrentPositions: parseInt(process.env.MAX_CONCURRENT_POSITIONS || '2'),
+    maxConcurrentPositions: parseInt(process.env.MAX_CONCURRENT_POSITIONS || '3'),
     weeklyGrowthTarget: parseFloat(process.env.WEEKLY_GROWTH_TARGET || '3.5'),
 
     // Network
@@ -38,13 +38,13 @@ export function loadConfig(): BotConfig {
     walletPrivateKey,
 
     // Risk Management
-    stopLossPercent: parseFloat(process.env.STOP_LOSS_PERCENT || '9'),
-    takeProfitPercent: parseFloat(process.env.TAKE_PROFIT_PERCENT || '60'),
-    trailingStopPercent: parseFloat(process.env.TRAILING_STOP_PERCENT || '12'),
-    maxConsecutiveLosses: parseInt(process.env.MAX_CONSECUTIVE_LOSSES || '2'),
+    stopLossPercent: parseFloat(process.env.STOP_LOSS_PERCENT || '8'),
+    takeProfitPercent: parseFloat(process.env.TAKE_PROFIT_PERCENT || '30'),
+    trailingStopPercent: parseFloat(process.env.TRAILING_STOP_PERCENT || '10'),
+    maxConsecutiveLosses: parseInt(process.env.MAX_CONSECUTIVE_LOSSES || '10'),
 
     // Trading Parameters
-    minLiquidity: parseFloat(process.env.MIN_LIQUIDITY || '25000'),
+    minLiquidity: parseFloat(process.env.MIN_LIQUIDITY || '10000'),
     maxTxFeePercent: parseFloat(process.env.MAX_TX_FEE_PERCENT || '2'),
     minVolume24h: parseFloat(process.env.MIN_VOLUME_24H || '2000'),
     minVolume12h: parseFloat(process.env.MIN_VOLUME_12H || '1000'),

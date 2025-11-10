@@ -1,0 +1,528 @@
+{
+  "config": {
+    "startDate": "2025-11-03T01:08:17.142Z",
+    "endDate": "2025-11-10T01:08:17.142Z",
+    "initialCapital": 10,
+    "network": "solana"
+  },
+  "startCapital": 10,
+  "endCapital": 10.000002210513765,
+  "totalPnl": 0.0000022105137644651395,
+  "totalPnlPercent": 0.000022105137644651393,
+  "totalTrades": 21,
+  "winningTrades": 8,
+  "losingTrades": 13,
+  "winRate": 38.095238095238095,
+  "avgWin": 2.7631422055814243e-7,
+  "avgLoss": 8.155846233824867e-51,
+  "profitFactor": 2.0848789379851811e+43,
+  "maxDrawdown": 0,
+  "maxDrawdownPercent": 0,
+  "sharpeRatio": -4.454835224846476,
+  "trades": [
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-03T15:28:17.142Z",
+      "exitTime": "2025-11-03T16:03:17.142Z",
+      "entryPrice": 0.007866798712581266,
+      "exitPrice": 0.010548198979150197,
+      "amount": 0.0008243878364693653,
+      "investedUSD": 0.000006485293170604859,
+      "returnUSD": 0.000008695806935069998,
+      "pnl": 0.0000022105137644651395,
+      "pnlPercent": 34.08502447482992,
+      "holdTimeMinutes": 35,
+      "exitReason": "take_profit",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 10.365443162953435,
+        "priceIncrease": 7.2850976107531915,
+        "score": 84.32311202448949,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-06T02:03:17.142Z",
+      "exitTime": "2025-11-06T02:33:17.142Z",
+      "entryPrice": 13894138.477084631,
+      "exitPrice": 18284629.225954585,
+      "amount": 1.1411685454853716e-31,
+      "investedUSD": 1.5855553796667005e-24,
+      "returnUSD": 2.086584373852191e-24,
+      "pnl": 5.010289941854905e-25,
+      "pnlPercent": 31.599589683888034,
+      "holdTimeMinutes": 30,
+      "exitReason": "take_profit",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 100.68393080197437,
+        "priceIncrease": 3.5407916487202256,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-09T02:18:17.142Z",
+      "exitTime": "2025-11-09T03:28:17.142Z",
+      "entryPrice": 40395494042324800000,
+      "exitPrice": 36845905451457360000,
+      "amount": 2.9869874656599853e-68,
+      "investedUSD": 1.206608343735668e-48,
+      "returnUSD": 1.1005825774439605e-48,
+      "pnl": -1.0602576629170747e-49,
+      "pnlPercent": -8.787090429314532,
+      "holdTimeMinutes": 70,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 85.47018624105918,
+        "priceIncrease": -1.6185341182301476,
+        "score": 86.260956647609,
+        "momentumPositive": false
+      }
+    },
+    {
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "entryTime": "2025-11-10T01:08:17.142Z",
+      "exitTime": "2025-11-03T01:08:17.142Z",
+      "entryPrice": 1.598003632779832e+23,
+      "exitPrice": 0.0005458751910020413,
+      "amount": 1.4690080233376173e-78,
+      "investedUSD": 2.3474801578762327e-55,
+      "returnUSD": 8.01895035322953e-82,
+      "pnl": -2.3474801578762327e-55,
+      "pnlPercent": -100,
+      "holdTimeMinutes": 10080,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 78.37344233077688,
+        "priceIncrease": 5.609812846559854,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "BOME",
+      "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+      "entryTime": "2025-11-06T04:38:17.142Z",
+      "exitTime": "2025-11-06T05:13:17.142Z",
+      "entryPrice": 9621372294.112457,
+      "exitPrice": 8755972909.902912,
+      "amount": 5.84029715436797e-91,
+      "investedUSD": 5.619167323041981e-81,
+      "returnUSD": 5.113748366942901e-81,
+      "pnl": -5.054189560990798e-82,
+      "pnlPercent": -8.9945525207366,
+      "holdTimeMinutes": 35,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 134.5522374837636,
+        "priceIncrease": -0.17379664078593496,
+        "score": 95,
+        "momentumPositive": false
+      }
+    },
+    {
+      "tokenSymbol": "BOME",
+      "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+      "entryTime": "2025-11-08T18:13:17.142Z",
+      "exitTime": "2025-11-08T19:13:17.142Z",
+      "entryPrice": 150845038340223000000,
+      "exitPrice": 138597300009594620000,
+      "amount": 7.673382649448884e-122,
+      "investedUSD": 1.157491699955319e-101,
+      "returnUSD": 1.063510117154085e-101,
+      "pnl": -9.398158280123396e-103,
+      "pnlPercent": -8.119417426912158,
+      "holdTimeMinutes": 60,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 94.21909360097342,
+        "priceIncrease": -0.15986072055074926,
+        "score": 95,
+        "momentumPositive": false
+      }
+    },
+    {
+      "tokenSymbol": "BOME",
+      "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+      "entryTime": "2025-11-09T11:13:17.142Z",
+      "exitTime": "2025-11-09T12:08:17.142Z",
+      "entryPrice": 1.761049255651784e+23,
+      "exitPrice": 1.6111697333609363e+23,
+      "amount": 1.0587087197407684e-130,
+      "investedUSD": 1.8644382028515333e-107,
+      "returnUSD": 1.705759445691632e-107,
+      "pnl": -1.5867875715990138e-108,
+      "pnlPercent": -8.510808077050386,
+      "holdTimeMinutes": 55,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": -10.376964822893404,
+        "priceIncrease": 6.881064750483273,
+        "score": 72.33577659048639,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "BOME",
+      "tokenAddress": "ukHH6c7mMyiWCf1b9pnWe25TSpkDDt3H5pQZgZ74J82",
+      "entryTime": "2025-11-10T01:08:17.142Z",
+      "exitTime": "2025-11-03T01:08:17.142Z",
+      "entryPrice": 1.1208561149238635e+25,
+      "exitPrice": 0.0007196243239128116,
+      "amount": 4.856958849968092e-136,
+      "investedUSD": 5.443952026920312e-111,
+      "returnUSD": 3.4951857286806356e-139,
+      "pnl": -5.443952026920312e-111,
+      "pnlPercent": -100,
+      "holdTimeMinutes": 10080,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 72.55301520259766,
+        "priceIncrease": 5.855785298314817,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "POPCAT",
+      "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+      "entryTime": "2025-11-03T11:18:17.142Z",
+      "exitTime": "2025-11-03T11:43:17.142Z",
+      "entryPrice": 0.0484717735549087,
+      "exitPrice": 0.06324944893594543,
+      "amount": 4.597627831889933e-113,
+      "investedUSD": 2.228551751571147e-114,
+      "returnUSD": 2.9079742677960383e-114,
+      "pnl": 6.794225162248914e-115,
+      "pnlPercent": 30.48717696350974,
+      "holdTimeMinutes": 25,
+      "exitReason": "take_profit",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 44.59245239613606,
+        "priceIncrease": 7.10160713793922,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "POPCAT",
+      "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+      "entryTime": "2025-11-05T23:13:17.142Z",
+      "exitTime": "2025-11-05T23:58:17.142Z",
+      "entryPrice": 720668678.5617201,
+      "exitPrice": 662874898.9096012,
+      "amount": 6.752307252103753e-144,
+      "investedUSD": 4.866176344616331e-135,
+      "returnUSD": 4.4759349871448425e-135,
+      "pnl": -3.902413574714887e-136,
+      "pnlPercent": -8.019466000307,
+      "holdTimeMinutes": 45,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 76.61116988777923,
+        "priceIncrease": 1.7021820625239124,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "POPCAT",
+      "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+      "entryTime": "2025-11-08T17:43:17.142Z",
+      "exitTime": "2025-11-08T18:18:17.142Z",
+      "entryPrice": 13780303625672272000,
+      "exitPrice": 18355504963202680000,
+      "amount": 2.3353440988764537e-175,
+      "investedUSD": 3.218175075293954e-156,
+      "returnUSD": 4.2866420197712837e-156,
+      "pnl": 1.0684669444773296e-156,
+      "pnlPercent": 33.201019816478876,
+      "holdTimeMinutes": 35,
+      "exitReason": "take_profit",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 36.690020318463304,
+        "priceIncrease": 6.034136588154257,
+        "score": 92.48155651184868,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "POPCAT",
+      "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+      "entryTime": "2025-11-08T20:03:17.142Z",
+      "exitTime": "2025-11-08T21:53:17.142Z",
+      "entryPrice": 26618597945853120000,
+      "exitPrice": 24303195012206980000,
+      "amount": 4.7867995978642736e-176,
+      "investedUSD": 1.274178939429205e-156,
+      "returnUSD": 1.163345241112494e-156,
+      "pnl": -1.1083369831671102e-157,
+      "pnlPercent": -8.698440610418604,
+      "holdTimeMinutes": 110,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 71.3452909487705,
+        "priceIncrease": 1.6432644372037106,
+        "score": 92.2457032232001,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "POPCAT",
+      "tokenAddress": "7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr",
+      "entryTime": "2025-11-10T00:53:17.142Z",
+      "exitTime": "2025-11-03T01:08:17.142Z",
+      "entryPrice": 1.4527009143810384e+24,
+      "exitPrice": 0.0005957534241183996,
+      "amount": 1.1069679150479186e-189,
+      "investedUSD": 1.6080933023805831e-165,
+      "returnUSD": 6.594799257790031e-193,
+      "pnl": -1.6080933023805831e-165,
+      "pnlPercent": -100,
+      "holdTimeMinutes": 10065,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 41.72200228890268,
+        "priceIncrease": 7.638338459477592,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "WIF",
+      "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+      "entryTime": "2025-11-04T14:48:17.142Z",
+      "exitTime": "2025-11-04T16:53:17.142Z",
+      "entryPrice": 3541.6785432612883,
+      "exitPrice": 3745.886229117083,
+      "amount": 1.2407117063894746e-181,
+      "investedUSD": 4.3942020288927014e-178,
+      "returnUSD": 4.6475648952686905e-178,
+      "pnl": 2.533628663759891e-179,
+      "pnlPercent": 5.765844736088164,
+      "holdTimeMinutes": 125,
+      "exitReason": "max_hold_time",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 74.04092428328187,
+        "priceIncrease": 7.9441220421852,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "WIF",
+      "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+      "entryTime": "2025-11-08T21:03:17.142Z",
+      "exitTime": "2025-11-08T22:18:17.142Z",
+      "entryPrice": 1926893130604049000,
+      "exitPrice": 1767471785867358500,
+      "amount": 8.73613500161815e-227,
+      "investedUSD": 1.6833598522647602e-208,
+      "returnUSD": 1.544087213288837e-208,
+      "pnl": -1.392726389759233e-209,
+      "pnlPercent": -8.273491778275961,
+      "holdTimeMinutes": 75,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 73.74149964720762,
+        "priceIncrease": 7.172353089651565,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "WIF",
+      "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+      "entryTime": "2025-11-09T13:03:17.142Z",
+      "exitTime": "2025-11-09T13:33:17.142Z",
+      "entryPrice": 307688113511620940000,
+      "exitPrice": 404732202695023300000,
+      "amount": 1.9321246680421688e-233,
+      "investedUSD": 5.944917941791618e-213,
+      "returnUSD": 7.819930727780977e-213,
+      "pnl": 1.875012785989359e-213,
+      "pnlPercent": 31.539758905810682,
+      "holdTimeMinutes": 30,
+      "exitReason": "take_profit",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 66.4780109592908,
+        "priceIncrease": 2.112699980864992,
+        "score": 91.68980540310537,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "WIF",
+      "tokenAddress": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm",
+      "entryTime": "2025-11-10T01:03:17.142Z",
+      "exitTime": "2025-11-03T01:08:17.142Z",
+      "entryPrice": 6.334460236487924e+21,
+      "exitPrice": 0.0008190712965727668,
+      "amount": 2.404427031849803e-237,
+      "investedUSD": 1.5230747424789262e-215,
+      "returnUSD": 1.9693971664918274e-240,
+      "pnl": -1.5230747424789262e-215,
+      "pnlPercent": -100,
+      "holdTimeMinutes": 10075,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 282.4711121511462,
+        "priceIncrease": 7.777748657208779,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "MEW",
+      "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+      "entryTime": "2025-11-06T04:43:17.142Z",
+      "exitTime": "2025-11-06T05:18:17.142Z",
+      "entryPrice": 263889787.7865672,
+      "exitPrice": 357605548.8018731,
+      "amount": 6.82832918047316e-248,
+      "investedUSD": 1.8019263383718868e-239,
+      "returnUSD": 2.441848403982949e-239,
+      "pnl": 6.399220656110622e-240,
+      "pnlPercent": 35.51322004590141,
+      "holdTimeMinutes": 35,
+      "exitReason": "take_profit",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 8.85038747691952,
+        "priceIncrease": 6.118572393072738,
+        "score": 78.89948331075071,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "MEW",
+      "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+      "entryTime": "2025-11-06T06:43:17.142Z",
+      "exitTime": "2025-11-06T08:03:17.142Z",
+      "entryPrice": 635066605.7456682,
+      "exitPrice": 580398947.5428853,
+      "amount": 5.883647675315085e-249,
+      "investedUSD": 3.736508158565742e-240,
+      "returnUSD": 3.414862918466019e-240,
+      "pnl": -3.216452400997226e-241,
+      "pnlPercent": -8.608177112162018,
+      "holdTimeMinutes": 80,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 94.58458872515433,
+        "priceIncrease": 0.6008338985587303,
+        "score": 95,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "MEW",
+      "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+      "entryTime": "2025-11-07T02:28:17.142Z",
+      "exitTime": "2025-11-07T04:18:17.142Z",
+      "entryPrice": 1174360390064.928,
+      "exitPrice": 1074893112129.0739,
+      "amount": 1.0082342846903232e-258,
+      "investedUSD": 1.1840304078457616e-246,
+      "returnUSD": 1.0837440880260122e-246,
+      "pnl": -1.0028631981974939e-247,
+      "pnlPercent": -8.469910836345113,
+      "holdTimeMinutes": 110,
+      "exitReason": "stop_loss",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": 27.324297769862397,
+        "priceIncrease": 5.348836509484178,
+        "score": 85.0574949228679,
+        "momentumPositive": true
+      }
+    },
+    {
+      "tokenSymbol": "MEW",
+      "tokenAddress": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5",
+      "entryTime": "2025-11-10T01:03:17.142Z",
+      "exitTime": "2025-11-10T01:08:17.142Z",
+      "entryPrice": 1.0522310081782163e+23,
+      "exitPrice": 1.109061962375849e+23,
+      "amount": 2.026412596796293e-291,
+      "investedUSD": 2.1322541697120005e-268,
+      "returnUSD": 2.2474171311860366e-268,
+      "pnl": 1.151629614740361e-269,
+      "pnlPercent": 5.4009959558241105,
+      "holdTimeMinutes": 5,
+      "exitReason": "end_of_period",
+      "signals": {
+        "shouldEnter": true,
+        "volumeIncrease": -9.769482905518931,
+        "priceIncrease": 6.89358782915557,
+        "score": 72.68960986386281,
+        "momentumPositive": true
+      }
+    }
+  ],
+  "dailyPnl": [
+    {
+      "date": "2025-11-03",
+      "pnl": 0.0000022105137644651395,
+      "capital": 10.000002210513765
+    },
+    {
+      "date": "2025-11-04",
+      "pnl": 2.533628663759891e-179,
+      "capital": 10.000002210513765
+    },
+    {
+      "date": "2025-11-05",
+      "pnl": -3.902413574714887e-136,
+      "capital": 10.000002210513765
+    },
+    {
+      "date": "2025-11-06",
+      "pnl": 5.010289941854905e-25,
+      "capital": 10.000002210513765
+    },
+    {
+      "date": "2025-11-07",
+      "pnl": -1.0028631981974939e-247,
+      "capital": 10.000002210513765
+    },
+    {
+      "date": "2025-11-08",
+      "pnl": -9.398158280123396e-103,
+      "capital": 10.000002210513765
+    },
+    {
+      "date": "2025-11-09",
+      "pnl": -1.0602576629170747e-49,
+      "capital": 10.000002210513765
+    },
+    {
+      "date": "2025-11-10",
+      "pnl": 1.151629614740361e-269,
+      "capital": 10.000002210513765
+    }
+  ]
+}
